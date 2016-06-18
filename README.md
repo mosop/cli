@@ -301,8 +301,6 @@ The virtual `CommandBase#run` method is the entry point for running your command
 
 Your command's class will be instantiated and its `#run` method will be invoked after calling the static `.run` method.
 
-The following code prints a single lovely message.
-
 ```crystal
 class AncientCommand < Cli::Command
   def run
@@ -313,7 +311,13 @@ end
 AncientCommand.run
 ```
 
-The command's instance is also accessible with the `command` method in option parser's scopes.
+This prints as:
+
+```
+We the Earth
+```
+
+A command's instance is also accessible with the `command` method in an option parser's scope.
 
 ```crystal
 class AncientCommand < Cli::Command
@@ -330,10 +334,14 @@ class AncientCommand < Cli::Command
   end
 end
 
-AncientCommand.run(%w(--understand))
-# prints as:
-# We know
-# We the Earth
+AncientCommand.run %w(--understand)
+```
+
+This prints as:
+
+```
+We know
+We the Earth
 ```
 
 ## Formatting Help
