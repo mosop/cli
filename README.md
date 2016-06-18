@@ -33,7 +33,7 @@ end
 Command.run %w(--hello world) # prints "Hello, world!"
 ```
 
-### Argument Access
+### Access to Options
 
 ```crystal
 class Command < Cli::Command
@@ -49,7 +49,7 @@ end
 Command.run %w(--option foo bar -- baz) # prints "foo bar baz"
 ```
 
-### With Handler
+### Access from Options
 
 ```crystal
 class Command < Cli::Command

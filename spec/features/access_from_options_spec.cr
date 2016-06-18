@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module Cli::Test::WithHandlerFeature
+module Cli::Test::AccessFromOptionsFeature
   class Command < Cli::Command
     class Options
       on("--go") { command.go(with: "the Wind") }
