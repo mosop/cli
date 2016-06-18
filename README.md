@@ -209,7 +209,7 @@ class Package < Cli::Supercommand
       end
 
       class Options
-        bool "--break", desc: "update to breaking version if any"
+        bool "--break", desc: "update major version if any"
       end
     end
 
