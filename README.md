@@ -101,6 +101,25 @@ Polygon.run %w(hexagon)  # prints "6"
 Polygon.run %w()         # prints "3"
 ```
 
+### Aliasing
+
+```crystal
+class Command < Cli::Supercommand
+  command "loooooooooong"
+  command "l", aliased: "loooooooooong"
+
+  module Commands
+    class Loooooooooong < Cli::Command
+      def run
+        sleep 1000
+      end
+    end
+  end
+end
+
+Command.run %w(l) # sleeps
+```
+
 ### Inheritance
 
 ```crystal
@@ -172,7 +191,7 @@ Say.run %w(--help)
 class Package < Cli::Supercommand
   command "install", default: true
   command "update"
-  command "remove"
+  command %w(remove uninstall)
 
   class Help
     title "#{global_name} [SUBCOMMAND] | [OPTIONS]"
@@ -230,7 +249,7 @@ Package.run %w(--help)
 #
 # Subcommands:
 #   install (default)  install package
-#   remove             remove package
+#   remove, uninstall  remove package
 #   update             update package
 #
 # Options:

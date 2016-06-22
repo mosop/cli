@@ -58,6 +58,10 @@ module Cli
           Help.new(indent: indent)
         end
 
+        def self.help_model
+          Help
+        end
+
         def self.supercommand
           c = __expand_supercommand
           c if c.is_a?(::Cli::CommandBase.class)

@@ -10,7 +10,11 @@ module Cli::Helps
           subcommand = command_model.subcommands[name]
           name_column = name
           name_column += " (default)" if command_model.default_subcommand_name == name
-          caption_column = subcommand.new_help.caption
+          caption_column = if aliased = command_model.subcommand_aliases[name]?
+            "alias for #{aliased}"
+          else
+            subcommand.help_model.caption
+          end
           a << {name_column, caption_column}
         end
         a

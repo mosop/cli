@@ -6,8 +6,10 @@ module Cli
       {%
         if @type.superclass == ::Cli::Supercommand
           merge_of_subcommands = "@@self_subcommands"
+          merge_of_subcommand_aliases = "@@self_subcommand_aliases"
         else
           merge_of_subcommands = "::#{@type.superclass.id}.subcommands.merge(@@self_subcommands)"
+          merge_of_subcommand_aliases = "::#{@type.superclass.id}.subcommand_aliases.merge(@@self_subcommand_aliases)"
         end %}
 
       @@self_subcommands = {} of ::String => ::Cli::CommandBase.class
@@ -16,6 +18,14 @@ module Cli
       def self.subcommands
         @@subcommands = {{merge_of_subcommands.id}} if @@subcommands.empty?
         @@subcommands
+      end
+
+      @@self_subcommand_aliases = {} of ::String => ::String
+      @@subcommand_aliases = {} of ::String => ::String
+
+      def self.subcommand_aliases
+        @@subcommand_aliases = {{merge_of_subcommand_aliases.id}} if @@subcommand_aliases.empty?
+        @@subcommand_aliases
       end
 
       @@default_subcommand_name : ::String?
@@ -49,16 +59,23 @@ module Cli
 
     @subargv = %w()
 
-    macro command(name, default = false)
+    macro command(name, default = false, aliased = nil)
       {%
-        command_class = name.split(/[_-]/).map{|i| i.capitalize}.join("\n")
+        s = aliased || name
+        a = s.strip.split(/\s+/)
+        a = a.map{|i| name.split(/[_-]/).map{|j| i.capitalize}.join("")}
+        class_name = "Commands::" + a.join("::Commands::")
       %}
 
       {% if default %}
         @@default_subcommand_name = {{name}}
       {% end %}
 
-      @@self_subcommands[{{name}}] = Commands::{{command_class.id}}
+      @@self_subcommands[{{name}}] = {{class_name.id}}
+
+      {% if aliased %}
+        @@self_subcommand_aliases[{{name}}] = {{aliased}}
+      {% end %}
     end
 
     def self.default_subcommand_name

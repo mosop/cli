@@ -5,6 +5,7 @@ module Cli::Test::HelpForSubcommandsFeature
     command "install", default: true
     command "update"
     command "remove"
+    command "uninstall", aliased: "remove"
 
     class Help
       title "#{global_name} [SUBCOMMAND] | [OPTIONS]"
@@ -68,6 +69,7 @@ module Cli::Test::HelpForSubcommandsFeature
         Subcommands:
           install (default)  install package
           remove             remove package
+          uninstall          alias for remove
           update             update package
 
         Options:
@@ -104,6 +106,19 @@ module Cli::Test::HelpForSubcommandsFeature
     it "prints remove's help" do
       io, _ = ::Cli::Test::Stdio.capture do
         Package.run %w(remove --help)
+      end
+      io.output.gets_to_end.should eq <<-EOS
+        package remove [OPTIONS] PACKAGE_NAME
+
+        Options:
+          -f      force to remove
+          --help  show this help\n
+        EOS
+    end
+
+    it "prints uninstall's help" do
+      io, _ = ::Cli::Test::Stdio.capture do
+        Package.run %w(uninstall --help)
       end
       io.output.gets_to_end.should eq <<-EOS
         package remove [OPTIONS] PACKAGE_NAME
