@@ -199,7 +199,7 @@ class Package < Cli::Supercommand
   end
 
   class Options
-    on("--help", desc: "shows this help") { command.help! }
+    on("--help", desc: "show this help") { command.help! }
   end
 
   class Base < Cli::Command
@@ -208,7 +208,7 @@ class Package < Cli::Supercommand
     end
 
     class Options
-      on("--help", desc: "shows this help") { command.help! }
+      on("--help", desc: "show this help") { command.help! }
     end
   end
 
