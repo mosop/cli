@@ -378,6 +378,11 @@ end
 
 [WIP]
 
+## Releases
+
+* v0.1.1
+  * Aliasing
+
 ## Development
 
 [WIP]
