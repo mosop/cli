@@ -224,12 +224,12 @@ class Package < Cli::Supercommand
     end
 
     class Update < Base
-      class Options
-        bool "--break", desc: "update major version if any"
-      end
-
       class Help
         caption "update package"
+      end
+
+      class Options
+        bool "--break", desc: "update major version if any"
       end
     end
 
