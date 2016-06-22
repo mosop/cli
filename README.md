@@ -191,7 +191,8 @@ Say.run %w(--help)
 class Package < Cli::Supercommand
   command "install", default: true
   command "update"
-  command %w(remove uninstall)
+  command "remove"
+  command "uninstall", aliased: "remove"
 
   class Help
     title "#{global_name} [SUBCOMMAND] | [OPTIONS]"
@@ -249,7 +250,8 @@ Package.run %w(--help)
 #
 # Subcommands:
 #   install (default)  install package
-#   remove, uninstall  remove package
+#   remove             remove package
+#   uninstall          alias for remove
 #   update             update package
 #
 # Options:
@@ -272,6 +274,13 @@ Package.run %w(update --help)
 end
 
 Package.run %w(remove --help)
+# package remove [OPTIONS] PACKAGE_NAME
+#
+# Options:
+#   -f      force to remove
+#   --help  show this help
+
+Package.run %w(uninstall --help)
 # package remove [OPTIONS] PACKAGE_NAME
 #
 # Options:
