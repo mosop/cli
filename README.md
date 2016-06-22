@@ -214,22 +214,22 @@ class Package < Cli::Supercommand
 
   module Commands
     class Install < Base
-      class Options
-        string "-v", var: "VERSION", desc: "specify package's version"
-      end
-
       class Help
         caption "install package"
+      end
+
+      class Options
+        string "-v", var: "VERSION", desc: "specify package's version"
       end
     end
 
     class Update < Base
-      class Help
-        caption "update package"
-      end
-
       class Options
         bool "--break", desc: "update major version if any"
+      end
+
+      class Help
+        caption "update package"
       end
     end
 
