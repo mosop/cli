@@ -15,7 +15,7 @@ module Cli
           option: [] of Description,
           exit: [] of Description
         }
-        (option_model.options.values + option_model.handlers.values).each do |definition|
+        (option_model.__options.values + option_model.__handlers.values).each do |definition|
           head = definition.names.join(", ")
           varname = __variable_name_of(definition)
           head += " #{varname}" if varname
@@ -61,8 +61,8 @@ module Cli
           end
         end
       when :bool
-        if definition.responds_to?(:default)
-          if definition.default == true
+        if definition.metadata.responds_to?(:default_string)
+          if definition.metadata.default_string == "true"
             "(enabled as default)"
           end
         end

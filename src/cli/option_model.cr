@@ -12,6 +12,12 @@ module Cli
       __add_bool_option {{names}}, metadata: %meta, default: {{default}}, not: {{not}}
     end
 
+    macro array(names, default = nil, not = %w(), desc = nil, help = :option)
+      __define_string_array_option {{names}}
+      %meta = __option_metadata_class_of({{names}}).new(description: {{desc}}, default: {{default}}, help_type: {{help}})
+      __add_string_array_option {{names}}, metadata: %meta, default: {{default}}
+    end
+
     macro on(names, desc = nil, help = :exit, &block)
       __define_handler {{names}} {{block}}
       %meta = __handler_metadata_class_of({{names}}).new(description: {{desc}}, help_type: {{help}})

@@ -4,7 +4,7 @@ module Cli
   abstract class Command < ::Cli::CommandBase
     macro inherited
       def parse
-        options.parse
+        options.__parse
       end
     end
   end

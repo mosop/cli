@@ -7,7 +7,8 @@ authors:
 dependencies:
   optarg:
     github: mosop/optarg
-    version: ~> 0.1.11
+    branch: edge
+    # version: ~> 0.1.11
   string_inflection:
     github: mosop/string_inflection
     version: ~> 0.1.0

@@ -44,7 +44,7 @@ module Cli
           end
         elsif @argv[0].starts_with?("-")
           if self.class.default_subcommand?
-            options.parse
+            options.__parse
           else
             @subcommand_name = self.class.default_subcommand_name
             @subargv = @argv[0..-1]
