@@ -57,9 +57,9 @@ module Cli
       end
     end
 
-    @command : ::Cli::CommandBase?
+    @__command : ::Cli::CommandBase?
 
-    def initialize(@command, argv)
+    def initialize(@__command, argv)
       super argv
     end
   end

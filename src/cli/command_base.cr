@@ -15,56 +15,60 @@ module Cli
           end %}
 
         class Options < ::{{super_option_model.id}}
-          def command
-            @command as ::{{@type.id}}
+          def command; __command; end
+          def __command
+            @__command as ::{{@type.id}}
           end
         end
 
         class Help < ::{{super_help.id}}
-          def self.local_name
-            ::{{@type.id}}.local_name
+          def self.__local_name
+            ::{{@type.id}}.__local_name
           end
 
-          def self.global_name
-            ::{{@type.id}}.global_name
+          def self.global_name; __global_name; end
+          def self.__global_name
+            ::{{@type.id}}.__global_name
           end
 
-          def local_name
-            ::{{@type.id}}.local_name
+          def __local_name
+            ::{{@type.id}}.__local_name
           end
 
-          def global_name
-            ::{{@type.id}}.global_name
+          def global_name; __global_name; end
+          def __global_name
+            ::{{@type.id}}.__global_name
           end
 
-          def command_model
+          def __command_model
             ::{{@type.id}}
           end
 
-          def option_model
+          def __option_model
             ::{{@type.id}}::Options
           end
         end
 
-        def options
-          @options as Options
+        def options; __options; end
+        def __options
+          @__options as Options
         end
 
-        def new_options
-          Options.new(self, @argv)
+        def __new_options
+          Options.new(self, @__argv)
         end
 
-        def self.new_help(indent = 2)
+        def self.__new_help(indent = 2)
           Help.new(indent: indent)
         end
 
-        def self.help_model
+        def self.__help_model
           Help
         end
 
-        def self.supercommand
+        def self.__supercommand
           c = __expand_supercommand
-          c if c.is_a?(::Cli::CommandBase.class)
+          c.as?(::Cli::CommandBase.class)
         end
       {% end %}
     end
@@ -78,54 +82,64 @@ module Cli
     end
 
     def self.run(argv = %w())
-      new(nil, argv).run
+      new(nil, argv).__run
     rescue ex : ::Cli::Exit
       out = ex.status == 0 ? ::STDOUT : ::STDERR
       out.puts ex.message if ex.message
       ex.status
     end
 
-    @parent : ::Cli::CommandBase?
-    @argv : ::Array(::String)
-    @options : ::Optarg::Model?
+    @__parent : ::Cli::CommandBase?
+    @__argv : ::Array(::String)
+    @__options : ::Optarg::Model?
 
-    def initialize(@parent, @argv)
-      @options = new_options
-      parse
+    def initialize(@__parent, @__argv)
+      @__options = __new_options
+      __parse
     end
 
-    def args
-      options.args
+    def args; __args; end
+    def __args
+      __options.__args
     end
 
-    def unparsed_args
-      options.unparsed_args
+    def unparsed_args; __unparsed_args; end
+    def __unparsed_args
+      __options.__unparsed_args
     end
 
-    def self.local_name
+    def self.__local_name
       ::StringInflection.kebab(name.split("::").last)
     end
 
     macro command_name(value)
-      def self.local_name
+      def self.__local_name
         {{value}}
       end
     end
 
-    def self.global_name
-      @@global_name ||= if supercommand = self.supercommand
-        "#{supercommand.local_name} #{local_name}"
+    def self.__global_name
+      @@__global_name ||= if supercommand = self.__supercommand
+        "#{supercommand.__local_name} #{__local_name}"
       else
-        local_name
+        __local_name
       end
     end
 
     def help!(indent = 2)
-      raise ::Cli::Exit.new(self.class.new_help(indent: indent).text)
+      __help! indent
+    end
+
+    def __help!(indent = 2)
+      raise ::Cli::Exit.new(self.class.__new_help(indent: indent).__text)
     end
 
     def run
       raise "Not implemented."
+    end
+
+    def __run
+      run
     end
   end
 end

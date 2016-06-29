@@ -1,21 +1,22 @@
 module Cli
   abstract class Help
     alias Description = {head: ::String, body: ::Array(::String)}
-    @indent : ::Int32
-    @option_descriptions : {option: Array(Description), exit: Array(Description)}?
-    @options : ::String | ::Bool | ::Nil
-    @text : ::String?
+    @__indent : ::Int32
+    @__option_descriptions : {option: Array(Description), exit: Array(Description)}?
+    @__options : ::String | ::Bool | ::Nil
+    @__text : ::String?
 
-    def initialize(@indent = 2)
+    def initialize(indent = 2)
+      @__indent = indent
     end
 
-    def option_descriptions
-      @option_descriptions ||= begin
+    def __option_descriptions
+      @__option_descriptions ||= begin
         h = {
           option: [] of Description,
           exit: [] of Description
         }
-        (option_model.__options.values + option_model.__handlers.values).each do |definition|
+        (__option_model.__options.values + __option_model.__handlers.values).each do |definition|
           head = definition.names.join(", ")
           varname = __variable_name_of(definition)
           head += " #{varname}" if varname
@@ -70,18 +71,18 @@ module Cli
       end
     end
 
-    def options
-      return nil if @options == false
-      descs = option_descriptions[:option] + option_descriptions[:exit]
-      @options = if descs.empty?
-        @options = false
+    def __options
+      return nil if @__options == false
+      descs = __option_descriptions[:option] + __option_descriptions[:exit]
+      @__options = if descs.empty?
+        @__options = false
         return nil
       else
         lines = ["Options:"]
         entries = %w()
-        left_width = descs.map{|i| i[:head].size}.max + @indent
-        indent = " " * @indent
-        (self.class.sort_description(option_descriptions[:option]) + self.class.sort_description(option_descriptions[:exit])).each do |description|
+        left_width = descs.map{|i| i[:head].size}.max + @__indent
+        indent = " " * @__indent
+        (self.class.__sort_description(__option_descriptions[:option]) + self.class.__sort_description(__option_descriptions[:exit])).each do |description|
           entry = %w()
           if description[:body].empty?
             entry << "#{indent}#{description[:head]}"
@@ -100,103 +101,103 @@ module Cli
       end
     end
 
-    def text
-      @text ||= render
+    def __text
+      @__text ||= render
     end
 
-    def self.sort_description(description)
+    def self.__sort_description(description)
       description.sort do |a, b|
-        a = normalize_definition_name(a[:head])
-        b = normalize_definition_name(b[:head])
+        a = __normalize_definition_name(a[:head])
+        b = __normalize_definition_name(b[:head])
         n = a.downcase <=> b.downcase
-        n == 0 ? reverse_case(a) <=> reverse_case(b) : n
+        n == 0 ? __reverse_case(a) <=> __reverse_case(b) : n
       end
     end
 
-    def self.normalize_definition_name(name)
+    def self.__normalize_definition_name(name)
       name.split(/\=/)[0].sub(/^-*/, "")
     end
 
-    def self.reverse_case(s)
+    def self.__reverse_case(s)
       s.split("").map{|i| i =~ /[A-Z]/ ? i.downcase : i.upcase}.join("")
     end
 
-    private def __yield_block
+    private def __yield
       yield
     end
 
-    def self.caption
+    def self.__caption
     end
 
-    def self.title
+    def self.__title
     end
 
-    def self.header
+    def self.__header
     end
 
-    def self.footer
+    def self.__footer
     end
 
-    def caption
-      self.class.caption
+    def __caption
+      self.class.__caption
     end
 
-    def title
-      self.class.title
+    def __title
+      self.class.__title
     end
 
-    def header
-      self.class.header
+    def __header
+      self.class.__header
     end
 
-    def footer
-      self.class.footer
+    def __footer
+      self.class.__footer
     end
 
     macro caption(text = nil, &block)
       {% if text %}
-        def self.caption
+        def self.__caption
           {{text}}
         end
       {% else %}
-        def caption
-          __yield_block {{block}}
+        def __caption
+          __yield {{block}}
         end
       {% end %}
     end
 
     macro title(text = nil, &block)
       {% if text %}
-        def self.title
+        def self.__title
           {{text}}
         end
       {% else %}
-        def title
-          __yield_block {{block}}
+        def __title
+          __yield {{block}}
         end
       {% end %}
     end
 
     macro header(text = nil, &block)
       {% if text %}
-        def self.header
+        def self.__header
           {{text}}
         end
       {% else %}
-        def header
-          __yield_block {{block}}
+        def __header
+          __yield {{block}}
         end
       {% end %}
     end
 
     macro footer(text = nil, &block)
       {% if text %}
-        def self.footer
+        def self.__footer
           {{text}}
         end
       {% else %}
-        def footer
-          __yield_block {{block}}
+        def __footer
+          __yield {{block}}
         end
       {% end %}
     end

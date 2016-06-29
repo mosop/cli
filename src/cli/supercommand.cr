@@ -5,59 +5,57 @@ module Cli
     macro inherited
       {%
         if @type.superclass == ::Cli::Supercommand
-          merge_of_subcommands = "@@self_subcommands"
-          merge_of_subcommand_aliases = "@@self_subcommand_aliases"
+          merge_of_subcommands = "@@__self_subcommands"
+          merge_of_subcommand_aliases = "@@__self_subcommand_aliases"
         else
-          merge_of_subcommands = "::#{@type.superclass.id}.subcommands.merge(@@self_subcommands)"
-          merge_of_subcommand_aliases = "::#{@type.superclass.id}.subcommand_aliases.merge(@@self_subcommand_aliases)"
+          merge_of_subcommands = "::#{@type.superclass.id}.__subcommands.merge(@@__self_subcommands)"
+          merge_of_subcommand_aliases = "::#{@type.superclass.id}.__subcommand_aliases.merge(@@__self_subcommand_aliases)"
         end %}
 
-      @@self_subcommands = {} of ::String => ::Cli::CommandBase.class
-      @@subcommands = {} of ::String => ::Cli::CommandBase.class
+      @@__self_subcommands = {} of ::String => ::Cli::CommandBase.class
+      @@__subcommands = {} of ::String => ::Cli::CommandBase.class
 
-      def self.subcommands
-        @@subcommands = {{merge_of_subcommands.id}} if @@subcommands.empty?
-        @@subcommands
+      def self.__subcommands
+        @@__subcommands = {{merge_of_subcommands.id}} if @@__subcommands.empty?
+        @@__subcommands
       end
 
-      @@self_subcommand_aliases = {} of ::String => ::String
-      @@subcommand_aliases = {} of ::String => ::String
+      @@__self_subcommand_aliases = {} of ::String => ::String
+      @@__subcommand_aliases = {} of ::String => ::String
 
-      def self.subcommand_aliases
-        @@subcommand_aliases = {{merge_of_subcommand_aliases.id}} if @@subcommand_aliases.empty?
-        @@subcommand_aliases
+      def self.__subcommand_aliases
+        @@__subcommand_aliases = {{merge_of_subcommand_aliases.id}} if @@__subcommand_aliases.empty?
+        @@__subcommand_aliases
       end
 
-      @@default_subcommand_name : ::String?
+      @@__default_subcommand_name : ::String?
 
-      def self.default_subcommand_name
-        @@default_subcommand_name || super
+      def self.__default_subcommand_name
+        @@__default_subcommand_name || super
       end
 
-      def parse
-        if @argv.empty?
-          if self.class.default_subcommand?
-            @subcommand_name = self.class.default_subcommand_name
-            @subargv = \%w()
+      def __parse
+        if @__argv.empty?
+          if self.class.__default_subcommand?
+            @__subcommand_name = self.class.__default_subcommand_name
+            @__subargv = \%w()
           else
-            help!
+            __help!
           end
-        elsif @argv[0].starts_with?("-")
-          if self.class.default_subcommand?
+        elsif @__argv[0].starts_with?("-")
+          if self.class.__default_subcommand?
             options.__parse
           else
-            @subcommand_name = self.class.default_subcommand_name
-            @subargv = @argv[0..-1]
+            @__subcommand_name = self.class.__default_subcommand_name
+            @__subargv = @__argv[0..-1]
           end
         else
-          raise ::Cli::UnknownCommand.new("#{self.class.global_name} #{@argv[0]}") unless self.class.subcommands.has_key?(@argv[0])
-          @subcommand_name = @argv[0]
-          @subargv = @argv.size >= 2 ? @argv[1..-1] : \%w()
+          raise ::Cli::UnknownCommand.new("#{self.class.__global_name} #{@__argv[0]}") unless self.class.__subcommands.has_key?(@__argv[0])
+          @__subcommand_name = @__argv[0]
+          @__subargv = @__argv.size >= 2 ? @__argv[1..-1] : \%w()
         end
       end
     end
-
-    @subargv = %w()
 
     macro command(name, default = false, aliased = nil)
       {%
@@ -68,29 +66,30 @@ module Cli
       %}
 
       {% if default %}
-        @@default_subcommand_name = {{name}}
+        @@__default_subcommand_name = {{name}}
       {% end %}
 
-      @@self_subcommands[{{name}}] = {{class_name.id}}
+      @@__self_subcommands[{{name}}] = {{class_name.id}}
 
       {% if aliased %}
-        @@self_subcommand_aliases[{{name}}] = {{aliased}}
+        @@__self_subcommand_aliases[{{name}}] = {{aliased}}
       {% end %}
     end
 
-    def self.default_subcommand_name
+    def self.__default_subcommand_name
     end
 
-    def self.default_subcommand?
-      !default_subcommand_name.nil?
+    def self.__default_subcommand?
+      !__default_subcommand_name.nil?
     end
 
-    @subcommand_name : ::String?
+    @__subargv = %w()
+    @__subcommand_name : ::String?
 
     def run
-      if subcommand_name = @subcommand_name
-        if subcommand = self.class.subcommands[@subcommand_name]?
-          subcommand.new(self, @subargv).run
+      if subcommand_name = @__subcommand_name
+        if subcommand = self.class.__subcommands[@__subcommand_name]?
+          subcommand.new(self, @__subargv).__run
         end
       end
     end
