@@ -394,6 +394,8 @@ end
 
 ## Releases
 
+* v0.1.2
+  * Array
 * v0.1.1
   * Aliasing
 
