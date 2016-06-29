@@ -12,9 +12,12 @@ module Cli
       __add_bool_option {{names}}, metadata: %meta, default: {{default}}, not: {{not}}
     end
 
-    macro array(names, default = nil, not = %w(), desc = nil, help = :option)
+    macro array(names, var = nil, default = nil, desc = nil, help = :option)
+      {%
+        default_string = default && default.join(", ")
+      %}
       __define_string_array_option {{names}}
-      %meta = __option_metadata_class_of({{names}}).new(description: {{desc}}, default: {{default}}, help_type: {{help}})
+      %meta = __option_metadata_class_of({{names}}).new(description: {{desc}}, default: {{default}}, variable_name: {{var}}, help_type: {{help}}, default_string: {{default_string}})
       __add_string_array_option {{names}}, metadata: %meta, default: {{default}}
     end
 
@@ -38,8 +41,8 @@ module Cli
         @help_type : ::Symbol
         getter :help_type
 
-        def initialize(@description = nil, default = nil, @variable_name = nil, @help_type = nil)
-          @default_string = default.to_s unless default.nil?
+        def initialize(@description = nil, default = nil, @variable_name = nil, @help_type = nil, @default_string = nil)
+          @default_string ||= default.to_s unless default.nil?
         end
       end
     end

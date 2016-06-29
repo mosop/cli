@@ -1,40 +1,43 @@
 require "../spec_helper"
 
 module Cli::Test::HelpFeature
-  class Say < Cli::Command
+  class Lang < Cli::Command
     class Help
       title "#{global_name} [OPTIONS]"
-      header "Says something to someone."
+      header "Converts a language to other languages."
       footer "(C) 20XX mosop"
     end
 
     class Options
-      string "--to", var: "WHO", desc: "set someone who you say to", default: "world"
-      bool "--hello", not: "--Hello", desc: "say hello", default: true
+      string "--from", var: "LANG", desc: "source language"
+      array "--to", var: "LANG", desc: "target language", default: %w(ruby crystal)
+      string "--indent", var: "NUM", desc: "set number of tab size", default: "2"
+      bool "--std", not: "--Std", desc: "use standard library", default: true
       on("--help", desc: "show this help") { command.help! }
     end
   end
 
-  ::describe "Help" do
-    it "" do
-      io, _ = ::Cli::Test::Stdio.capture do
-        Say.run(%w(--help))
-      end
-      io.output.gets_to_end.should eq <<-EOS
-        say [OPTIONS]
-
-        Says something to someone.
-
-        Options:
-          --hello   say hello
-                    (enabled as default)
-          --Hello   disable --hello
-          --to WHO  set someone who you say to
-                    (default: world)
-          --help    show this help
-
-        (C) 20XX mosop\n
-        EOS
+  it "Help" do
+    io, _ = ::Cli::Test::Stdio.capture do
+      Lang.run(%w(--help))
     end
+    io.output.gets_to_end.should eq <<-EOS
+      lang [OPTIONS]
+
+      Converts a language to other languages.
+
+      Options:
+        --from LANG           source language
+        --indent NUM          set number of tab size
+                              (default: 2)
+        --std                 use standard library
+                              (enabled as default)
+        --Std                 disable --std
+        --to LANG (multiple)  target language
+                              (default: ruby, crystal)
+        --help                show this help
+
+      (C) 20XX mosop\n
+      EOS
   end
 end

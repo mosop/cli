@@ -19,6 +19,7 @@ module Cli
           head = definition.names.join(", ")
           varname = __variable_name_of(definition)
           head += " #{varname}" if varname
+          head += " (multiple)" if [:string_array].includes?(definition.type)
           body = %w()
           desc = __description_of(definition)
           default = __default_of(definition)
@@ -39,7 +40,7 @@ module Cli
 
     def __variable_name_of(definition)
       case definition.type
-      when :string
+      when :string, :string_array
         if definition.metadata.responds_to?(:variable_name)
           definition.metadata.variable_name
         end
@@ -54,7 +55,7 @@ module Cli
 
     def __default_of(definition)
       case definition.type
-      when :string
+      when :string, :string_array
         if definition.metadata.responds_to?(:default_string)
           if s = definition.metadata.default_string
             "(default: #{s})"
