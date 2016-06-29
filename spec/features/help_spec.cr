@@ -18,26 +18,26 @@ module Cli::Test::HelpFeature
   end
 
   it "Help" do
-    io, _ = ::Cli::Test::Stdio.capture do
-      Lang.run(%w(--help))
+    Stdio.capture do |io|
+      Lang.run %w(--help)
+      io.out.gets_to_end.should eq <<-EOS
+        lang [OPTIONS]
+
+        Converts a language to other languages.
+
+        Options:
+          --from LANG           source language
+          --indent NUM          set number of tab size
+                                (default: 2)
+          --std                 use standard library
+                                (enabled as default)
+          --Std                 disable --std
+          --to LANG (multiple)  target language
+                                (default: ruby, crystal)
+          --help                show this help
+
+        (C) 20XX mosop\n
+        EOS
     end
-    io.output.gets_to_end.should eq <<-EOS
-      lang [OPTIONS]
-
-      Converts a language to other languages.
-
-      Options:
-        --from LANG           source language
-        --indent NUM          set number of tab size
-                              (default: 2)
-        --std                 use standard library
-                              (enabled as default)
-        --Std                 disable --std
-        --to LANG (multiple)  target language
-                              (default: ruby, crystal)
-        --help                show this help
-
-      (C) 20XX mosop\n
-      EOS
   end
 end

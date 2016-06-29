@@ -26,13 +26,11 @@ module Cli::Test::InheritanceFeature
     end
   end
 
-  ::describe "Features" do
-    it "Inheritance" do
-      io, _ = ::Cli::Test::Stdio.capture do
-        Chase.run(%w(mouse --name Jerry))
-        Chase.run(%w(cat --name Tom))
-      end
-      io.output.gets_to_end.should eq "Jerry runs away.\nTom runs into a wall.\n"
+  it "Inheritance" do
+    Stdio.capture do |io|
+      Chase.run(%w(mouse --name Jerry))
+      Chase.run(%w(cat --name Tom))
+      io.out.gets_to_end.should eq "Jerry runs away.\nTom runs into a wall.\n"
     end
   end
 end

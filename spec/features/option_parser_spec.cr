@@ -11,12 +11,10 @@ module Cli::Test::OptionParserFeature
     end
   end
 
-  ::describe "Features" do
-    it "Option Parser" do
-      io, _ = ::Cli::Test::Stdio.capture do
-        Command.run(%w(--hello world))
-      end
-      io.output.gets_to_end.should eq "Hello, world!\n"
+  it "Option Parser" do
+    Stdio.capture do |io|
+      Command.run %w(--hello world)
+      io.out.gets_to_end.should eq "Hello, world!\n"
     end
   end
 end

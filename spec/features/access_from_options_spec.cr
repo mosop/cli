@@ -12,12 +12,10 @@ module Cli::Test::AccessFromOptionsFeature
     end
   end
 
-  ::describe "With Handler" do
-    it "" do
-      io, _ = ::Cli::Test::Stdio.capture do
-        Command.run(%w(--go))
-      end
-      io.output.gets_to_end.should eq "Gone with the Wind\n"
+  it "Access From Options" do
+    Stdio.capture do |io|
+      Command.run(%w(--go))
+      io.out.gets_to_end.should eq "Gone with the Wind\n"
     end
   end
 end

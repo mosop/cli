@@ -11,5 +11,8 @@ dependencies:
   string_inflection:
     github: mosop/string_inflection
     version: ~> 0.1.0
+  stdio:
+    github: mosop/stdio
+    version: ~> 0.1.1
 
 license: MIT

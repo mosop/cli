@@ -11,12 +11,10 @@ module Cli::Test::AccessToOptionsFeature
     end
   end
 
-  ::describe "Features" do
-    it "Argument Access" do
-      io, _ = ::Cli::Test::Stdio.capture do
-        Command.run(%w(--option foo bar -- baz))
-      end
-      io.output.gets_to_end.should eq "foo bar baz\n"
+  it "Access to Options" do
+    Stdio.capture do |io|
+      Command.run(%w(--option foo bar -- baz))
+      io.out.gets_to_end.should eq "foo bar baz\n"
     end
   end
 end

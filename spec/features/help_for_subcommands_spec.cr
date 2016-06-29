@@ -58,75 +58,75 @@ module Cli::Test::HelpForSubcommandsFeature
     end
   end
 
-  ::describe "Help for Subcommands" do
+  describe "Help for Subcommands" do
     it "prints supercommand's help" do
-      io, _ = ::Cli::Test::Stdio.capture do
-        Package.run(%w(--help))
+      Stdio.capture do |io|
+        Package.run %w(--help)
+        io.out.gets_to_end.should eq <<-EOS
+          package [SUBCOMMAND] | [OPTIONS]
+
+          Subcommands:
+            install (default)  install package
+            remove             remove package
+            uninstall          alias for remove
+            update             update package
+
+          Options:
+            --help  show this help\n
+          EOS
       end
-      io.output.gets_to_end.should eq <<-EOS
-        package [SUBCOMMAND] | [OPTIONS]
-
-        Subcommands:
-          install (default)  install package
-          remove             remove package
-          uninstall          alias for remove
-          update             update package
-
-        Options:
-          --help  show this help\n
-        EOS
     end
 
     it "prints install's help" do
-      io, _ = ::Cli::Test::Stdio.capture do
-        Package.run(%w(install --help))
-      end
-      io.output.gets_to_end.should eq <<-EOS
-        package install [OPTIONS] PACKAGE_NAME
+      Stdio.capture do |io|
+        Package.run %w(install --help)
+        io.out.gets_to_end.should eq <<-EOS
+          package install [OPTIONS] PACKAGE_NAME
 
-        Options:
-          -v VERSION  specify package's version
-          --help      show this help\n
-        EOS
+          Options:
+            -v VERSION  specify package's version
+            --help      show this help\n
+          EOS
+      end
     end
 
     it "prints update's help" do
-      io, _ = ::Cli::Test::Stdio.capture do
+      Stdio.capture do |io|
         Package.run %w(update --help)
-      end
-      io.output.gets_to_end.should eq <<-EOS
-        package update [OPTIONS] PACKAGE_NAME
+        io.out.gets_to_end.should eq <<-EOS
+          package update [OPTIONS] PACKAGE_NAME
 
-        Options:
-          --major  update major version if any
-          --help   show this help\n
-        EOS
+          Options:
+            --major  update major version if any
+            --help   show this help\n
+          EOS
+      end
     end
 
     it "prints remove's help" do
-      io, _ = ::Cli::Test::Stdio.capture do
+      Stdio.capture do |io|
         Package.run %w(remove --help)
-      end
-      io.output.gets_to_end.should eq <<-EOS
-        package remove [OPTIONS] PACKAGE_NAME
+        io.out.gets_to_end.should eq <<-EOS
+          package remove [OPTIONS] PACKAGE_NAME
 
-        Options:
-          -f      force to remove
-          --help  show this help\n
-        EOS
+          Options:
+            -f      force to remove
+            --help  show this help\n
+          EOS
+      end
     end
 
     it "prints uninstall's help" do
-      io, _ = ::Cli::Test::Stdio.capture do
+      Stdio.capture do |io|
         Package.run %w(uninstall --help)
-      end
-      io.output.gets_to_end.should eq <<-EOS
-        package remove [OPTIONS] PACKAGE_NAME
+        io.out.gets_to_end.should eq <<-EOS
+          package remove [OPTIONS] PACKAGE_NAME
 
-        Options:
-          -f      force to remove
-          --help  show this help\n
-        EOS
+          Options:
+            -f      force to remove
+            --help  show this help\n
+          EOS
+      end
     end
   end
 end

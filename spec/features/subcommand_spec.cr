@@ -27,15 +27,13 @@ module Cli::Test::SubcommandFeature
     end
   end
 
-  ::describe "Features" do
-    it "Subcommand" do
-      io, _ = ::Cli::Test::Stdio.capture do
-        Polygon.run(%w(triangle))
-        Polygon.run(%w(square))
-        Polygon.run(%w(hexagon))
-        Polygon.run(%w())
-      end
-      io.output.gets_to_end.should eq "3\n4\n6\n3\n"
+  it "Subcommand" do
+    Stdio.capture do |io|
+      Polygon.run %w(triangle)
+      Polygon.run %w(square)
+      Polygon.run %w(hexagon)
+      Polygon.run %w()
+      io.out.gets_to_end.should eq "3\n4\n6\n3\n"
     end
   end
 end

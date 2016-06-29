@@ -14,10 +14,10 @@ module Cli::Test::AliasingFeature
     end
   end
 
-  ::it "Aliasing" do
-    io, _ = ::Cli::Test::Stdio.capture do
+  it "Aliasing" do
+    Stdio.capture do |io|
       Command.run %w(l)
+      io.out.gets_to_end.should eq "sleep!\n"
     end
-    io.output.gets_to_end.should eq "sleep!\n"
   end
 end
