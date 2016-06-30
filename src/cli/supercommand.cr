@@ -60,8 +60,8 @@ module Cli
     macro command(name, default = false, aliased = nil)
       {%
         s = aliased || name
-        a = s.strip.split(/\s+/)
-        a = a.map{|i| name.split(/[_-]/).map{|j| i.capitalize}.join("")}
+        a = s.strip.split(" ")
+        a = a.map{|i| i.split("-").join("_").split("_").map{|j| j.capitalize}.join("")}
         class_name = "Commands::" + a.join("::Commands::")
       %}
 
