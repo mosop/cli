@@ -80,7 +80,7 @@ Command.run %w(--exit) # => 0
 Command.run %w(--abort) # => 1
 ```
 
-For more detail, see [Handling Exit](handling_exit).
+For more detail, see [Handling Exit](#handling_exit).
 
 ### Subcommand
 
