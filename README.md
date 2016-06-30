@@ -495,6 +495,8 @@ end
 
 ## Releases
 
+* v0.1.4
+  * help!, exit! and error!
 * v0.1.2
   * Array
 * v0.1.1
