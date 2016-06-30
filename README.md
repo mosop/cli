@@ -1,6 +1,6 @@
 # Crystal CLI
 
-Yet another library for building command-line interface applications written in Crystal.
+Yet another library for building command-line interface applications, written in Crystal.
 
 [![Build Status](https://travis-ci.org/mosop/cli.svg?branch=master)](https://travis-ci.org/mosop/cli)
 
@@ -173,13 +173,13 @@ Chase.run %w(cat --name Tom)     # prints "Tom runs into a wall."
 ```crystal
 class Lang < Cli::Command
   class Help
-    title "#{global_name} [OPTIONS]"
+    title "#{global_name} [OPTIONS] #{argument_names}"
     header "Converts a language to other languages."
     footer "(C) 20XX mosop"
   end
 
   class Options
-    string "--from", var: "LANG", desc: "source language"
+    arg "from", desc: "source language"
     array "--to", var: "LANG", desc: "target language", default: %w(ruby crystal)
     string "--indent", var: "NUM", desc: "set number of tab size", default: "2"
     bool "--std", not: "--Std", desc: "use standard library", default: true
@@ -188,12 +188,14 @@ class Lang < Cli::Command
 end
 
 Lang.run %w(--help)
-# lang [OPTIONS]
+# lang [OPTIONS] FROM
 #
 # Converts a language to other languages.
 #
+# Arguments:
+#   FROM  source language
+#
 # Options:
-#   --from LANG           source language
 #   --indent NUM          set number of tab size
 #                         (default: 2)
 #   --std                 use standard library
@@ -225,10 +227,11 @@ class Package < Cli::Supercommand
 
   class Base < Cli::Command
     class Help
-      title { "#{global_name} [OPTIONS] PACKAGE_NAME" }
+      title "#{global_name} [OPTIONS] #{argument_names}"
     end
 
     class Options
+      arg "package_name", desc: "specify package's name"
       on("--help", desc: "show this help") { command.help! }
     end
   end
@@ -281,6 +284,9 @@ Package.run %w(--help)
 Package.run %w(install --help)
 # package install [OPTIONS] PACKAGE_NAME
 #
+# Arguments:
+#   PACKAGE_NAME  specify package's name
+#
 # Options:
 #   -v VERSION  specify package's version
 #   --help      show this help
@@ -288,6 +294,9 @@ end
 
 Package.run %w(update --help)
 # package update [OPTIONS] PACKAGE_NAME
+#
+# Arguments:
+#   PACKAGE_NAME  specify package's name
 #
 # Options:
 #   --major  update major version if any
@@ -297,12 +306,18 @@ end
 Package.run %w(remove --help)
 # package remove [OPTIONS] PACKAGE_NAME
 #
+# Arguments:
+#   PACKAGE_NAME  specify package's name
+#
 # Options:
 #   -f      force to remove
 #   --help  show this help
 
 Package.run %w(uninstall --help)
 # package remove [OPTIONS] PACKAGE_NAME
+#
+# Arguments:
+#   PACKAGE_NAME  specify package's name
 #
 # Options:
 #   -f      force to remove

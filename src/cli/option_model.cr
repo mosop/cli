@@ -21,6 +21,12 @@ module Cli
       __add_string_array_option {{names}}, metadata: %meta, default: {{default}}
     end
 
+    macro arg(name, default = nil, desc = nil, help = :argument)
+      __define_argument {{name}}
+      %meta = __argument_metadata_class_of({{name}}).new(description: {{desc}}, default: {{default}}, help_type: {{help}})
+      __add_argument {{name}}, metadata: %meta
+    end
+
     macro on(names, desc = nil, help = :exit, &block)
       __define_handler {{names}} {{block}}
       %meta = __handler_metadata_class_of({{names}}).new(description: {{desc}}, help_type: {{help}})
@@ -43,6 +49,23 @@ module Cli
 
         def initialize(@description = nil, default = nil, @variable_name = nil, @help_type = nil, @default_string = nil)
           @default_string ||= default.to_s unless default.nil?
+        end
+      end
+    end
+
+    class Argument
+      class Metadata
+        @description : ::String?
+        getter :description
+
+        @default_string : ::String?
+        getter :default_string
+
+        @help_type : ::Symbol
+        getter :help_type
+
+        def initialize(@description = nil, default = nil, @help_type = nil)
+          @default_string = default.to_s unless default.nil?
         end
       end
     end

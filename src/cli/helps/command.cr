@@ -5,6 +5,7 @@ module Cli::Helps
       s = nil
       a << s if s = self.__title
       a << s if s = self.__header
+      a << s if s = self.__arguments
       a << s if s = self.__options
       a << s if s = self.__footer
       a.empty? ? nil : a.join("\n\n")

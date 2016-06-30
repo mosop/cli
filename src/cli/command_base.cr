@@ -22,29 +22,13 @@ module Cli
         end
 
         class Help < ::{{super_help.id}}
-          def self.__local_name
-            ::{{@type.id}}.__local_name
-          end
-
-          def self.global_name; __global_name; end
-          def self.__global_name
-            ::{{@type.id}}.__global_name
-          end
-
-          def __local_name
-            ::{{@type.id}}.__local_name
-          end
-
-          def global_name; __global_name; end
-          def __global_name
-            ::{{@type.id}}.__global_name
-          end
-
-          def __command_model
+          def __command_model; self.class.__command_model; end
+          def self.__command_model
             ::{{@type.id}}
           end
 
-          def __option_model
+          def __option_model; self.class.__option_model; end
+          def self.__option_model
             ::{{@type.id}}::Options
           end
         end

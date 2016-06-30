@@ -17,10 +17,11 @@ module Cli::Test::HelpForSubcommandsFeature
 
     class Base < Cli::Command
       class Help
-        title { "#{global_name} [OPTIONS] PACKAGE_NAME" }
+        title "#{global_name} [OPTIONS] #{argument_names}"
       end
 
       class Options
+        arg "package_name", desc: "specify package's name"
         on("--help", desc: "show this help") { command.help! }
       end
     end
@@ -83,6 +84,9 @@ module Cli::Test::HelpForSubcommandsFeature
         io.out.gets_to_end.should eq <<-EOS
           package install [OPTIONS] PACKAGE_NAME
 
+          Arguments:
+            PACKAGE_NAME  specify package's name
+
           Options:
             -v VERSION  specify package's version
             --help      show this help\n
@@ -95,6 +99,9 @@ module Cli::Test::HelpForSubcommandsFeature
         Package.run %w(update --help)
         io.out.gets_to_end.should eq <<-EOS
           package update [OPTIONS] PACKAGE_NAME
+
+          Arguments:
+            PACKAGE_NAME  specify package's name
 
           Options:
             --major  update major version if any
@@ -109,6 +116,9 @@ module Cli::Test::HelpForSubcommandsFeature
         io.out.gets_to_end.should eq <<-EOS
           package remove [OPTIONS] PACKAGE_NAME
 
+          Arguments:
+            PACKAGE_NAME  specify package's name
+
           Options:
             -f      force to remove
             --help  show this help\n
@@ -121,6 +131,9 @@ module Cli::Test::HelpForSubcommandsFeature
         Package.run %w(uninstall --help)
         io.out.gets_to_end.should eq <<-EOS
           package remove [OPTIONS] PACKAGE_NAME
+
+          Arguments:
+            PACKAGE_NAME  specify package's name
 
           Options:
             -f      force to remove

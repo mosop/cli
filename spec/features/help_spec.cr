@@ -3,13 +3,13 @@ require "../spec_helper"
 module Cli::Test::HelpFeature
   class Lang < Cli::Command
     class Help
-      title "#{global_name} [OPTIONS]"
+      title "#{global_name} [OPTIONS] #{argument_names}"
       header "Converts a language to other languages."
       footer "(C) 20XX mosop"
     end
 
     class Options
-      string "--from", var: "LANG", desc: "source language"
+      arg "from", desc: "source language"
       array "--to", var: "LANG", desc: "target language", default: %w(ruby crystal)
       string "--indent", var: "NUM", desc: "set number of tab size", default: "2"
       bool "--std", not: "--Std", desc: "use standard library", default: true
@@ -21,12 +21,14 @@ module Cli::Test::HelpFeature
     Stdio.capture do |io|
       Lang.run %w(--help)
       io.out.gets_to_end.should eq <<-EOS
-        lang [OPTIONS]
+        lang [OPTIONS] FROM
 
         Converts a language to other languages.
 
+        Arguments:
+          FROM  source language
+
         Options:
-          --from LANG           source language
           --indent NUM          set number of tab size
                                 (default: 2)
           --std                 use standard library
