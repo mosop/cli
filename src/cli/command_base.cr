@@ -66,19 +66,19 @@ module Cli
           Help
         end
 
-        def self.__supercommand
-          c = __expand_supercommand
-          c.as?(::Cli::CommandBase.class)
-        end
-      {% end %}
-    end
+        {%
+          names = @type.id.split("::")
+          enclosing_class_name = names.size >= 3 ? names[0..-3].join("::") : nil
+        %}
 
-    macro __expand_supercommand
-      {%
-        names = @type.id.split("::")
-        class_name = names.size >= 3 ? names[0..-3].join("::") : nil
-      %}
-      {{class_name.id}}
+        def self.__enclosing_class
+          {% if enclosing_class_name %}
+            ::{{enclosing_class_name.id}}
+          {% end %}
+        end
+
+        @@__global_name : String?
+      {% end %}
     end
 
     def self.run(argv = %w())
@@ -119,9 +119,12 @@ module Cli
     end
 
     def self.__global_name
-      @@__global_name ||= if supercommand = self.__supercommand
-        "#{supercommand.__local_name} #{__local_name}"
-      else
+      @@__global_name ||= begin
+        if enclosing_class = __enclosing_class
+          if enclosing_class.responds_to?(:__global_name)
+            return "#{enclosing_class.__global_name} #{__local_name}"
+          end
+        end
         __local_name
       end
     end
