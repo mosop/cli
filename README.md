@@ -66,6 +66,22 @@ end
 Command.run %w(--go) # prints "Gone with the Wind"
 ```
 
+### Exit
+
+```crystal
+class Command < Cli::Command
+  class Options
+    on("--exit") { command.exit! }
+    on("--abort") { command.error! }
+  end
+end
+
+Command.run %w(--exit) # => 0
+Command.run %w(--abort) # => 1
+```
+
+For more detail, see [Handling Exit](handling_exit).
+
 ### Subcommand
 
 ```crystal
@@ -300,6 +316,91 @@ require "cli"
 ```
 
 and see [Features](#features).
+
+## Handling Exit
+<a name="features"></a>
+
+You can handle a command's exit with one of the 3 methods, `help!`, `exit!` and `error!`.
+
+### help!
+
+```crystal
+class Command < Cli::Command
+  def run
+    help!
+  end
+end
+
+Command.run # => 0
+```
+
+This command just ends after printing its help message. `Command.run` returns 0 as exit code.
+
+To print message to STDERR and exit with an error code, use `error` option.
+
+```crystal
+help! error: true
+```
+
+If the `:error` option is true, `run` method returns 1 as exit code. To specify a number, use the `:code` option.
+
+```crystal
+help! code: 22
+```
+
+You can also let it exit with an additional message:
+
+```crystal
+help! message: "You passed an illegal option! See help!"
+```
+
+Or simply:
+
+```crystal
+help! "You passed an illegal option! See help!"
+```
+
+Calling `help!` with the `:message` argument implies that the `:error` option is true. To exit normally, set false to `:error`.
+
+### exit! and error!
+
+`exit!` is more general than `help!`.
+
+```crystal
+class Command < Cli::Command
+  def run
+    exit!
+  end
+end
+
+Command.run # => 0
+```
+
+It just ends and returns 0 as exit code without printing.
+
+To print a message:
+
+```crystal
+exit! "bye."
+```
+
+Or more variations:
+
+```crystal
+exit! help: true # same as help!
+exit! error: true # returns 1 as exit code
+exit! "message", error: true, help: true # same as help!("message")
+```
+
+`error!` is similar to `exit!`, but the `:error` option is true as default.
+
+```crystal
+error! # ends with 1 as exit code
+error! "message" # same as exit!("message", error: true)
+error! code: 22 # specifies exit code
+error! help: true # same as help!(error: true)
+error! "message", help: true # same as help!("message")
+```
 
 ## API Basics
 

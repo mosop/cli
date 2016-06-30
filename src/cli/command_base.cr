@@ -126,12 +126,38 @@ module Cli
       end
     end
 
-    def help!(indent = 2)
-      __help! indent
+    def help!(message = nil, error = nil, code = nil, indent = 2)
+      __help! message, error, code, indent
     end
 
-    def __help!(indent = 2)
-      raise ::Cli::Exit.new(self.class.__new_help(indent: indent).__text)
+    def __help!(message = nil, error = nil, code = nil, indent = 2)
+      error = !message.nil? if error.nil?
+      __exit! message, error, code, true, indent
+    end
+
+    def exit!(message = nil, error = false, code = nil, help = false, indent = 2)
+      __exit! message, error, code, help, indent
+    end
+
+    def __exit!(message = nil, error = false, code = nil, help = false, indent = 2)
+      a = %w()
+      a << message if message
+      if help
+        if help = self.class.__new_help(indent: indent).__text
+          a << help
+        end
+      end
+      message = a.join("\n\n") unless a.empty?
+      code ||= error ? 1 : 0
+      raise ::Cli::Exit.new(message, code)
+    end
+
+    def error!(message = nil, code = nil, help = false, indent = 2)
+      __error! message, code, help, indent
+    end
+
+    def __error!(message = nil, code = nil, help = false, indent = 2)
+      __exit! message, true, code, help, indent
     end
 
     def run
