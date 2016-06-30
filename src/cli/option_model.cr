@@ -52,7 +52,10 @@ module Cli
         @description : ::String?
         getter :description
 
-        def initialize(@description = nil)
+        @help_type : ::Symbol
+        getter :help_type
+
+        def initialize(@description = nil, @help_type = nil)
         end
       end
     end

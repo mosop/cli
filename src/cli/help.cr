@@ -40,31 +40,32 @@ module Cli
     end
 
     def __variable_name_of(definition)
+      md = definition.metadata
       case definition.type
       when :string, :string_array
-        if definition.metadata.responds_to?(:variable_name)
-          definition.metadata.variable_name
+        if md.responds_to?(:variable_name)
+          md.variable_name
         end
       end
     end
 
     def __description_of(definition)
-      if definition.metadata.responds_to?(:description)
-        definition.metadata.description
+      md = definition.metadata
+      if md.responds_to?(:description)
+        md.description
       end
     end
 
     def __default_of(definition)
-      case definition.type
-      when :string, :string_array
-        if definition.metadata.responds_to?(:default_string)
-          if s = definition.metadata.default_string
+      md = definition.metadata
+      if md.responds_to?(:default_string)
+        case definition.type
+        when :string, :string_array
+          if s = md.default_string
             "(default: #{s})"
           end
-        end
-      when :bool
-        if definition.metadata.responds_to?(:default_string)
-          if definition.metadata.default_string == "true"
+        when :bool
+          if md.default_string == "true"
             "(enabled as default)"
           end
         end
