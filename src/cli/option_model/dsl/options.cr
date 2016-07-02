@@ -11,19 +11,19 @@ class Cli::OptionModel
     __add_bool_option {{names}}, metadata: %meta, default: {{default}}, not: {{not}}
   end
 
-  macro array(names, var = nil, default = nil, desc = nil, help = :option)
+  macro array(names, var = nil, default = nil, desc = nil, help = :option, min = nil)
     {%
       default_string = default && default.join(", ")
     %}
     __define_string_array_option {{names}}
     %meta = __option_metadata_class_of({{names}}).new(description: {{desc}}, default: {{default}}, variable_name: {{var}}, help_type: {{help}}, default_string: {{default_string}})
-    __add_string_array_option {{names}}, metadata: %meta, default: {{default}}
+    __add_string_array_option {{names}}, metadata: %meta, default: {{default}}, min: {{min}}
   end
 
-  macro arg(name, default = nil, desc = nil, help = :argument)
+  macro arg(name, default = nil, desc = nil, help = :argument, required = nil)
     __define_argument {{name}}
     %meta = __argument_metadata_class_of({{name}}).new(description: {{desc}}, default: {{default}}, help_type: {{help}})
-    __add_argument {{name}}, metadata: %meta
+    __add_argument {{name}}, metadata: %meta, required: {{required}}
   end
 
   macro on(names, desc = nil, help = :exit, &block)

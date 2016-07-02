@@ -22,7 +22,8 @@ module Cli
           head = definition.names.join(", ")
           varname = __variable_name_of(definition)
           head += " #{varname}" if varname
-          head += " (multiple)" if [:string_array].includes?(definition.type)
+          array_size = __array_size_of(definition)
+          head += " (#{array_size})" if array_size
           body = %w()
           desc = __description_of(definition)
           default = __default_of(definition)
@@ -71,6 +72,12 @@ module Cli
             "(enabled as default)"
           end
         end
+      end
+    end
+
+    def __array_size_of(definition)
+      if definition.responds_to?(:min)
+        definition.min > 0 ? "at least #{definition.min}" : "multple"
       end
     end
 
