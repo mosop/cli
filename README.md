@@ -179,8 +179,8 @@ class Lang < Cli::Command
   end
 
   class Options
-    arg "from", desc: "source language"
-    array "--to", var: "LANG", desc: "target language", default: %w(ruby crystal)
+    arg "from", desc: "source language", required: true
+    array "--to", var: "LANG", desc: "target language", default: %w(ruby crystal), min: 1
     string "--indent", var: "NUM", desc: "set number of tab size", default: "2"
     bool "--std", not: "--Std", desc: "use standard library", default: true
     on("--help", desc: "show this help") { command.help! }
@@ -193,17 +193,17 @@ Lang.run %w(--help)
 # Converts a language to other languages.
 #
 # Arguments:
-#   FROM  source language
+#   FROM (required)  source language
 #
 # Options:
-#   --indent NUM          set number of tab size
-#                         (default: 2)
-#   --std                 use standard library
-#                         (enabled as default)
-#   --Std                 disable --std
-#   --to LANG (multiple)  target language
-#                         (default: ruby, crystal)
-#   --help                show this help
+#   --indent NUM            set number of tab size
+#                           (default: 2)
+#   --std                   use standard library
+#                           (enabled as default)
+#   --Std                   disable --std
+#   --to LANG (at least 1)  target language
+#                           (default: ruby, crystal)
+#   --help                  show this help
 #
 # (C) 20XX mosop
 ```
@@ -332,6 +332,83 @@ require "cli"
 
 and see [Features](#features).
 
+## Fundamentals
+
+Crystal CLI provides 4 fundamental classes, `Command`, `Supercommand`, `Options` and `Help`.
+
+Both `Command` and `Supercommand` inherit the `CommandBase` class that has several features commonly used.
+
+Once you make a class inherit `Command` or `Supercommand`, then `Options` and `Help` is automatically defined into the class.
+
+```crystal
+class AncientCommand < Cli::Command
+end
+```
+
+This code seems that it simply defines the `AncientCommand` class. But, actually, it also makes `AncientCommand::Options` and `AncientCommand::Help` defined internally.
+
+
+### Parsing Options
+
+The `Options` class is used for parsing command-line options. `Options` inherits the `Optarg::Model` class provided from the [optarg](https://github.com/mosop/optarg) library. So you can define options in it.
+
+```crystal
+class AncientCommand < Cli::Command
+  class Options
+    string "--message"
+  end
+end
+```
+
+### Running a Command
+
+The virtual `CommandBase#run` method is the entry point for running your command.
+
+Your command's class will be instantiated and its `#run` method will be invoked after calling the static `.run` method.
+
+```crystal
+class AncientCommand < Cli::Command
+  def run
+    puts "We the Earth"
+  end
+end
+
+AncientCommand.run
+```
+
+This prints as:
+
+```
+We the Earth
+```
+
+A command's instance is also accessible with the `command` method in an option parser's scope.
+
+```crystal
+class AncientCommand < Cli::Command
+  class Options
+    on("--understand") { command.understand }
+  end
+
+  def understand
+    puts "We know"
+  end
+
+  def run
+    puts "We the Earth"
+  end
+end
+
+AncientCommand.run %w(--understand)
+```
+
+This prints as:
+
+```
+We know
+We the Earth
+```
+
 ## Handling Exit
 <a name="features"></a>
 
@@ -417,85 +494,9 @@ error! help: true # same as help!(error: true)
 error! "message", help: true # same as help!("message")
 ```
 
-## API Basics
+## Formatting Help [WIP]
 
-Crystal CLI provides 4 fundamental classes, `Command`, `Supercommand`, `Options` and `Help`.
-
-Both `Command` and `Supercommand` inherit the `CommandBase` class that has several features commonly used.
-
-Once you make a class inherit `Command` or `Supercommand`, then `Options` and `Help` is automatically defined into the class.
-
-```crystal
-class AncientCommand < Cli::Command
-end
-```
-
-This code seems that it simply defines the `AncientCommand` class. But, actually, it also makes `AncientCommand::Options` and `AncientCommand::Help` defined internally.
-
-### Parsing Options
-
-The `Options` class is used for parsing command-line options. `Options` inherits the `Optarg::Model` class provided from the [optarg](https://github.com/mosop/optarg) library. So you can define options in it.
-
-```crystal
-class AncientCommand < Cli::Command
-  class Options
-    string "--message"
-  end
-end
-```
-
-### Running a Command
-
-The virtual `CommandBase#run` method is the entry point for running your command.
-
-Your command's class will be instantiated and its `#run` method will be invoked after calling the static `.run` method.
-
-```crystal
-class AncientCommand < Cli::Command
-  def run
-    puts "We the Earth"
-  end
-end
-
-AncientCommand.run
-```
-
-This prints as:
-
-```
-We the Earth
-```
-
-A command's instance is also accessible with the `command` method in an option parser's scope.
-
-```crystal
-class AncientCommand < Cli::Command
-  class Options
-    on("--understand") { command.understand }
-  end
-
-  def understand
-    puts "We know"
-  end
-
-  def run
-    puts "We the Earth"
-  end
-end
-
-AncientCommand.run %w(--understand)
-```
-
-This prints as:
-
-```
-We know
-We the Earth
-```
-
-## Formatting Help
-
-The `Help` class is used for formatting help texts.
+To format help texts, use the `Help` class.
 
 ```crystal
 class AncientCommand < Cli::Command
@@ -505,8 +506,6 @@ class AncientCommand < Cli::Command
   end
 end
 ```
-
-[WIP]
 
 ## Releases
 
