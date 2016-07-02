@@ -19,7 +19,7 @@ module Cli
           exit: [] of Description
         }
         (__option_model.__options.values + __option_model.__arguments.values + __option_model.__handlers.values).each do |definition|
-          head = definition.names.join(", ")
+          head = __names_of(definition)
           varname = __variable_name_of(definition)
           head += " #{varname}" if varname
           array_size = __array_size_of(definition)
@@ -39,6 +39,15 @@ module Cli
           end
         end
         h
+      end
+    end
+
+    def __names_of(definition)
+      case definition.type
+      when :argument
+        definition.key.upcase
+      else
+        definition.names.join(", ")
       end
     end
 
@@ -178,7 +187,7 @@ module Cli
 
     def self.argument_names(separator = " "); __argument_names(separator); end
     def self.__argument_names(separator = " ")
-      __option_model.__arguments.keys.join(separator)
+      __option_model.__arguments.keys.map{|i| i.upcase}.join(separator)
     end
 
     macro caption(block)
