@@ -507,6 +507,12 @@ class AncientCommand < Cli::Command
 end
 ```
 
+## Wish List
+
+- Application-Level Logger
+- Documentation for Formatting Help
+- Auto-Title
+
 ## Releases
 
 * v0.1.4
