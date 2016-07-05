@@ -410,9 +410,33 @@ We the Earth
 ```
 
 ## Handling Exit
-<a name="features"></a>
 
-You can handle a command's exit with one of the 3 methods, `help!`, `exit!` and `error!`.
+<a name="handling_exit"></a>
+
+When a command normally ends, it returns 0.
+
+```crystal
+class Command < Cli::Command
+  def run
+  end
+end
+
+Command.run # => 0
+```
+
+When you want to abort your command, you may raise an exception:
+
+```crystal
+class Command < Cli::Command
+  def run
+    raise "ERROR!"
+  end
+end
+
+Command.run # => raises error
+```
+
+Or, instead, you can have more control of exit with one of the 3 methods: `help!`, `exit!` and `error!`.
 
 ### help!
 

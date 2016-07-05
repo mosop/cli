@@ -67,6 +67,7 @@ module Cli
 
     def self.run(argv = %w())
       new(nil, argv).__run
+      0
     rescue ex : ::Cli::Exit
       out = ex.status == 0 ? ::STDOUT : ::STDERR
       out.puts ex.message if ex.message
