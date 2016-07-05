@@ -543,6 +543,8 @@ end
 
 ## Releases
 
+* v0.1.9
+  * CommandBase.run returns 0 when #run normally returns.
 * v0.1.4
   * help!, exit! and error!
 * v0.1.2
