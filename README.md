@@ -499,10 +499,14 @@ error! "message", help: true # same as help!("message")
 To format help texts, use the `Help` class.
 
 ```crystal
-class AncientCommand < Cli::Command
+class Ancient < Cli::Command
   class Help
-    title "ancient [OPTIONS]"
+    title global_name
     footer "(C) 1977 mosop"
+  end
+
+  def run
+    help!
   end
 end
 ```
