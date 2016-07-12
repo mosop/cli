@@ -173,17 +173,16 @@ Chase.run %w(cat --name Tom)     # prints "Tom runs into a wall."
 ```crystal
 class Lang < Cli::Command
   class Help
-    title "#{global_name} [OPTIONS] #{argument_names}"
     header "Converts a language to other languages."
     footer "(C) 20XX mosop"
   end
 
   class Options
     arg "from", desc: "source language", required: true
-    array "--to", var: "LANG", desc: "target language", default: %w(ruby crystal), min: 1
+    array "--to", var: "LANG", desc: "target language", default: %w(crystal)
     string "--indent", var: "NUM", desc: "set number of tab size", default: "2"
     bool "--std", not: "--Std", desc: "use standard library", default: true
-    on("--help", desc: "show this help") { command.help! }
+    help
   end
 end
 
@@ -196,14 +195,14 @@ Lang.run %w(--help)
 #   FROM (required)  source language
 #
 # Options:
-#   --indent NUM            set number of tab size
-#                           (default: 2)
-#   --std                   use standard library
-#                           (enabled as default)
-#   --Std                   disable --std
-#   --to LANG (at least 1)  target language
-#                           (default: ruby, crystal)
-#   --help                  show this help
+#   --indent NUM          set number of tab size
+#                         (default: 2)
+#   --std                 use standard library
+#                         (enabled as default)
+#   --Std                 disable --std
+#   --to LANG (multiple)  target language
+#                         (default: crystal)
+#   -h, --help            show this help
 #
 # (C) 20XX mosop
 ```
@@ -222,17 +221,13 @@ class Package < Cli::Supercommand
   end
 
   class Options
-    on("--help", desc: "show this help") { command.help! }
+    help
   end
 
   class Base < Cli::Command
-    class Help
-      title "#{global_name} [OPTIONS] #{argument_names}"
-    end
-
     class Options
-      arg "package_name", desc: "specify package's name"
-      on("--help", desc: "show this help") { command.help! }
+      arg "package_name", desc: "specify package's name", required: true
+      help
     end
   end
 
@@ -279,7 +274,7 @@ Package.run %w(--help)
 #   update             update package
 #
 # Options:
-#   --help  show this help
+#   -h, --help  show this help
 
 Package.run %w(install --help)
 # package install [OPTIONS] PACKAGE_NAME
@@ -289,7 +284,7 @@ Package.run %w(install --help)
 #
 # Options:
 #   -v VERSION  specify package's version
-#   --help      show this help
+#   -h, --help  show this help
 end
 
 Package.run %w(update --help)
@@ -299,8 +294,8 @@ Package.run %w(update --help)
 #   PACKAGE_NAME  specify package's name
 #
 # Options:
-#   --major  update major version if any
-#   --help   show this help
+#   --major     update major version if any
+#   -h, --help  show this help
 end
 
 Package.run %w(remove --help)
@@ -310,8 +305,8 @@ Package.run %w(remove --help)
 #   PACKAGE_NAME  specify package's name
 #
 # Options:
-#   -f      force to remove
-#   --help  show this help
+#   -f          force to remove
+#   -h, --help  show this help
 
 Package.run %w(uninstall --help)
 # package remove [OPTIONS] PACKAGE_NAME
@@ -320,8 +315,8 @@ Package.run %w(uninstall --help)
 #   PACKAGE_NAME  specify package's name
 #
 # Options:
-#   -f      force to remove
-#   --help  show this help
+#   -f          force to remove
+#   -h, --help  show this help
 ```
 
 ## Usage

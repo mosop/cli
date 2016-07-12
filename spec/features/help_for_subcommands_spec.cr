@@ -12,13 +12,13 @@ module Cli::Test::HelpForSubcommandsFeature
     end
 
     class Options
-      on("--help", desc: "show this help") { command.help! }
+      help
     end
 
     class Base < Cli::Command
       class Options
         arg "package_name", desc: "specify package's name", required: true
-        on("--help", desc: "show this help") { command.help! }
+        help
       end
     end
 
@@ -69,7 +69,7 @@ module Cli::Test::HelpForSubcommandsFeature
             update             update package
 
           Options:
-            --help  show this help\n
+            -h, --help  show this help\n
           EOS
       end
     end
@@ -85,7 +85,7 @@ module Cli::Test::HelpForSubcommandsFeature
 
           Options:
             -v VERSION  specify package's version
-            --help      show this help\n
+            -h, --help  show this help\n
           EOS
       end
     end
@@ -100,8 +100,8 @@ module Cli::Test::HelpForSubcommandsFeature
             PACKAGE_NAME  specify package's name
 
           Options:
-            --major  update major version if any
-            --help   show this help\n
+            --major     update major version if any
+            -h, --help  show this help\n
           EOS
       end
     end
@@ -116,8 +116,8 @@ module Cli::Test::HelpForSubcommandsFeature
             PACKAGE_NAME  specify package's name
 
           Options:
-            -f      force to remove
-            --help  show this help\n
+            -f          force to remove
+            -h, --help  show this help\n
           EOS
       end
     end
@@ -132,8 +132,8 @@ module Cli::Test::HelpForSubcommandsFeature
             PACKAGE_NAME  specify package's name
 
           Options:
-            -f      force to remove
-            --help  show this help\n
+            -f          force to remove
+            -h, --help  show this help\n
           EOS
       end
     end
