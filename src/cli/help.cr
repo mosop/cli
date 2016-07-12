@@ -135,7 +135,7 @@ module Cli
     end
 
     def __text
-      @__text ||= render
+      @__text ||= __render
     end
 
     def self.__sort_description(description)

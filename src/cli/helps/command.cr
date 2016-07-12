@@ -1,6 +1,6 @@
 module Cli::Helps
   abstract class Command < ::Cli::Help
-    def render
+    def __render
       a = %w()
       s = nil
       a << s if s = self.__title

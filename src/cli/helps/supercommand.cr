@@ -44,7 +44,7 @@ module Cli::Helps
       end
     end
 
-    def render
+    def __render
       a = %w()
       s = nil
       a << s if s = self.__title
