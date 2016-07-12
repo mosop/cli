@@ -31,4 +31,17 @@ class Cli::OptionModel
     %meta = __handler_metadata_class_of({{names}}).new(description: {{desc}})
     __add_handler {{names}}, metadata: %meta
   end
+
+  macro help(names = nil, desc = nil)
+    {%
+      names ||= %w(-h --help)
+      names = [names] if names.class_name != "ArrayLiteral"
+      command_class = @type.name.split("::")[0..-2]
+    %}
+    on({{names}}, desc: ({{desc}} || "show this help")) { __command.help! }
+
+    def self.__help_handler
+      Options.__handlers[{{names[0]}}]
+    end
+  end
 end

@@ -32,6 +32,9 @@ module Cli
       end
     end
 
+    def self.__help_handler
+    end
+
     @__command : ::Cli::CommandBase?
 
     def initialize(@__command, argv)
