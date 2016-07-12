@@ -1,8 +1,17 @@
 module Cli
   abstract class Help
+    TYPES = {
+      :argument => :argument,
+      :array => :option,
+      :bool => :option,
+      :string => :option,
+      :string_array => :option,
+      :handler => :handler
+    }
+
     alias Description = {head: ::String, body: ::Array(::String)}
     @__indent : ::Int32
-    @__definition_descriptions : {option: ::Array(Description), argument: ::Array(Description), exit: ::Array(Description)}?
+    @__definition_descriptions : {option: ::Array(Description), argument: ::Array(Description), handler: ::Array(Description)}?
     @__arguments : ::String | ::Bool | ::Nil
     @__options : ::String | ::Bool | ::Nil
     @__text : ::String?
@@ -16,9 +25,10 @@ module Cli
         h = {
           option: [] of Description,
           argument: [] of Description,
-          exit: [] of Description
+          handler: [] of Description
         }
         (__option_model.__options.values + __option_model.__arguments.values + __option_model.__handlers.values).each do |definition|
+          type = TYPES[definition.type]
           head = __names_of(definition)
           varname = __variable_name_of(definition)
           head += " #{varname}" if varname
@@ -29,12 +39,12 @@ module Cli
           default = __default_of(definition)
           body += desc.split("\n") if desc
           body += default.split("\n") if default
-          h[definition.metadata.help_type] << {head: head, body: body}
+          h[type] << {head: head, body: body}
           if definition.type == :bool && definition.responds_to?(:not)
             unless definition.not.empty?
               head = definition.not.join(", ")
               desc = "disable #{definition.names.first}"
-              h[definition.metadata.help_type] << {head: head, body: [desc]}
+              h[type] << {head: head, body: [desc]}
             end
           end
         end
@@ -102,7 +112,7 @@ module Cli
 
     def __options
       return nil if @__options == false
-      if lines = __join_description(:option, :exit)
+      if lines = __join_description(:option, :handler)
         @__options = ["Options:", lines].join("\n")
       else
         @__options = false
