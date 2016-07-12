@@ -96,7 +96,7 @@ module Cli
 
     def __array_size_of(definition)
       if definition.responds_to?(:min)
-        definition.min > 0 ? "at least #{definition.min}" : "multple"
+        definition.min > 0 ? "at least #{definition.min}" : "multiple"
       end
     end
 
