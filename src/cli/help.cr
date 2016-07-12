@@ -170,20 +170,16 @@ module Cli
     end
 
     def __caption; self.class.__caption; end
-    def self.__caption
-    end
+    def self.__caption; end;
 
     def __title; self.class.__title; end
-    def self.__title
-    end
+    def self.__title; end
 
     def __header; self.class.__header; end
-    def self.__header
-    end
+    def self.__header; end
 
     def __footer; self.class.__footer; end
-    def self.__footer
-    end
+    def self.__footer; end
 
     def self.local_name; __local_name; end
     def self.__local_name
@@ -196,8 +192,25 @@ module Cli
     end
 
     def self.argument_names(separator = " "); __argument_names(separator); end
+    @@__argument_names : String?
     def self.__argument_names(separator = " ")
-      __option_model.__arguments.keys.map{|i| i.upcase}.join(separator)
+      @@__argument_names ||= unless __option_model.__arguments.empty?
+        __option_model.__arguments.values.map{|i| i.required? ? i.display_name : "[#{i.display_name}]" }.join(separator)
+      end
+    end
+
+    def __default_title; self.class.__default_title; end
+    @@__default_title : String?
+    def self.__default_title
+      @@__default_title ||= begin
+        a = %w()
+        a << __global_name
+        unless __option_model.__options.empty?
+          a << (__option_model.__options.values.any?{|i| i.required?} ? "OPTIONS" : "[OPTIONS]")
+        end
+        a << __argument_names.to_s if __argument_names
+        a.join(" ")
+      end
     end
 
     macro caption(block)

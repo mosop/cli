@@ -13,6 +13,10 @@ module Cli
     end
 
     class Argument
+      def display_name
+        super.upcase
+      end
+      
       class Metadata
         getter description : ::String?
         getter default_string : ::String?

@@ -16,12 +16,8 @@ module Cli::Test::HelpForSubcommandsFeature
     end
 
     class Base < Cli::Command
-      class Help
-        title "#{global_name} [OPTIONS] #{argument_names}"
-      end
-
       class Options
-        arg "package_name", desc: "specify package's name"
+        arg "package_name", desc: "specify package's name", required: true
         on("--help", desc: "show this help") { command.help! }
       end
     end

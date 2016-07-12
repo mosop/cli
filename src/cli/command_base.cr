@@ -60,8 +60,6 @@ module Cli
             ::{{enclosing_class_name.id}}
           {% end %}
         end
-
-        @@__global_name : String?
       {% end %}
     end
 
@@ -106,6 +104,7 @@ module Cli
       end
     end
 
+    @@__global_name : String?
     def self.__global_name
       @@__global_name ||= begin
         if enclosing_class = __enclosing_class
