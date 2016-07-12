@@ -72,6 +72,9 @@ module Cli
       out = ex.status == 0 ? ::STDOUT : ::STDERR
       out.puts ex.message if ex.message
       ex.status
+    rescue ex : ::Optarg::ValidationError
+      ::STDERR.puts "Parsing Error: #{ex.message}"
+      1
     end
 
     @__parent : ::Cli::CommandBase?
