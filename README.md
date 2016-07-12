@@ -534,10 +534,11 @@ end
 
 - Application-Level Logger
 - Documentation for Formatting Help
-- Auto-Title
 
 ## Releases
 
+* v0.1.11
+  * Automatic Title Generation
 * v0.1.9
   * CommandBase.run returns 0 when #run normally returns.
 * v0.1.4
