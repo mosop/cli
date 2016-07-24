@@ -57,7 +57,7 @@ class Open < Cli::Command
 end
 
 Open.run %w(sesame) # => prints "Opened!" and returns 0 as exit code
-Open.run %w(paprika) # => prints "Not opened!" into STDERR and returns 1 an exit code
+Open.run %w(paprika) # => prints "Not opened!" into STDERR and returns 1 as exit code
 ```
 
 For more detail, see [Handling Exit](#handling_exit).
