@@ -396,7 +396,7 @@ error! "message", help: true # same as help!("message")
 To define subcommands, you do:
 
 * define a *supercommand* class that inherits `Cli::Supercommand`,
-* define subcommand names with the `comamnd` method into the supercommand's class,
+* define subcommand names with the `comamnd` method into the supercommand class,
 * inside the supercommand's scope, define a module and name it "Commands" and
 * define command classes into the `Commands` module.
 
