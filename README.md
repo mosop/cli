@@ -97,6 +97,8 @@ Polygon.run %w(hexagon)  # prints "6"
 Polygon.run %w()         # prints "3"
 ```
 
+For more detail, see [Defining Subcommands](#defining_subcommands).
+
 ### Aliasing
 
 ```crystal
@@ -180,6 +182,8 @@ Call.run %w(--help)
 #
 # (C) 20XX mosop
 ```
+
+For more detail, see [Generating Help](#generating_help).
 
 ## Usage
 
@@ -385,6 +389,8 @@ error! "message", help: true # same as help!("message")
 
 ## Defining Subcommands
 
+<a name="defining_subcommands"></a>
+
 *subcommand* is a child command that is categorized under a specific namespace. For example, the `git` command has several its subcommands, `clone`, `commit`, `push`, etc.
 
 To define subcommands, you do:
@@ -433,6 +439,8 @@ Bundle.run %w()         # implicitly run install
 ```
 
 ## Generating Help
+
+<a name="generating_help"></a>
 
 To format help texts, use the `Help` class.
 
