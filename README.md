@@ -195,7 +195,7 @@ and see [Features](#features).
 
 ## Fundamentals
 
-Crystal CLI provides 4 fundamental classes, `Command`, `Supercommand`, `Options` and `Help`.
+Crystal CLI provides 4 fundamental classes: `Command`, `Supercommand`, `Options` and `Help`.
 
 Both `Command` and `Supercommand` inherit the `CommandBase` class that has several features commonly used.
 
@@ -391,7 +391,7 @@ error! "message", help: true # same as help!("message")
 
 <a name="defining_subcommands"></a>
 
-*subcommand* is a child command that is categorized under a specific namespace. For example, the `git` command has several its subcommands, `clone`, `commit`, `push`, etc.
+*subcommand* is a child command that is categorized under a specific namespace. For example, the `git` command has its several subcommands, `clone`, `commit`, `push`, etc.
 
 To define subcommands, you do:
 
