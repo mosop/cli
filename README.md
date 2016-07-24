@@ -17,7 +17,7 @@ dependencies:
 ## Features
 <a name="features"></a>
 
-### Option Parser (Integrated with [optarg](https://github.com/mosop/optarg))
+### Option Parser
 
 ```crystal
 class Command < Cli::Command
@@ -33,51 +33,31 @@ end
 Command.run %w(--hello world) # prints "Hello, world!"
 ```
 
-### Access to Options
-
-```crystal
-class Command < Cli::Command
-  class Options
-    string "--option"
-  end
-
-  def run
-    puts "#{options.option} #{args[0]} #{unparsed_args[0]}"
-  end
-end
-
-Command.run %w(--option foo bar -- baz) # prints "foo bar baz"
-```
-
-### Access from Options
-
-```crystal
-class Command < Cli::Command
-  class Options
-    on("--go") { command.go(with: "the Wind") }
-  end
-
-  def go(with some)
-    puts "Gone with #{some}"
-    exit
-  end
-end
-
-Command.run %w(--go) # prints "Gone with the Wind"
-```
+For more detail, see [Parsing Options](#parsing_options).
 
 ### Exit
 
 ```crystal
-class Command < Cli::Command
+class Open < Cli::Command
   class Options
-    on("--exit") { command.exit! }
-    on("--abort") { command.error! }
+    arg "word"
+  end
+
+  def valid?
+    args.word == "sesame"
+  end
+
+  def run
+    if valid?
+      exit! "Opened!"
+    else
+      error! "Not opened!"
+    end
   end
 end
 
-Command.run %w(--exit) # => 0
-Command.run %w(--abort) # => 1
+Open.run %w(sesame) # => prints "Opened!" and returns 0 as exit code
+Open.run %w(paprika) # => prints "Not opened!" into STDERR and returns 1 an exit code
 ```
 
 For more detail, see [Handling Exit](#handling_exit).
@@ -171,152 +151,34 @@ Chase.run %w(cat --name Tom)     # prints "Tom runs into a wall."
 ### Help
 
 ```crystal
-class Lang < Cli::Command
+class Call < Cli::Command
   class Help
-    header "Converts a language to other languages."
+    header "Receives an ancient message."
     footer "(C) 20XX mosop"
   end
 
   class Options
-    arg "from", desc: "source language", required: true
-    array "--to", var: "LANG", desc: "target language", default: %w(crystal)
-    string "--indent", var: "NUM", desc: "set number of tab size", default: "2"
-    bool "--std", not: "--Std", desc: "use standard library", default: true
+    arg "message", desc: "your message to call them", required: true
+    bool "-w", not: "-W", desc: "wait for response", default: true
     help
   end
 end
 
-Lang.run %w(--help)
-# lang [OPTIONS] FROM
+Call.run %w(--help)
+# call [OPTIONS] MESSAGE
 #
-# Converts a language to other languages.
+# Receives an ancient message.
 #
 # Arguments:
-#   FROM (required)  source language
+#   MESSAGE (required)  your message to call them
 #
 # Options:
-#   --indent NUM          set number of tab size
-#                         (default: 2)
-#   --std                 use standard library
-#                         (enabled as default)
-#   --Std                 disable --std
-#   --to LANG (multiple)  target language
-#                         (default: crystal)
-#   -h, --help            show this help
+#   -w          wait for response
+#               (default: true)
+#   -W          disable -w
+#   -h, --help  show this help
 #
 # (C) 20XX mosop
-```
-
-### Help for Subcommands
-
-```crystal
-class Package < Cli::Supercommand
-  command "install", default: true
-  command "update"
-  command "remove"
-  command "uninstall", aliased: "remove"
-
-  class Help
-    title "#{global_name} [SUBCOMMAND] | [OPTIONS]"
-  end
-
-  class Options
-    help
-  end
-
-  class Base < Cli::Command
-    class Options
-      arg "package_name", desc: "specify package's name", required: true
-      help
-    end
-  end
-
-  module Commands
-    class Install < Base
-      class Help
-        caption "install package"
-      end
-
-      class Options
-        string "-v", var: "VERSION", desc: "specify package's version"
-      end
-    end
-
-    class Update < Base
-      class Help
-        caption "update package"
-      end
-
-      class Options
-        bool "--break", desc: "update major version if any"
-      end
-    end
-
-    class Remove < Base
-      class Help
-        caption "remove package"
-      end
-
-      class Options
-        bool "-f", desc: "force to remove"
-      end
-    end
-  end
-end
-
-Package.run %w(--help)
-# package [SUBCOMMAND] | [OPTIONS]
-#
-# Subcommands:
-#   install (default)  install package
-#   remove             remove package
-#   uninstall          alias for remove
-#   update             update package
-#
-# Options:
-#   -h, --help  show this help
-
-Package.run %w(install --help)
-# package install [OPTIONS] PACKAGE_NAME
-#
-# Arguments:
-#   PACKAGE_NAME  specify package's name
-#
-# Options:
-#   -v VERSION  specify package's version
-#   -h, --help  show this help
-end
-
-Package.run %w(update --help)
-# package update [OPTIONS] PACKAGE_NAME
-#
-# Arguments:
-#   PACKAGE_NAME  specify package's name
-#
-# Options:
-#   --major     update major version if any
-#   -h, --help  show this help
-end
-
-Package.run %w(remove --help)
-# package remove [OPTIONS] PACKAGE_NAME
-#
-# Arguments:
-#   PACKAGE_NAME  specify package's name
-#
-# Options:
-#   -f          force to remove
-#   -h, --help  show this help
-
-Package.run %w(uninstall --help)
-# package remove [OPTIONS] PACKAGE_NAME
-#
-# Arguments:
-#   PACKAGE_NAME  specify package's name
-#
-# Options:
-#   -f          force to remove
-#   -h, --help  show this help
 ```
 
 ## Usage
@@ -336,24 +198,32 @@ Both `Command` and `Supercommand` inherit the `CommandBase` class that has sever
 Once you make a class inherit `Command` or `Supercommand`, then `Options` and `Help` is automatically defined into the class.
 
 ```crystal
-class AncientCommand < Cli::Command
+class YourCommand < Cli::Command
 end
 ```
 
-This code seems that it simply defines the `AncientCommand` class. But, actually, it also makes `AncientCommand::Options` and `AncientCommand::Help` defined internally.
+This code seems that it simply defines the `YourCommand` class. But, actually, it also makes `YourCommand::Options` and `YourCommand::Help` defined internally.
 
 
 ### Parsing Options
 
-The `Options` class is used for parsing command-line options. `Options` inherits the `Optarg::Model` class provided from the [optarg](https://github.com/mosop/optarg) library. So you can define options in it.
+<a name="parsing_options"></a>
+
+The `Options` class is used to define command-line options and arguments.
+
+For example:
 
 ```crystal
-class AncientCommand < Cli::Command
+class PlaySong < Cli::Command
   class Options
-    string "--message"
+    arg "title", required: true
+    bool "--repeat", not: "--Repeat", default: true
+    array "--genre"
   end
 end
 ```
+
+`Options` inherits the `Optarg::Model` class provided from the *optarg* parser library. For more information about optarg, see the  [README](https://github.com/mosop/optarg).
 
 ### Running a Command
 
@@ -447,7 +317,7 @@ Command.run # => 0
 
 This command just ends after printing its help message. `Command.run` returns 0 as exit code.
 
-To print message to STDERR and exit with an error code, use `error` option.
+To print message to STDERR and exit with an error code, use `:error` option.
 
 ```crystal
 help! error: true
@@ -513,27 +383,221 @@ error! help: true # same as help!(error: true)
 error! "message", help: true # same as help!("message")
 ```
 
-## Formatting Help [WIP]
+## Defining Subcommands
+
+*subcommand* is a child command that is categorized under a specific namespace. For example, the `git` command has several its subcommands, `clone`, `commit`, `push`, etc.
+
+To define subcommands, you do:
+
+* define a *supercommand* class that inherits `Cli::Supercommand`,
+* define subcommand names with the `comamnd` method into the supercommand's scope,
+* inside the supercommand's scope, define a module and name it "Commands" and
+* define command classes into the `Commands` module.
+
+```crystal
+class Git < Cli::Supercommand
+  command "clone"
+  command "commit"
+  command "push"
+
+  module Commands
+    class Clone < Cli::Command
+     # ...
+    end
+
+    class Commit < Cli::Command
+      # ...
+    end
+
+    class Push < Cli::Command
+      # ...
+    end
+  end
+end
+```
+
+### Default Subcommand
+
+You can mark one of subcommands as default. The default subcommand can be run without an explicit name in a command line.
+
+```crystal
+class Bundle < Cli::Supercommand
+  command "install", default: true
+  command "update"
+  command "config"
+  # ...
+end
+
+Bundle.run %w(install)  # explicitly run install
+Bundle.run %w()         # implicitly run install
+```
+
+## Generating Help
 
 To format help texts, use the `Help` class.
+
+For example:
+
+```crystal
+class Smile < Cli::Command
+  class Help
+    header "Smiles n times."
+    footer "(C) 20XX mosop"
+  end
+
+  class Options
+    arg "face", required: true, desc: "your face, for example, :), :(, :P"
+    string "--times", var: "NUMBER", default: "1", desc: "number of times to display"
+    help
+  end
+
+  def run
+    puts args.face * options.times.to_i
+  end
+
+  end
+    help
+  end
+end
+
+Smile.run ARGV
+```
+
+If you run this command with a help option, you see:
+
+```
+$ smile --help
+smile [OPTIONS] FACE
+
+Smiles n times.
+
+Arguments:
+  FACE  your face, for example, :), :(, :P
+
+Options:
+  --times NUMBER  number of times to display
+                  (default: 1)
+  -h, --help      show this help
+
+(C) 20XX mosop
+```
+
+The help format has the following sections. Each section is aligned in the order.
+
+* title
+* header
+* subcommands (`Supercommand` only)
+* arguments
+* options
+* footer
+
+### Titling
+
+By default, the title section is automatically generated. To explicitly specify a title, use the `Help.title` method.
 
 ```crystal
 class Ancient < Cli::Command
   class Help
-    title global_name
-    footer "(C) 1977 mosop"
+    title "ancient - calls ancient people"
+  end
+end
+```
+
+Instead of specifying a whole title, you can only set a command's name. It is convenient when a command name is different from its class name.
+
+```crystal
+class Main < Cli::Command
+  command_name "ancient"
+end
+```
+
+Note: The `command_name` method belongs to the `CommandBase` class, not the `Help` class.
+
+### Header and Footer
+
+The header and footer sections are not automatically defined. They appear only if you define them.
+
+To define those sections, use the methods: `Help.header` and `Help.footer`.
+
+```crystal
+class Dependency < Cli::Command
+  class Help
+    header <<-EOS
+      Renders a dependency diagram.
+
+      Supported package managers:
+        RubyGems
+        Shards
+        npm
+      EOS
+    footer <<-EOS
+      (C) 20XX mosop
+      Created by mosop (http://mosop.me)
+      EOS
+  end
+end
+```
+
+### Subcommands
+
+The *subcommands* section is appeared only if a command is a supercommand.
+
+You can specify a *caption* that is displayed beside each subcommand. The caption is a very short description and it is typically a single phrase.
+
+```crystal
+class Cake < Cli::Supercommand
+  command "strawberry"
+  command "cheese"
+  command "chocolat"
+
+  class Options
+    help
   end
 
-  def run
-    help!
+  module Commands
+    class Strawberry < Cli::Command
+      caption "made with Sachinoka strawberry"
+    end
+
+    class Cheese < Cli::Command
+      caption "New York-style"
+    end
+
+    class Chocolat < Cli::Command
+      caption "Winter only"
+    end
   end
+end
+
+Cake.run %w(--help)
+# cake SUBCOMMAND
+#
+# Subcommands:
+#   cheese      New York-style
+#   chocolat    winter only
+#   strawberry  made with Toyonoka strawberry
+```
+
+### Arguments and Options
+
+The arguments and options sections are fully automatically generated. You can not include any custom text into them.
+
+### Options.help
+
+The `Options.help` method adds the `-h` and `--help` options to your command. These options can be used to print help:
+
+`help` is a shorthand. You can also explicitly define the options:
+
+```crystal
+class Options
+  on(["-h", "--help"]) { command.help! }
 end
 ```
 
 ## Wish List
 
 - Application-Level Logger
-- Documentation for Formatting Help
+- Bash Completion Support
 
 ## Releases
 
