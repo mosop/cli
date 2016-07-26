@@ -590,7 +590,7 @@ Cake.run %w(--help)
 
 The arguments and options sections are automatically generated from information defined.
 
-You can specify an option's description by the :desc option.
+You can specify an option's description by the `:desc` option.
 
 ```crystal
 class Friend < Cli::Command
