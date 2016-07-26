@@ -434,8 +434,8 @@ class Bundle < Cli::Supercommand
   # ...
 end
 
-Bundle.run %w(install)  # explicitly run install
-Bundle.run %w()         # implicitly run install
+Bundle.run %w(install)  # explicitly runs install
+Bundle.run %w()         # implicitly runs install
 ```
 
 ## Generating Help
@@ -572,7 +572,7 @@ class Cake < Cli::Supercommand
     end
 
     class Chocolat < Cli::Command
-      caption "Winter only"
+      caption "winter only"
     end
   end
 end
