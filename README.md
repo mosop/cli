@@ -588,7 +588,28 @@ Cake.run %w(--help)
 
 ### Arguments and Options
 
-The arguments and options sections are fully automatically generated. You can not include any custom text into them.
+The arguments and options sections are automatically generated from information defined.
+
+You can specify an option's description by the :desc option.
+
+```crystal
+class Friend < Cli::Command
+  class Options
+    arg "name", required: true, desc: "your friend name"
+    string "--years", desc: "how long you've been friends"
+    help
+  end
+end
+
+Friend.run %w(--help)
+# friend [OPTIONS] NAME
+#
+# Arguments:
+#   NAME (required)  your friend name
+#
+# Options:
+#   --years  how long you've been friends  
+```
 
 ### Options.help
 
@@ -606,6 +627,7 @@ end
 
 - Application-Level Logger
 - Bash Completion Support
+- I18n
 
 ## Releases
 
