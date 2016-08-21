@@ -667,6 +667,8 @@ end
 
 ## Releases
 
+* v0.2.0
+  * (Breaking Change) The optarg's version is updated to 0.3.
 * v0.1.11
   * Automatic Title Generation
 * v0.1.9
