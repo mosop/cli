@@ -1,6 +1,6 @@
-require "../spec_helper"
+require "../../spec_helper"
 
-module CliHelpFeature
+module CliObsoleteHelpFeature
   class Lang < Cli::Command
     class Help
       header "Converts a language to other languages."

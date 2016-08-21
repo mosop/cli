@@ -15,6 +15,10 @@ module Cli
           end %}
 
         class Options < ::{{super_option_model.id}}
+          {% if @type.superclass == ::Cli::Supercommand %}
+            arg "subcommand", required: true, stop: true
+          {% end %}
+
           def command; __command; end
           def __command
             @__command as ::{{@type.id}}
@@ -38,10 +42,6 @@ module Cli
           @__options as Options
         end
 
-        def __new_options
-          Options.new(self, @__argv)
-        end
-
         def self.__new_help(indent = 2)
           Help.new(indent: indent)
         end
@@ -60,28 +60,38 @@ module Cli
             ::{{enclosing_class_name.id}}
           {% end %}
         end
+
+        def __new_options(argv)
+          Options.new(self, argv)
+        end
       {% end %}
     end
 
     def self.run(argv = %w())
+      __run(argv)
+    end
+
+    def self.__run(argv)
       new(nil, argv).__run
       0
     rescue ex : ::Cli::Exit
       out = ex.status == 0 ? ::STDOUT : ::STDERR
       out.puts ex.message if ex.message
       ex.status
-    rescue ex : ::Optarg::ValidationError
+    rescue ex : ::Optarg::ParsingError
       ::STDERR.puts "Parsing Error: #{ex.message}"
       1
     end
 
-    @__parent : ::Cli::CommandBase?
-    @__argv : ::Array(::String)
-    @__options : ::Optarg::Model?
+    getter __parent : ::Cli::CommandBase?
 
-    def initialize(@__parent, @__argv)
-      @__options = __new_options
-      __parse
+    def initialize(@__parent, argv)
+      __initialize_options argv
+    end
+
+    @__options : ::Optarg::Model?
+    def __options
+      @__options as ::Optarg::Model
     end
 
     def args; __args; end

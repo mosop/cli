@@ -1,9 +1,10 @@
-require "../spec_helper"
+require "../../spec_helper"
 
 module Cli::Test::AccessToOptionsFeature
   class Command < Cli::Command
     class Options
       string "--option"
+      terminator "--"
     end
 
     def run

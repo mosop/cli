@@ -1,6 +1,15 @@
 module Cli
   abstract class OptionModel < ::Optarg::Model
     class Option
+      def optional?
+        o = self
+        if o.responds_to?(:required?)
+          !(default.nil? && o.required?)
+        else
+          true
+        end
+      end
+
       class Metadata
         getter description : ::String?
         getter default_string : ::String?
@@ -13,10 +22,14 @@ module Cli
     end
 
     class Argument
+      def optional?
+        !(default.nil? && required?)
+      end
+
       def display_name
         super.upcase
       end
-      
+
       class Metadata
         getter description : ::String?
         getter default_string : ::String?
@@ -28,6 +41,10 @@ module Cli
     end
 
     class Handler
+      def optional?
+        true
+      end
+
       class Metadata
         getter description : ::String?
 

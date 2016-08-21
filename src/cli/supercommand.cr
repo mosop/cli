@@ -5,54 +5,57 @@ module Cli
     macro inherited
       {%
         if @type.superclass == ::Cli::Supercommand
-          merge_of_subcommands = "@@__self_subcommands"
-          merge_of_subcommand_aliases = "@@__self_subcommand_aliases"
+          is_root = true
         else
-          merge_of_subcommands = "::#{@type.superclass.id}.__subcommands.merge(@@__self_subcommands)"
-          merge_of_subcommand_aliases = "::#{@type.superclass.id}.__subcommand_aliases.merge(@@__self_subcommand_aliases)"
+          is_root = false
         end %}
 
       @@__self_subcommands = {} of ::String => ::Cli::CommandBase.class
-      @@__subcommands = {} of ::String => ::Cli::CommandBase.class
-
+      @@__subcommands : ::Hash(::String, ::Cli::CommandBase.class)?
       def self.__subcommands
-        @@__subcommands = {{merge_of_subcommands.id}} if @@__subcommands.empty?
-        @@__subcommands
+        @@__subcommands ||= begin
+          {% if is_root %}
+            h = {} of ::String => ::Cli::CommandBase.class
+          {% else %}
+            h = superclass.__subcommands
+          {% end %}
+          h.merge(@@__self_subcommands)
+        end
       end
 
       @@__self_subcommand_aliases = {} of ::String => ::String
-      @@__subcommand_aliases = {} of ::String => ::String
-
+      @@__subcommand_aliases : ::Hash(::String, ::String)?
       def self.__subcommand_aliases
-        @@__subcommand_aliases = {{merge_of_subcommand_aliases.id}} if @@__subcommand_aliases.empty?
-        @@__subcommand_aliases
+        @@__subcommand_aliases ||= begin
+          {% if is_root %}
+            h = {} of ::String => ::String
+          {% else %}
+            h = superclass.__subcommand_aliases
+          {% end %}
+          h.merge(@@__self_subcommand_aliases)
+        end
       end
 
       @@__default_subcommand_name : ::String?
-
       def self.__default_subcommand_name
-        @@__default_subcommand_name || super
+        {% if is_root %}
+          @@__default_subcommand_name
+        {% else %}
+          @@__default_subcommand_name || super
+        {% end %}
       end
 
-      def __parse
-        if @__argv.empty?
-          if self.class.__default_subcommand?
-            @__subcommand_name = self.class.__default_subcommand_name
-            @__subargv = \%w()
-          else
-            __help!
-          end
-        elsif @__argv[0].starts_with?("-")
-          if self.class.__default_subcommand?
-            options.__parse
-          else
-            @__subcommand_name = self.class.__default_subcommand_name
-            @__subargv = @__argv[0..-1]
-          end
-        else
-          raise ::Cli::UnknownCommand.new("#{self.class.__global_name} #{@__argv[0]}") unless self.class.__subcommands.has_key?(@__argv[0])
-          @__subcommand_name = @__argv[0]
-          @__subargv = @__argv.size >= 2 ? @__argv[1..-1] : \%w()
+      def self.__default_subcommand?
+        __subcommands[__default_subcommand_name] if __default_subcommand_name
+      end
+
+      def self.__is_alias_command_name?(name)
+        __subcommand_aliases.has_key?(name)
+      end
+
+      def __subcommand
+        if command = __args.subcommand?
+          self.class.__subcommands[command]
         end
       end
     end
@@ -66,6 +69,7 @@ module Cli
       %}
 
       {% if default %}
+        Options.__arguments["subcommand"].default = {{name}}
         @@__default_subcommand_name = {{name}}
       {% end %}
 
@@ -76,21 +80,21 @@ module Cli
       {% end %}
     end
 
-    def self.__default_subcommand_name
+    def __initialize_options(argv)
+      @__options = opts = __new_options(argv)
+      begin
+        opts.__parse
+      rescue ex : Optarg::RequiredArgumentError
+        raise ex unless ex.argument.key == "subcommand"
+      end
     end
 
-    def self.__default_subcommand?
-      !__default_subcommand_name.nil?
-    end
-
-    @__subargv = %w()
-    @__subcommand_name : ::String?
-
-    def run
-      if subcommand_name = @__subcommand_name
-        if subcommand = self.class.__subcommands[@__subcommand_name]?
-          subcommand.new(self, @__subargv).__run
-        end
+    def __run
+      if command = __subcommand
+        subargv = __unparsed_args.dup
+        command.new(self, subargv).__run
+      else
+        __help!
       end
     end
   end

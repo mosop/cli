@@ -1,15 +1,11 @@
-require "../spec_helper"
+require "../../spec_helper"
 
-module Cli::Test::HelpForSubcommandsFeature
+module CliObsoleteHelpForSubcommandsFeature
   class Package < ::Cli::Supercommand
     command "install", default: true
     command "update"
     command "remove"
     command "uninstall", aliased: "remove"
-
-    class Help
-      title "#{global_name} [SUBCOMMAND] | [OPTIONS]"
-    end
 
     class Options
       help
@@ -60,7 +56,7 @@ module Cli::Test::HelpForSubcommandsFeature
       Stdio.capture do |io|
         Package.run %w(--help)
         io.out.gets_to_end.should eq <<-EOS
-          package [SUBCOMMAND] | [OPTIONS]
+          package [SUBCOMMAND]
 
           Subcommands:
             install (default)  install package

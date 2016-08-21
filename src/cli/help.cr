@@ -191,14 +191,6 @@ module Cli
       __command_model.__global_name
     end
 
-    def self.argument_names(separator = " "); __argument_names(separator); end
-    @@__argument_names : String?
-    def self.__argument_names(separator = " ")
-      @@__argument_names ||= unless __option_model.__arguments.empty?
-        __option_model.__arguments.values.map{|i| i.required? ? i.display_name : "[#{i.display_name}]" }.join(separator)
-      end
-    end
-
     def __default_title; self.class.__default_title; end
     @@__default_title : String?
     def self.__default_title
@@ -206,9 +198,12 @@ module Cli
         a = %w()
         a << __global_name
         unless __option_model.__options.empty?
-          a << (__option_model.__options.values.any?{|i| i.required?} ? "OPTIONS" : "[OPTIONS]")
+          required = __option_model.__options.values.any?{|i| !i.optional? }
+          a << (required ? "OPTIONS" : "[OPTIONS]")
         end
-        a << __argument_names.to_s if __argument_names
+        __option_model.__arguments.values.each do |i|
+          a << (i.optional? ? "[#{i.display_name}]" : i.display_name)
+        end
         a.join(" ")
       end
     end
