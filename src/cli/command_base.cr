@@ -71,7 +71,22 @@ module Cli
       __run(argv)
     end
 
+    @@__run = false
+
     def self.__run(argv)
+      if @@__run
+        __run_without_rescue(argv)
+      else
+        @@__run = true
+        __run_with_rescue(argv)
+      end
+    end
+
+    def self.__run_without_rescue(argv)
+      new(nil, argv).__run
+    end
+
+    def self.__run_with_rescue(argv)
       new(nil, argv).__run
       0
     rescue ex : ::Cli::Exit
