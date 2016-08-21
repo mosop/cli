@@ -229,6 +229,42 @@ end
 
 `Options` inherits the `Optarg::Model` class provided from the *optarg* parser library. For more information about optarg, see the  [README](https://github.com/mosop/optarg).
 
+Crystal CLI provides the proxy methods calling the corresponding optarg's API methods for access to options and arguments. The following table shows how the methods are mapped.
+
+| Crystal CLI | optarg |
+| :-- | :-- |
+| Cli::CommandBase#options | Optarg::Model (itself) |
+| Cli::CommandBase#args | Optarg::Model#args  |
+| Cli::CommandBase#unparsed_args | Optarg::Model#unparsed_args
+
+So, you can access to options and arguments easily in a command's scope.
+
+```crystal
+class Command < Cli::Command
+  class Options
+    arg "arg"
+    string "-s"
+    terminator "--"
+  end
+
+  def run
+    puts args.arg
+    puts options.s
+    puts unparsed_args[0]
+  end
+end
+
+Command.run %w(foo -s bar -- baz)
+```
+
+This prints:
+
+```
+foo
+bar
+baz
+```
+
 ### Running a Command
 
 The virtual `CommandBase#run` method is the entry point for running your command.
