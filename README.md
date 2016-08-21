@@ -245,13 +245,13 @@ end
 AncientCommand.run
 ```
 
-This prints as:
+This prints:
 
 ```
 We the Earth
 ```
 
-A command's instance is also accessible with the `command` method in an option parser's scope.
+A command's instance is also accessible with the `command` method in option parser's scopes.
 
 ```crystal
 class AncientCommand < Cli::Command
@@ -271,7 +271,7 @@ end
 AncientCommand.run %w(--understand)
 ```
 
-This prints as:
+This prints:
 
 ```
 We know
