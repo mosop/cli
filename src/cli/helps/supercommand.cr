@@ -50,7 +50,6 @@ module Cli::Helps
       a << (__title || __default_title)
       a << s if s = __header
       a << s if s = __subcommands
-      a << s if s = __arguments
       a << s if s = __options
       a << s if s = __footer
       a.empty? ? nil : a.join("\n\n")
