@@ -13,7 +13,9 @@ module CliRecursiveRunFeature
 
   describe name do
     it "returns internal error" do
-      Command.run(%w(arg)).should eq 1
+      Stdio.capture do |io|
+        Command.run(%w(arg)).should eq 1
+      end
     end
   end
 end

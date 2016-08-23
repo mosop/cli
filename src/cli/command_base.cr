@@ -71,14 +71,18 @@ module Cli
       __run(argv)
     end
 
-    @@__run = false
+    @@__running = false
 
     def self.__run(argv)
-      if @@__run
+      if @@__running
         __run_without_rescue(argv)
       else
-        @@__run = true
-        __run_with_rescue(argv)
+        @@__running = true
+        begin
+          result = __run_with_rescue(argv)
+        ensure
+          @@__running = false
+        end
       end
     end
 
