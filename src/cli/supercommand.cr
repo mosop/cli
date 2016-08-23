@@ -17,7 +17,7 @@ module Cli
           {% if is_root %}
             h = {} of ::String => ::Cli::CommandBase.class
           {% else %}
-            h = superclass.__subcommands
+            h = ::{{@type.superclass}}.__subcommands
           {% end %}
           h.merge(@@__self_subcommands)
         end
@@ -30,7 +30,7 @@ module Cli
           {% if is_root %}
             h = {} of ::String => ::String
           {% else %}
-            h = superclass.__subcommand_aliases
+            h = ::{{@type.superclass}}.__subcommand_aliases
           {% end %}
           h.merge(@@__self_subcommand_aliases)
         end
