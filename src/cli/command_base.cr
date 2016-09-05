@@ -21,7 +21,7 @@ module Cli
 
           def command; __command; end
           def __command
-            @__command as ::{{@type.id}}
+            @__command.as(::{{@type.id}})
           end
         end
 
@@ -39,7 +39,7 @@ module Cli
 
         def options; __options; end
         def __options
-          @__options as Options
+          @__options.as(Options)
         end
 
         def self.__new_help(indent = 2)
@@ -110,7 +110,7 @@ module Cli
 
     @__options : ::Optarg::Model?
     def __options
-      @__options as ::Optarg::Model
+      @__options.as(::Optarg::Model)
     end
 
     def args; __args; end
