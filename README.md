@@ -600,15 +600,21 @@ class Cake < Cli::Supercommand
 
   module Commands
     class Strawberry < Cli::Command
-      caption "made with Sachinoka strawberry"
+      class Help
+        caption "made with Sachinoka strawberry"
+      end
     end
 
     class Cheese < Cli::Command
-      caption "New York-style"
+      class Help
+        caption "New York-style"
+      end
     end
 
     class Chocolat < Cli::Command
-      caption "winter only"
+      class Help
+        caption "winter only"
+      end
     end
   end
 end
@@ -620,6 +626,9 @@ Cake.run %w(--help)
 #   cheese      New York-style
 #   chocolat    winter only
 #   strawberry  made with Toyonoka strawberry
+#
+# Options:
+#   -h, --help  show this help
 ```
 
 ### Arguments and Options
