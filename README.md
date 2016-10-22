@@ -498,10 +498,6 @@ class Smile < Cli::Command
   def run
     puts args.face * options.times.to_i
   end
-
-  end
-    help
-  end
 end
 
 Smile.run ARGV
