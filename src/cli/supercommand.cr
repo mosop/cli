@@ -55,7 +55,7 @@ module Cli
 
       def __subcommand
         if command = __args.subcommand?
-          self.class.__subcommands[command]
+          self.class.__subcommands.fetch(command, nil)
         end
       end
     end
