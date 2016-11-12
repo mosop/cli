@@ -843,7 +843,7 @@ end
 
 You can change the option's name:
 
-```crsytal
+```crystal
 class Command < Cli::Command
   class Options
     version "--show-version"
