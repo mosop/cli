@@ -82,10 +82,12 @@ module Cli
 
     def __initialize_options(argv)
       @__option_model = opts = __new_options(argv)
-      begin
-        opts.__parse
-      rescue ex : Optarg::RequiredArgumentError
-        raise ex unless ex.argument.key == "subcommand"
+      __rescue_parsing_error do
+        begin
+          opts.__parse
+        rescue ex : Optarg::RequiredArgumentError
+          raise ex unless ex.argument.key == "subcommand"
+        end
       end
     end
 

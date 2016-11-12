@@ -423,6 +423,49 @@ error! help: true # same as help!(error: true)
 error! "message", help: true # same as help!("message")
 ```
 
+### Displaying Help on Parsing Error
+
+If a parsing error occurs, help automatically will be displayed.
+
+```crystal
+class Bookmark < Cli::Command
+  class Options
+    arg "url", required: true, desc: "a URL to be bookmarked"
+  end
+end
+
+Command.run
+```
+
+This prints:
+
+```
+Parsing Error: The URL argument is required.
+
+bookmark URL
+
+Arguments:
+  URL  a URL to be bookmarked
+```
+
+If you want to disable the feature, use the `CommandBase.disable_help_on_parsing_error!` method.
+
+```crystal
+class Bookmark < Cli::Command
+  disable_help_on_parsing_error!
+
+  class Options
+    arg "url", required: true, desc: "a URL to be bookmarked"
+  end
+end
+```
+
+This only prints an error message:
+
+```
+Parsing Error: The URL argument is required.
+```
+
 ## Defining Subcommands
 
 <a name="defining_subcommands"></a>
@@ -703,6 +746,8 @@ end
 
 ## Releases
 
+* v0.2.5
+  * Displaying Help on Parsing Error
 * v0.2.4
   * Unparsed Arguments for Help
 * v0.2.0

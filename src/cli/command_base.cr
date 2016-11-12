@@ -97,9 +97,6 @@ module Cli
       out = ex.status == 0 ? ::STDOUT : ::STDERR
       out.puts ex.message if ex.message
       ex.status
-    rescue ex : ::Optarg::ParsingError
-      ::STDERR.puts "Parsing Error: #{ex.message}"
-      1
     end
 
     getter __parent : ::Cli::CommandBase?
@@ -132,9 +129,19 @@ module Cli
       ::StringInflection.kebab(name.split("::").last)
     end
 
+    def self.__help_on_parsing_error?
+      true
+    end
+
     macro command_name(value)
       def self.__local_name
         {{value}}
+      end
+    end
+
+    macro disable_help_on_parsing_error!
+      def self.__help_on_parsing_error?
+        false
       end
     end
 
@@ -190,6 +197,12 @@ module Cli
 
     def __run
       run
+    end
+
+    def __rescue_parsing_error
+      yield
+    rescue ex : ::Optarg::ParsingError
+      exit! "Parsing Error: #{ex.message}", error: true, help: self.class.__help_on_parsing_error?
     end
   end
 end
