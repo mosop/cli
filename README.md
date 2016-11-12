@@ -820,7 +820,7 @@ class Command < Cli::Supercommand
       end
     end
 
-    class Inherit < Cli::Commands
+    class Inherit < Cli::Command
       def run
         version # => "1.1.0"
       end
