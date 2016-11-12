@@ -1,15 +1,17 @@
 require "../spec_helper"
 
-module CliHelpHandlerDslFeature
+module CliVersionHandlerDslFeature
   class Default < Cli::Command
+    version "1.0.0"
     class Options
-      help
+      version
     end
   end
 
   class Specific < Cli::Command
+    version "1.0.0"
     class Options
-      help "--show-help", desc: "help!"
+      version "--show-version", desc: "version!"
     end
   end
 
@@ -20,19 +22,14 @@ module CliHelpHandlerDslFeature
       {% for e, i in names %}
         Stdio.capture do |io|
           {{klass.id}}.run [{{e}}]
-          io.out.gets_to_end.should eq <<-EOS
-            {{klass.downcase.id}}
-
-            Options:
-              #{ ({{names}}).join(", ") }  {{desc.id}}\n
-            EOS
+          io.out.gets_to_end.should eq "1.0.0\n"
         end
       {% end %}
     end
   end
 
   describe name do
-    test "default", "Default", %w(-h --help), "show this help"
-    test "specific", "Specific", %w(--show-help), "help!"
+    test "default", "Default", %w(-v --version), "show version"
+    test "specific", "Specific", %w(--show-version), "version!"
   end
 end

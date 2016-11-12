@@ -40,4 +40,13 @@ class Cli::OptionModel
     %}
     on({{names}}, desc: ({{desc}} || "show this help")) { __command.__help! }
   end
+
+  macro version(names = nil, desc = nil)
+    {%
+      names ||= %w(-v --version)
+      names = [names] if names.class_name != "ArrayLiteral"
+      command_class = @type.name.split("::")[0..-2]
+    %}
+    on({{names}}, desc: ({{desc}} || "show version")) { __command.__version! }
+  end
 end

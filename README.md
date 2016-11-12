@@ -185,6 +185,22 @@ Call.run %w(--help)
 
 For more detail, see [Generating Help](#generating_help).
 
+### Versioning
+
+```crystal
+class Command < Cli::Supercommand
+  version "1.0.0"
+
+  class Options
+    version
+  end
+end
+
+Command.run %w(-v) # prints 1.0.0
+```
+
+For more detail, see [Versioning](#versioning).
+
 ## Usage
 
 ```crystal
@@ -728,13 +744,110 @@ Friend.run %w(--help)
 
 ### Options.help
 
-The `Options.help` method adds the `-h` and `--help` options to your command. These options can be used to print help:
+The `Options.help` method adds the `-h` and `--help` options to your command. These options can be used to print help.
 
-`help` is a shorthand. You can also explicitly define the options:
+```
+class Command < Cli::Command
+  class Options
+    help # same as on(%w(-h --help)) { command.help! }
+  end
+end
+```
+
+You can change the option's name:
+
+```
+class Command < Cli::Command
+  class Options
+    help "--show-help"
+  end
+end
+```
+
+## Versioning
+
+<a name="versioning"></a>
+
+You can set a command's version with the `CommandBase.version` method.
 
 ```crystal
-class Options
-  on(["-h", "--help"]) { command.help! }
+class Command < Cli::Command
+  version "1.0.0"
+end
+```
+
+To access the version string in a running context, use the `CommandBase#version` method.
+
+```crystal
+class Command < Cli::Command
+  version "1.0.0"
+
+  def run
+    version # => "1.0.0"
+  end
+end
+```
+
+Like the `CommandBase#help!` method, the `CommandBase#version!` method exits with a version string.
+
+```crystal
+class Command < Cli::Command
+  version "1.0.0"
+
+  def run
+    version!
+  end
+end
+```
+
+### Version Inheritance
+
+Without a explicit definition, a subcommand inherits its supercommand's version.
+
+```crystal
+class Command < Cli::Supercommand
+  version "1.1.0"
+
+  command "specific"
+  command "inherit"
+
+  module Commands
+    class Specific < Cli::Command
+      version "1.0.0"
+
+      def run
+        version # => "1.0.0"
+      end
+    end
+
+    class Inherit < Cli::Commands
+      def run
+        version # => "1.1.0"
+      end
+    end
+  end
+end
+```
+
+### Options.version
+
+The `Options.version` method adds the `-v` and `--version` options to your command. These options can be used to print version.
+
+```
+class Command < Cli::Command
+  class Options
+    version # same as on(%w(-v --version)) { command.version! }
+  end
+end
+```
+
+You can change the option's name:
+
+```
+class Command < Cli::Command
+  class Options
+    version "--show-version"
+  end
 end
 ```
 
@@ -748,6 +861,7 @@ end
 
 * v0.2.5
   * Displaying Help on Parsing Error
+  * Versioning
 * v0.2.4
   * Unparsed Arguments for Help
 * v0.2.0

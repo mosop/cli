@@ -1,6 +1,31 @@
 module Cli
   abstract class CommandBase
+    macro __define_supercommand(type)
+      {% type = type.resolve %}
+      def self.__supercommand
+        {% if type < ::Cli::Supercommand %}
+          ::{{type}}
+        {% end %}
+      end
+    end
+
     macro inherited
+      {%
+        name_components = @type.name.split("::")
+        if name_components.size > 3 && name_components[-2] == "Commands"
+          outer_module = name_components[0..-3].join("::")
+        else
+          outer_module = nil
+        end
+      %}
+
+      {% if outer_module %}
+        __define_supercommand ::{{outer_module.id}}
+      {% else %}
+        def self.__supercommand
+        end
+      {% end %}
+
       {% if @type.superclass != ::Cli::CommandBase %}
         {%
           if @type.superclass == ::Cli::Command
@@ -125,12 +150,32 @@ module Cli
       __option_model.__unparsed_args
     end
 
+    def version; __version; end
+    def __version; self.class.__version; end
+
+    def version?; __version?; end
+    def __version?; self.class.__version?; end
+
     def self.__local_name
       ::StringInflection.kebab(name.split("::").last)
     end
 
     def self.__help_on_parsing_error?
       true
+    end
+
+    def self.__version
+      if v = __version?
+        v.as(::String)
+      elsif sc = __supercommand
+        sc.__version
+      else
+        raise "No version."
+      end
+    end
+
+    def self.__version?
+      nil
     end
 
     macro command_name(value)
@@ -142,6 +187,12 @@ module Cli
     macro disable_help_on_parsing_error!
       def self.__help_on_parsing_error?
         false
+      end
+    end
+
+    macro version(value)
+      def self.__version?
+        {{value}}
       end
     end
 
@@ -189,6 +240,14 @@ module Cli
 
     def __error!(message = nil, code = nil, help = false, indent = 2)
       __exit! message, true, code, help, indent
+    end
+
+    def version!
+      __version!
+    end
+
+    def __version!
+      __exit! version
     end
 
     def run
