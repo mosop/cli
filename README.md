@@ -795,7 +795,7 @@ class Command < Cli::Command
   version "1.0.0"
 
   def run
-    version!
+    version! # prints "1.0.0" and exits
   end
 end
 ```
