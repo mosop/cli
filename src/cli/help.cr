@@ -181,6 +181,9 @@ module Cli
     def __footer; self.class.__footer; end
     def self.__footer; end
 
+    def __unparsed_args; self.class.__unparsed_args; end
+    def self.__unparsed_args; end
+
     def self.local_name; __local_name; end
     def self.__local_name
       __command_model.__local_name
@@ -203,6 +206,9 @@ module Cli
         end
         __option_model.__arguments.values.each do |i|
           a << (i.optional? ? "[#{i.display_name}]" : i.display_name)
+        end
+        if unparsed_args = __unparsed_args
+          a << unparsed_args
         end
         a.join(" ")
       end
@@ -234,6 +240,14 @@ module Cli
 
     macro footer(block)
       def self.__footer
+        __yield do
+          {{block}}
+        end
+      end
+    end
+
+    macro unparsed_args(block)
+      def self.__unparsed_args
         __yield do
           {{block}}
         end

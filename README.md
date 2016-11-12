@@ -553,6 +553,37 @@ end
 
 Note: The `command_name` method belongs to the `CommandBase` class, not the `Help` class.
 
+#### Unparsed Arguments
+
+You may make a command that has arguments unparsed. For example, "exec" command internally executes another command. If you still need to display unparsed arguments in a title, use the `Help.unparsed_args` method.
+
+```crystal
+class Exec < Cli::Command
+  class Options
+    arg "command", required: true, stop: true, desc: "command name"
+    help
+  end
+
+  class Help
+    unparsed_args "[ARG1 ARG2 ...]"
+  end
+end
+
+Command.run(%w(-h))
+```
+
+This prints:
+
+```
+exec COMMAND [ARG1 ARG2 ...]
+
+Arguments:
+  COMMAND  command name
+
+Options:
+  -h, --help  show this help
+```
+
 ### Header and Footer
 
 The header and footer sections are not automatically defined. They appear only if you define them.
@@ -672,6 +703,8 @@ end
 
 ## Releases
 
+* v0.2.4
+  * Unparsed Arguments for Help
 * v0.2.0
   * (Breaking Change) The optarg's version is updated to 0.3.
 * v0.1.11
