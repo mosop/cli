@@ -802,7 +802,7 @@ end
 
 ### Version Inheritance
 
-Without a explicit definition, a subcommand inherits its supercommand's version.
+Without an explicit definition, a subcommand inherits its supercommand's version.
 
 ```crystal
 class Command < Cli::Supercommand
