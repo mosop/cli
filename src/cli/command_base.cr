@@ -37,9 +37,9 @@ module Cli
           end
         end
 
-        def options; __options; end
-        def __options
-          @__options.as(Options)
+        def option_model; __option_model; end
+        def __option_model
+          @__option_model.as(Options)
         end
 
         def self.__new_help(indent = 2)
@@ -108,19 +108,24 @@ module Cli
       __initialize_options argv
     end
 
-    @__options : ::Optarg::Model?
+    @__option_model : ::Optarg::Model?
+    def __option_model
+      @__option_model.as(::Optarg::Model)
+    end
+
+    def options; __options; end
     def __options
-      @__options.as(::Optarg::Model)
+      __option_model.__options
     end
 
     def args; __args; end
     def __args
-      __options.__args
+      __option_model.__args
     end
 
     def unparsed_args; __unparsed_args; end
     def __unparsed_args
-      __options.__unparsed_args
+      __option_model.__unparsed_args
     end
 
     def self.__local_name

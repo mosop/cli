@@ -1,3 +1,15 @@
+class Optarg::Model
+  @__command : ::Cli::CommandBase?
+
+  def command
+    @__command
+  end
+
+  def initialize(@__command, argv)
+    initialize argv
+  end
+end
+
 module Cli
   abstract class OptionModel < ::Optarg::Model
     class Option
@@ -51,12 +63,6 @@ module Cli
         def initialize(@description = nil)
         end
       end
-    end
-
-    @__command : ::Cli::CommandBase?
-
-    def initialize(@__command, argv)
-      super argv
     end
   end
 end
