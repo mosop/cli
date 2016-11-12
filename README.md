@@ -833,7 +833,7 @@ end
 
 The `Options.version` method adds the `-v` and `--version` options to your command. These options can be used to print version.
 
-```
+```crystal
 class Command < Cli::Command
   class Options
     version # same as on(%w(-v --version)) { command.version! }
@@ -843,7 +843,7 @@ end
 
 You can change the option's name:
 
-```
+```crsytal
 class Command < Cli::Command
   class Options
     version "--show-version"
