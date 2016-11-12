@@ -249,7 +249,7 @@ Crystal CLI provides the proxy methods calling the corresponding optarg's API me
 
 | Crystal CLI | optarg |
 | :-- | :-- |
-| Cli::CommandBase#options | Optarg::Model (itself) |
+| Cli::CommandBase#options | Optarg::Model#options |
 | Cli::CommandBase#args | Optarg::Model#args  |
 | Cli::CommandBase#unparsed_args | Optarg::Model#unparsed_args
 
