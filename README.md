@@ -569,7 +569,7 @@ class Exec < Cli::Command
   end
 end
 
-Command.run(%w(-h))
+Command.run %w(-h)
 ```
 
 This prints:
