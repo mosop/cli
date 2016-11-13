@@ -245,7 +245,7 @@ end
 
 `Options` inherits the `Optarg::Model` class provided from the *optarg* parser library. For more information about optarg, see the  [README](https://github.com/mosop/optarg).
 
-Crystal CLI provides the proxy methods calling the corresponding optarg's API methods for access to options and arguments. The following table shows how the methods are mapped.
+Crystal CLI provides the proxy methods calling the corresponding optarg's API methods for accessing options and arguments. The following table shows how the methods are mapped.
 
 | Crystal CLI | optarg |
 | :-- | :-- |
@@ -374,21 +374,21 @@ end
 Command.run # => 0
 ```
 
-This command just ends after printing its help message. `Command.run` returns 0 as an exit code.
+This command just ends after printing its help message. `Command.run` returns 0.
 
-To print message to STDERR and exit with an error code, use `:error` option.
+To print a message to STDERR and exit with an error code, use `:error` option.
 
 ```crystal
 help! error: true
 ```
 
-If the `:error` option is true, `run` method returns 1 as an exit code. To specify a number, use the `:code` option.
+If the `:error` option is true, `run` method returns 1. To specify a number, use the `:code` option.
 
 ```crystal
 help! code: 22
 ```
 
-You can also let it exit with an additional message:
+You can also let a command exit with an additional message:
 
 ```crystal
 help! message: "You passed an illegal option! See help!"
@@ -404,7 +404,7 @@ Calling `help!` with the `:message` argument implies that the `:error` option is
 
 ### exit! and error!
 
-`exit!` is more general than `help!`.
+`exit!` is more general purpose than `help!`.
 
 ```crystal
 class Command < Cli::Command
@@ -416,7 +416,7 @@ end
 Command.run # => 0
 ```
 
-It just ends and returns 0 as an exit code without printing.
+It just ends and returns 0 without a message.
 
 To print a message:
 
@@ -444,7 +444,7 @@ error! "message", help: true # equivalent to help!("message")
 
 ### Displaying Help on Parsing Error
 
-If a parsing error occurs, help automatically will be displayed.
+If a parsing error occurs, a help message automatically will be displayed.
 
 ```crystal
 class Bookmark < Cli::Command
@@ -494,8 +494,8 @@ Parsing Error: The URL argument is required.
 To define subcommands, you do:
 
 * define a *supercommand* class that inherits `Cli::Supercommand`,
-* define subcommand names with the `comamnd` method into the supercommand class,
-* inside the supercommand's scope, define a module and name it "Commands" and
+* define subcommand names with the `comamnd` method in the supercommand class,
+* define a module and name it "Commands" in the supercommand class and
 * define command classes into the `Commands` module.
 
 ```crystal
@@ -540,7 +540,7 @@ Bundle.run %w()         # implicitly runs install
 
 <a name="generating_help"></a>
 
-To format help texts, use the `Help` class.
+To format help messages, use the `Help` class.
 
 For example:
 
@@ -588,7 +588,7 @@ The help format has the following sections. Each section is aligned in the order
 
 * title
 * header
-* subcommands (`Supercommand` only)
+* subcommands (for supercommands only)
 * arguments
 * options
 * footer
@@ -617,7 +617,7 @@ Note: The `command_name` method belongs to the `CommandBase` class, not the `Hel
 
 #### Unparsed Arguments
 
-You may make a command that has arguments unparsed. For example, "exec" command internally executes another command. If you still need to display unparsed arguments in a title, use the `Help.unparsed_args` method.
+You may make a command that has arguments unparsed. For example, "exec" command internally executes another command and passes unparsed arguments to the other command. If you still need to display unparsed arguments in a title, use the `Help.unparsed_args` method.
 
 ```crystal
 class Exec < Cli::Command
@@ -675,7 +675,7 @@ end
 
 The *subcommands* section is appeared only if a command is a supercommand.
 
-You can specify a *caption* that is displayed beside each subcommand. The caption is a very short description and it is typically a single phrase.
+You can specify a *caption* that is displayed beside each subcommand. The caption is a very short description and typically a single phrase.
 
 ```crystal
 class Cake < Cli::Supercommand
@@ -747,7 +747,7 @@ Friend.run %w(--help)
 
 ### Options.help
 
-The `Options.help` method adds the `-h` and `--help` options to your command. These options can be used to print help.
+The `Options.help` method adds the `-h` and `--help` options to your command. These options can be used to print a help message.
 
 ```
 class Command < Cli::Command
@@ -834,7 +834,7 @@ end
 
 ### Options.version
 
-The `Options.version` method adds the `-v` and `--version` options to your command. These options can be used to print version.
+The `Options.version` method adds the `-v` and `--version` options to your command. These options can be used to print a version string.
 
 ```crystal
 class Command < Cli::Command
