@@ -1,6 +1,6 @@
 require "../../spec_helper"
 
-module Cli::Test::AccessFromOptionsFeature
+module CliAccessFromOptionsPreviousFeature
   class Command < Cli::Command
     class Options
       on("--go") { command.go(with: "the Wind") }
@@ -12,7 +12,7 @@ module Cli::Test::AccessFromOptionsFeature
     end
   end
 
-  it "Access From Options" do
+  it name do
     Stdio.capture do |io|
       Command.run(%w(--go))
       io.out.gets_to_end.should eq "Gone with the Wind\n"

@@ -1,6 +1,6 @@
-require "../spec_helper"
+require "../../spec_helper"
 
-module CliGeneratingHelpFeature
+module CliGeneratingHelpFeatureDetail
   class Smile < Cli::Command
     class Help
       header "Smiles n times."

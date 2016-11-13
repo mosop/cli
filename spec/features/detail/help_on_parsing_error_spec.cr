@@ -1,6 +1,6 @@
-require "../spec_helper"
+require "../../spec_helper"
 
-module Cli::Test::HelpOnParsingErrorFeature
+module CliHelpOnParsingErrorFeatureDetail
   class Bookmark < ::Cli::Command
     class Options
       arg "url", required: true, desc: "a URL to be bookmarked"

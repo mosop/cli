@@ -136,19 +136,22 @@ module Cli
     end
 
     def options; __options; end
-    def __options
-      __option_model.__options
-    end
+    def __options; __option_model.__options; end
 
     def args; __args; end
-    def __args
-      __option_model.__args
-    end
+    def __args; __option_model.__args; end
+
+    def named_args; __named_args; end
+    def __named_args; __option_model.__named_args; end
+
+    def nameless_args; __nameless_args; end
+    def __nameless_args; __option_model.__nameless_args; end
+
+    def parsed_args; __parsed_args; end
+    def __parsed_args; __option_model.__parsed_args; end
 
     def unparsed_args; __unparsed_args; end
-    def __unparsed_args
-      __option_model.__unparsed_args
-    end
+    def __unparsed_args; __option_model.__unparsed_args; end
 
     def version; __version; end
     def __version; self.class.__version; end

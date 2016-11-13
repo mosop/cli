@@ -249,8 +249,11 @@ Crystal CLI provides the proxy methods calling the corresponding optarg's API me
 
 | Crystal CLI | optarg |
 | :-- | :-- |
-| Cli::CommandBase#options | Optarg::Model#options |
-| Cli::CommandBase#args | Optarg::Model#args  |
+| Cli::CommandBase#options | Optarg::Model#options
+| Cli::CommandBase#args | Optarg::Model#args
+| Cli::CommandBase#named_args | Optarg::Model#named_args
+| Cli::CommandBase#nameless_args | Optarg::Model#nameless_args
+| Cli::CommandBase#parsed_args | Optarg::Model#parsed_args
 | Cli::CommandBase#unparsed_args | Optarg::Model#unparsed_args
 
 So, you can access to options and arguments easily in a command's scope.
@@ -851,7 +854,7 @@ class Command < Cli::Command
 end
 ```
 
-## Wish List
+## Want to Do
 
 - Application-Level Logger
 - Bash Completion Support
@@ -859,6 +862,8 @@ end
 
 ## Releases
 
+* v0.3.0
+  * (Breaking Change) Updated optarg to 0.4.0 from 0.3.2. See [README](https://github.com/mosop/optarg).
 * v0.2.5
   * Displaying Help on Parsing Error
   * Versioning

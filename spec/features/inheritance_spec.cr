@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module Cli::Test::InheritanceFeature
+module CliInheritanceFeature
   class Role < Cli::Command
     class Options
       string "--name"
@@ -26,7 +26,7 @@ module Cli::Test::InheritanceFeature
     end
   end
 
-  it "Inheritance" do
+  it name do
     Stdio.capture do |io|
       Chase.run(%w(mouse --name Jerry))
       Chase.run(%w(cat --name Tom))

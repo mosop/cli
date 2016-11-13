@@ -1,6 +1,6 @@
 require "../../spec_helper"
 
-module CliObsoleteHelpForSubcommandsFeature
+module CliHelpForSubcommandsPreviousFeature
   class Package < ::Cli::Supercommand
     command "install", default: true
     command "update"
@@ -51,7 +51,7 @@ module CliObsoleteHelpForSubcommandsFeature
     end
   end
 
-  describe "Help for Subcommands" do
+  describe name do
     it "prints supercommand's help" do
       Stdio.capture do |io|
         Package.run %w(--help)

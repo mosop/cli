@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module Cli::Test::ThreeLevelCommandNameFeature
+module CliInternalThreeLevelCommandNameFeature
   class One < Cli::Supercommand
     command "two"
 
@@ -19,7 +19,7 @@ module Cli::Test::ThreeLevelCommandNameFeature
     end
   end
 
-  it "3-Level Command Name" do
+  it name do
     Stdio.capture do |io|
       One.run %w(two three)
       io.out.gets_to_end.should eq "one two three\n"

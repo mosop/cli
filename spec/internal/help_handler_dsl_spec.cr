@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module CliHelpHandlerDslFeature
+module CliInternalHelpHandlerDslFeature
   class Default < Cli::Command
     class Options
       help

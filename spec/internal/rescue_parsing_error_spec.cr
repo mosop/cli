@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module CliRescueParsingErrorFeature
+module CliInternalRescueParsingErrorFeature
   class RequiredArgument < Cli::Command
     class Options
       arg "arg", required: true

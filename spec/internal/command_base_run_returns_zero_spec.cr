@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module CliCommandBaseRunReturnsZeroFeature
+module CliInternalCommandBaseRunReturnsZeroFeature
   class Command < Cli::Command
     def run
       1

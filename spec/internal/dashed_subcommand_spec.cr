@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module Cli::Test::DashedSubcommandFeature
+module CliInternalDashedSubcommandFeature
   class Command < Cli::Supercommand
     command "dashed-command"
 
@@ -10,7 +10,7 @@ module Cli::Test::DashedSubcommandFeature
     end
   end
 
-  it "Dashed Subcommand" do
+  it name do
     Stdio.capture do |io|
       Command.run
       io.out.gets_to_end.should eq "command SUBCOMMAND\n\nSubcommands:\n  dashed-command\n"

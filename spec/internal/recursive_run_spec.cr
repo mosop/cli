@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module CliRecursiveRunFeature
+module CliInternalRecursiveRunFeature
   class Command < Cli::Command
     class Options
       arg "arg", required: true

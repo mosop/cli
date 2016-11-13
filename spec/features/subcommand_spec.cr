@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module Cli::Test::SubcommandFeature
+module CliSubcommandFeature
   class Polygon < Cli::Supercommand
     command "triangle", default: true
     command "square"
@@ -27,7 +27,7 @@ module Cli::Test::SubcommandFeature
     end
   end
 
-  it "Subcommand" do
+  it name do
     Stdio.capture do |io|
       Polygon.run %w(triangle)
       Polygon.run %w(square)

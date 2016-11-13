@@ -1,6 +1,6 @@
-require "../spec_helper"
+require "../../spec_helper"
 
-module Cli::Test::HandlingExitFeature
+module CliHandlingExitFeatureDetail
   macro test(run, code = 0, out = "", err = "")
     class Exit%x < Cli::Command
       class Help

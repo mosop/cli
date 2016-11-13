@@ -1,6 +1,6 @@
-require "../spec_helper"
+require "../../spec_helper"
 
-module CliHelpUnparsedArgsFeature
+module CliHelpUnparsedArgsFeatureDetail
   class Exec < Cli::Command
     class Options
       arg "command", required: true, stop: true, desc: "command name"

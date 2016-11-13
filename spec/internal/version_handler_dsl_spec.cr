@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module CliVersionHandlerDslFeature
+module CliInternalVersionHandlerDslFeature
   class Default < Cli::Command
     version "1.0.0"
     class Options

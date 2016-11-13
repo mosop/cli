@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module CliDefaultHelpTitleFeature
+module CliInternalDefaultHelpTitleFeature
   class Optional < Cli::Command
     class Options
       string "-s"

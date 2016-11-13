@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module CliCustomCommandNameFeature
+module CliInternalCustomCommandNameFeature
   class Command < Cli::Supercommand
     command_name "custom"
   end

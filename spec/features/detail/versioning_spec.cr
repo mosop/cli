@@ -1,6 +1,6 @@
-require "../spec_helper"
+require "../../spec_helper"
 
-module Cli::Test::VersioningFeature
+module CliVersioningFeatureDetail
   class Command < ::Cli::Supercommand
     version "1.1.0"
     command "inherit"

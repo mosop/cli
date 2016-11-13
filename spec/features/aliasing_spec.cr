@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module Cli::Test::AliasingFeature
+module CliAliasingFeature
   class Command < ::Cli::Supercommand
     command "loooooooooong"
     command "l", aliased: "loooooooooong"
@@ -14,7 +14,7 @@ module Cli::Test::AliasingFeature
     end
   end
 
-  it "Aliasing" do
+  it name do
     Stdio.capture do |io|
       Command.run %w(l)
       io.out.gets_to_end.should eq "sleep!\n"

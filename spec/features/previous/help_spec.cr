@@ -1,6 +1,6 @@
 require "../../spec_helper"
 
-module CliObsoleteHelpFeature
+module CliHelpPreviousFeature
   class Lang < Cli::Command
     class Help
       header "Converts a language to other languages."
@@ -16,7 +16,7 @@ module CliObsoleteHelpFeature
     end
   end
 
-  it "Help" do
+  it name do
     Stdio.capture do |io|
       Lang.run %w(--help)
       io.out.gets_to_end.should eq <<-EOS

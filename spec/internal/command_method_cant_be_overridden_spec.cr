@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module CliCommandMethodCantBeOverridenFeature
+module CliInternalCommandMethodCantBeOverridenFeature
   class Command < Cli::Command
     class Options
       string "--command"
@@ -15,7 +15,7 @@ module CliCommandMethodCantBeOverridenFeature
   it name do
     Stdio.capture do |io|
       Command.run %w(--on --command command)
-      io.out.gets_to_end.should eq "CliCommandMethodCantBeOverridenFeature::Command\ncommand\n"
+      io.out.gets_to_end.should eq "CliInternalCommandMethodCantBeOverridenFeature::Command\ncommand\n"
     end
   end
 end
