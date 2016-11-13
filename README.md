@@ -489,7 +489,7 @@ Parsing Error: The URL argument is required.
 
 <a name="defining_subcommands"></a>
 
-*subcommand* is a child command that is categorized under a specific namespace. For example, the `git` command has its several subcommands, `clone`, `commit`, `push`, etc.
+A subcommand is a child command that is categorized under a specific namespace. For example, the `git` command has its several subcommands, `clone`, `commit`, `push`, etc.
 
 To define subcommands, you do:
 
