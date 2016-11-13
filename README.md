@@ -56,8 +56,8 @@ class Open < Cli::Command
   end
 end
 
-Open.run %w(sesame) # => prints "Opened!" and returns 0 as exit code
-Open.run %w(paprika) # => prints "Not opened!" into STDERR and returns 1 as exit code
+Open.run %w(sesame) # => prints "Opened!" and returns 0 as an exit code
+Open.run %w(paprika) # => prints "Not opened!" into STDERR and returns 1 as an exit code
 ```
 
 For more detail, see [Handling Exit](#handling_exit).
@@ -374,7 +374,7 @@ end
 Command.run # => 0
 ```
 
-This command just ends after printing its help message. `Command.run` returns 0 as exit code.
+This command just ends after printing its help message. `Command.run` returns 0 as an exit code.
 
 To print message to STDERR and exit with an error code, use `:error` option.
 
@@ -382,7 +382,7 @@ To print message to STDERR and exit with an error code, use `:error` option.
 help! error: true
 ```
 
-If the `:error` option is true, `run` method returns 1 as exit code. To specify a number, use the `:code` option.
+If the `:error` option is true, `run` method returns 1 as an exit code. To specify a number, use the `:code` option.
 
 ```crystal
 help! code: 22
@@ -416,7 +416,7 @@ end
 Command.run # => 0
 ```
 
-It just ends and returns 0 as exit code without printing.
+It just ends and returns 0 as an exit code without printing.
 
 To print a message:
 
@@ -427,19 +427,19 @@ exit! "bye."
 Or more variations:
 
 ```crystal
-exit! help: true # same as help!
-exit! error: true # returns 1 as exit code
-exit! "message", error: true, help: true # same as help!("message")
+exit! help: true # equivalent to help!
+exit! error: true # returns 1 as an exit code
+exit! "message", error: true, help: true # equivalent to help!("message")
 ```
 
 `error!` is similar to `exit!`, but the `:error` option is true as default.
 
 ```crystal
-error! # ends with 1 as exit code
-error! "message" # same as exit!("message", error: true)
+error! # ends with 1 as an exit code
+error! "message" # equivalent to exit!("message", error: true)
 error! code: 22 # specifies exit code
-error! help: true # same as help!(error: true)
-error! "message", help: true # same as help!("message")
+error! help: true # equivalent to help!(error: true)
+error! "message", help: true # equivalent to help!("message")
 ```
 
 ### Displaying Help on Parsing Error
@@ -752,7 +752,7 @@ The `Options.help` method adds the `-h` and `--help` options to your command. Th
 ```
 class Command < Cli::Command
   class Options
-    help # same as on(%w(-h --help)) { command.help! }
+    help # equivalent to on(%w(-h --help)) { command.help! }
   end
 end
 ```
@@ -839,7 +839,7 @@ The `Options.version` method adds the `-v` and `--version` options to your comma
 ```crystal
 class Command < Cli::Command
   class Options
-    version # same as on(%w(-v --version)) { command.version! }
+    version # equivalent to on(%w(-v --version)) { command.version! }
   end
 end
 ```
