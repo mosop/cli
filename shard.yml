@@ -10,7 +10,7 @@ dependencies:
     version: ~> 0.4.0.0
   string_inflection:
     github: mosop/string_inflection
-    version: ~> 0.1.7
+    version: ~> 0.2.0
 
 development_dependencies:
   stdio:

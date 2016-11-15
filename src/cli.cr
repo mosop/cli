@@ -1,4 +1,4 @@
 require "optarg"
-require "string_inflection"
+require "string_inflection/kebab"
 require "./cli/*"
 require "./cli/helps/*"
