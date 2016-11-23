@@ -17,87 +17,119 @@ module Cli
     @__text : ::String?
 
     def initialize(indent = 2)
+      __command_class.__finalize_definition
       @__indent = indent
     end
 
     def __definition_descriptions
       @__definition_descriptions ||= begin
-        h = {
-          option: [] of Description,
-          argument: [] of Description,
-          handler: [] of Description
+        {
+          argument: __descriptions_for(__option_class.definitions.arguments),
+          option: __descriptions_for(__option_class.definitions.options),
+          handler: __descriptions_for(__option_class.definitions.handlers),
         }
-        (__option_model.__options.values + __option_model.__arguments.values + __option_model.__handlers.values).each do |definition|
-          type = TYPES[definition.type]
-          head = __names_of(definition)
-          varname = __variable_name_of(definition)
-          head += " #{varname}" if varname
-          array_size = __array_size_of(definition)
-          head += " (#{array_size})" if array_size
-          body = %w()
-          desc = __description_of(definition)
-          default = __default_of(definition)
-          body += desc.split("\n") if desc
-          body += default.split("\n") if default
-          h[type] << {head: head, body: body}
-          if definition.type == :bool && definition.responds_to?(:not)
-            unless definition.not.empty?
-              head = definition.not.join(", ")
-              desc = "disable #{definition.names.first}"
-              h[type] << {head: head, body: [desc]}
-            end
+      end
+    end
+
+    def __descriptions_for(dfs)
+      a = [] of Description
+      dfs.each do |kv|
+        df = kv[1]
+        head = __names_of(df)
+        varname = __variable_name_of(df)
+        head += " #{varname}" if varname
+        array_size = __array_size_of(df)
+        head += " (#{array_size})" if array_size
+        body = %w()
+        desc = __description_of(df)
+        default = __default_of(df)
+        inclusion = __inclusion_of(df)
+        body += desc.split("\n") if desc
+        body += inclusion.split("\n") if inclusion
+        body += default.split("\n") if default
+        a << {head: head, body: body}
+        case df
+        when Optarg::Definitions::BoolOption
+          unless df.not.empty?
+            head = df.not.join(", ")
+            desc = "disable #{df.names.first}"
+            a << {head: head, body: [desc]}
           end
         end
-        h
       end
+      a
     end
 
-    def __names_of(definition)
-      case definition.type
-      when :argument
-        definition.key.upcase
+    def __names_of(df)
+      case df
+      when Optarg::Definitions::Argument
+        df.key.upcase
       else
-        definition.names.join(", ")
+        df.names.join(", ")
       end
     end
 
-    def __variable_name_of(definition)
-      md = definition.metadata
-      case definition.type
-      when :string, :string_array
+    def __variable_name_of(df)
+      md = df.metadata
+      case df
+      when Optarg::Definitions::StringOption, Optarg::Definitions::StringArrayOption
         if md.responds_to?(:variable_name)
           md.variable_name
         end
       end
     end
 
-    def __description_of(definition)
-      md = definition.metadata
+    def __description_of(df)
+      md = df.metadata
       if md.responds_to?(:description)
         md.description
       end
     end
 
-    def __default_of(definition)
-      md = definition.metadata
-      if md.responds_to?(:default_string)
-        case definition.type
-        when :string, :string_array
-          if s = md.default_string
-            "(default: #{s})"
-          end
-        when :bool
-          if md.default_string == "true"
-            "(enabled as default)"
-          end
+    def __default_of(df)
+      case df
+      when Optarg::Definitions::Value
+        case v = df.default_value.get?
+        when String
+          "(default: #{v})"
+        when Array(String)
+          "(default: #{v.join(", ")})"
+        when Bool
+          "(enabled as default)" if v
         end
       end
     end
 
-    def __array_size_of(definition)
-      if definition.responds_to?(:min)
-        definition.min > 0 ? "at least #{definition.min}" : "multiple"
+    def __array_size_of(df)
+      case df
+      when Optarg::Definitions::ArrayOption
+        min = df.minimum_length_of_array_value
+        min > 0 ? "at least #{min}" : "multiple"
       end
+    end
+
+    def __inclusion_of(df)
+      case df
+      when Optarg::Definitions::StringOption
+        if incl = df.value_validations.find{|i| i.is_a?(::Optarg::Definitions::StringOption::Validations::Inclusion)}
+          __inclusion_of2(incl.as(::Optarg::Definitions::StringOption::Validations::Inclusion))
+        end
+      when Optarg::Definitions::StringArgument
+        if incl = df.value_validations.find{|i| i.is_a?(::Optarg::Definitions::StringArgument::Validations::Inclusion)}
+          __inclusion_of2(incl.as(::Optarg::Definitions::StringArgument::Validations::Inclusion))
+        end
+      end
+    end
+
+    def __inclusion_of2(incl)
+      a = incl.values.map do |v|
+        desc = if md = v.metadata.as?(OptionValueMetadata)
+          md.description
+        end
+        Description.new(head: v.metadata.string, body: desc ? desc.split("\n") : %w())
+      end
+      indent = " " * @__indent
+      "one of:\n" + __join_description2(a).to_s
     end
 
     def __arguments
@@ -124,6 +156,10 @@ module Cli
       descs = [] of Description
       types.each{|t| descs += self.class.__sort_description(__definition_descriptions[t])}
       return nil if descs.empty?
+      __join_description2 descs
+    end
+
+    def __join_description2(descs)
       lines = %w()
       left_width = descs.map{|i| i[:head].size}.max + @__indent
       indent = " " * @__indent
@@ -186,12 +222,12 @@ module Cli
 
     def self.local_name; __local_name; end
     def self.__local_name
-      __command_model.__local_name
+      __command_class.__local_name
     end
 
     def self.global_name; __global_name; end
     def self.__global_name
-      __command_model.__global_name
+      __command_class.__global_name
     end
 
     def __default_title; self.class.__default_title; end
@@ -200,12 +236,15 @@ module Cli
       @@__default_title ||= begin
         a = %w()
         a << __global_name
-        unless __option_model.__options.empty?
-          required = __option_model.__options.values.any?{|i| !i.optional? }
+        unless __option_class.definitions.options.empty?
+          required = __option_class.definitions.options.any? do |kv|
+            kv[1].value_required?
+          end
           a << (required ? "OPTIONS" : "[OPTIONS]")
         end
-        __option_model.__arguments.values.each do |i|
-          a << (i.optional? ? "[#{i.display_name}]" : i.display_name)
+        __option_class.definitions.arguments.each do |kv|
+          required = kv[1].value_required?
+          a << (required ? kv[1].metadata.display_name : "[#{kv[1].metadata.display_name}]")
         end
         if unparsed_args = __unparsed_args
           a << unparsed_args

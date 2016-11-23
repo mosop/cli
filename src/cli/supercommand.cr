@@ -37,7 +37,7 @@ module Cli
       end
 
       @@__default_subcommand_name : ::String?
-      def self.__default_subcommand_name
+      def self.__default_subcommand_name?
         {% if is_root %}
           @@__default_subcommand_name
         {% else %}
@@ -46,7 +46,7 @@ module Cli
       end
 
       def self.__default_subcommand?
-        __subcommands[__default_subcommand_name] if __default_subcommand_name
+        __subcommands[__default_subcommand_name] if __default_subcommand_name?
       end
 
       def self.__is_alias_command_name?(name)
@@ -56,6 +56,27 @@ module Cli
       def __subcommand
         if command = __args.subcommand?
           self.class.__subcommands.fetch(command, nil)
+        end
+      end
+
+      def self.__finalize_definition
+        Options.definitions.arguments["subcommand"].tap do |scdf|
+          if default_name = __default_subcommand_name?
+            scdf.default_value.set default_name
+          else
+            scdf.require_value!
+          end
+        end
+      end
+
+      def __initialize_options(argv)
+        @__option_data = opts = __new_options(argv)
+        __rescue_parsing_error do
+          begin
+            opts.__parse
+          rescue ex : Optarg::Definitions::StringArgument::Validations::Required::Error
+            raise ex unless ex.argument.key == "subcommand"
+          end
         end
       end
     end
@@ -69,7 +90,6 @@ module Cli
       %}
 
       {% if default %}
-        Options.__arguments["subcommand"].default = {{name}}
         @@__default_subcommand_name = {{name}}
       {% end %}
 
@@ -78,17 +98,6 @@ module Cli
       {% if aliased %}
         @@__self_subcommand_aliases[{{name}}] = {{aliased}}
       {% end %}
-    end
-
-    def __initialize_options(argv)
-      @__option_model = opts = __new_options(argv)
-      __rescue_parsing_error do
-        begin
-          opts.__parse
-        rescue ex : Optarg::RequiredArgumentError
-          raise ex unless ex.argument.key == "subcommand"
-        end
-      end
     end
 
     def __run

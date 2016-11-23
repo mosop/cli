@@ -17,7 +17,7 @@ module CliInternalVersionHandlerDslFeature
 
   macro test(example, klass, names, desc)
     it {{example}} do
-      handler = {{klass.id}}::Options.__handlers[{{names[0]}}]
+      handler = {{klass.id}}::Options.definitions.handlers[{{names[0]}}]
       handler.names.should eq {{names}}
       {% for e, i in names %}
         Stdio.capture do |io|

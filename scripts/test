@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
 Dir.glob("spec/**/*_spec.cr").each do |f|
-  exit 1 unless system("crystal spec #{f}")
+  cmd = "crystal spec #{f}"
+  abort "error: #{cmd}" unless system(cmd)
 end
+exit 1 unless system("crystal spec")

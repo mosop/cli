@@ -1,4 +1,6 @@
 require "optarg"
 require "string_inflection/kebab"
+require "./cli/macros/*"
 require "./cli/*"
 require "./cli/helps/*"
+require "./cli/option_model/dsl"

@@ -13,14 +13,14 @@ module Cli
       {%
         name_components = @type.name.split("::")
         if name_components.size > 3 && name_components[-2] == "Commands"
-          outer_module = name_components[0..-3].join("::")
+          outer_module = name_components[0..-3].join("::").id
         else
           outer_module = nil
         end
       %}
 
       {% if outer_module %}
-        __define_supercommand ::{{outer_module.id}}
+        __define_supercommand ::{{outer_module}}
       {% else %}
         def self.__supercommand
         end
@@ -29,42 +29,42 @@ module Cli
       {% if @type.superclass != ::Cli::CommandBase %}
         {%
           if @type.superclass == ::Cli::Command
-            super_option_model = "Cli::OptionModel"
-            super_help = "Cli::Helps::Command"
+            super_option_data = "Cli::OptionModel".id
+            super_help = "Cli::Helps::Command".id
           elsif @type.superclass == ::Cli::Supercommand
-            super_option_model = "Cli::OptionModel"
-            super_help = "Cli::Helps::Supercommand"
+            super_option_data = "Cli::OptionModel".id
+            super_help = "Cli::Helps::Supercommand".id
           else
-            super_option_model = "#{@type.superclass.id}::Options"
-            super_help = "#{@type.superclass.id}::Help"
+            super_option_data = "#{@type.superclass}::Options".id
+            super_help = "#{@type.superclass}::Help".id
           end %}
 
-        class Options < ::{{super_option_model.id}}
+        class Options < ::{{super_option_data}}
           {% if @type.superclass == ::Cli::Supercommand %}
-            arg "subcommand", required: true, stop: true
+            arg "subcommand", stop: true
           {% end %}
 
           def command; __command; end
           def __command
-            @__command.as(::{{@type.id}})
+            @__command.as(::{{@type}})
           end
         end
 
-        class Help < ::{{super_help.id}}
-          def __command_model; self.class.__command_model; end
-          def self.__command_model
-            ::{{@type.id}}
+        class Help < ::{{super_help}}
+          def __command_class; self.class.__command_class; end
+          def self.__command_class
+            ::{{@type}}
           end
 
-          def __option_model; self.class.__option_model; end
-          def self.__option_model
-            ::{{@type.id}}::Options
+          def __option_class; self.class.__option_class; end
+          def self.__option_class
+            ::{{@type}}::Options
           end
         end
 
-        def option_model; __option_model; end
-        def __option_model
-          @__option_model.as(Options)
+        def option_data; __option_data; end
+        def __option_data
+          @__option_data.as(Options)
         end
 
         def self.__new_help(indent = 2)
@@ -77,12 +77,12 @@ module Cli
 
         {%
           names = @type.id.split("::")
-          enclosing_class_name = names.size >= 3 ? names[0..-3].join("::") : nil
+          enclosing_class_name = names.size >= 3 ? names[0..-3].join("::").id : nil
         %}
 
         def self.__enclosing_class
           {% if enclosing_class_name %}
-            ::{{enclosing_class_name.id}}
+            ::{{enclosing_class_name}}
           {% end %}
         end
 
@@ -127,31 +127,32 @@ module Cli
     getter __parent : ::Cli::CommandBase?
 
     def initialize(@__parent, argv)
+      self.class.__finalize_definition
       __initialize_options argv
     end
 
-    @__option_model : ::Optarg::Model?
-    def __option_model
-      @__option_model.as(::Optarg::Model)
+    @__option_data : ::Optarg::Model?
+    def __option_data
+      @__option_data.as(::Optarg::Model)
     end
 
     def options; __options; end
-    def __options; __option_model.__options; end
+    def __options; __option_data.__options; end
 
     def args; __args; end
-    def __args; __option_model.__args; end
+    def __args; __option_data.__args; end
 
     def named_args; __named_args; end
-    def __named_args; __option_model.__named_args; end
+    def __named_args; __option_data.__named_args; end
 
     def nameless_args; __nameless_args; end
-    def __nameless_args; __option_model.__nameless_args; end
+    def __nameless_args; __option_data.__nameless_args; end
 
     def parsed_args; __parsed_args; end
-    def __parsed_args; __option_model.__parsed_args; end
+    def __parsed_args; __option_data.__parsed_args; end
 
     def unparsed_args; __unparsed_args; end
-    def __unparsed_args; __option_model.__unparsed_args; end
+    def __unparsed_args; __option_data.__unparsed_args; end
 
     def version; __version; end
     def __version; self.class.__version; end

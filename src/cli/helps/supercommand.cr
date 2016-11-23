@@ -6,11 +6,11 @@ module Cli::Helps
     def __subcommands_lines
       @__subcommands_lines ||= begin
         a = [] of ::Tuple(::String, ::String?)
-        __command_model.__subcommands.keys.sort.each do |name|
-          subcommand = __command_model.__subcommands[name]
+        __command_class.__subcommands.keys.sort.each do |name|
+          subcommand = __command_class.__subcommands[name]
           name_column = name
-          name_column += " (default)" if __command_model.__default_subcommand_name == name
-          caption_column = if aliased = __command_model.__subcommand_aliases[name]?
+          name_column += " (default)" if __command_class.__default_subcommand_name? == name
+          caption_column = if aliased = __command_class.__subcommand_aliases[name]?
             "alias for #{aliased}"
           else
             subcommand.__help_model.__caption
