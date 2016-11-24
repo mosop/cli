@@ -21,14 +21,14 @@ class Cli::OptionModel
 
   macro help(names = nil, desc = nil)
     {%
-      names ||= %w(-h --help)
+      names = names || %w(-h --help)
     %}
     on({{names}}, desc: ({{desc}} || "show this help")) { __command.__help! }
   end
 
   macro version(names = nil, desc = nil)
     {%
-      names ||= %w(-v --version)
+      names = names || %w(-v --version)
     %}
     on({{names}}, desc: ({{desc}} || "show version")) { __command.__version! }
   end
