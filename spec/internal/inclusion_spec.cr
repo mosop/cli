@@ -35,7 +35,7 @@ module CliInternalInclusionFeature
       Stdio.capture do |io|
         ByArray.run %w(-h)
         io.out.gets_to_end.should eq <<-EOS
-        by-array ARG
+        by-array [OPTIONS] ARG
 
         Arguments:
           ARG  description
@@ -51,7 +51,7 @@ module CliInternalInclusionFeature
       Stdio.capture do |io|
         ByTuple.run %w(-h)
         io.out.gets_to_end.should eq <<-EOS
-        by-tuple ARG
+        by-tuple [OPTIONS] ARG
 
         Arguments:
           ARG  description

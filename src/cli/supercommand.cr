@@ -2,108 +2,36 @@ require "./command_base"
 
 module Cli
   abstract class Supercommand < ::Cli::CommandBase
-    macro inherited
-      {%
-        if @type.superclass == ::Cli::Supercommand
-          is_root = true
-        else
-          is_root = false
-        end %}
-
-      @@__self_subcommands = {} of ::String => ::Cli::CommandBase.class
-      @@__subcommands : ::Hash(::String, ::Cli::CommandBase.class)?
-      def self.__subcommands
-        @@__subcommands ||= begin
-          {% if is_root %}
-            h = {} of ::String => ::Cli::CommandBase.class
-          {% else %}
-            h = ::{{@type.superclass}}.__subcommands
-          {% end %}
-          h.merge(@@__self_subcommands)
-        end
-      end
-
-      @@__self_subcommand_aliases = {} of ::String => ::String
-      @@__subcommand_aliases : ::Hash(::String, ::String)?
-      def self.__subcommand_aliases
-        @@__subcommand_aliases ||= begin
-          {% if is_root %}
-            h = {} of ::String => ::String
-          {% else %}
-            h = ::{{@type.superclass}}.__subcommand_aliases
-          {% end %}
-          h.merge(@@__self_subcommand_aliases)
-        end
-      end
-
-      @@__default_subcommand_name : ::String?
-      def self.__default_subcommand_name?
-        {% if is_root %}
-          @@__default_subcommand_name
-        {% else %}
-          @@__default_subcommand_name || super
-        {% end %}
-      end
-
-      def self.__default_subcommand?
-        __subcommands[__default_subcommand_name] if __default_subcommand_name?
-      end
-
-      def self.__is_alias_command_name?(name)
-        __subcommand_aliases.has_key?(name)
-      end
-
-      def __subcommand
-        if command = __args.subcommand?
-          self.class.__subcommands.fetch(command, nil)
-        end
-      end
-
-      def self.__finalize_definition
-        Options.definitions.arguments["subcommand"].tap do |scdf|
-          if default_name = __default_subcommand_name?
-            scdf.default_value.set default_name
-          else
-            scdf.require_value!
-          end
-        end
-      end
-
-      def __initialize_options(argv)
-        @__option_data = opts = __new_options(argv)
-        __rescue_parsing_error do
-          begin
-            opts.__parse
-          rescue ex : Optarg::Definitions::StringArgument::Validations::Required::Error
-            raise ex unless ex.argument.key == "subcommand"
-          end
-        end
-      end
-    end
-
     macro command(name, default = false, aliased = nil)
       {%
         s = aliased || name
         a = s.strip.split(" ")
         a = a.map{|i| i.split("-").join("_").split("_").map{|j| j.capitalize}.join("")}
-        class_name = "Commands::" + a.join("::Commands::")
       %}
 
       {% if default %}
-        @@__default_subcommand_name = {{name}}
+        __klass.default_subcommand_name = {{name}}
+        __klass.subcommand_option_model_definition.unrequire_value!
       {% end %}
 
-      @@__self_subcommands[{{name}}] = {{class_name.id}}
-
       {% if aliased %}
-        @@__self_subcommand_aliases[{{name}}] = {{aliased}}
+        __klass.define_subcommand_alias {{name}}, {{aliased}}
       {% end %}
     end
 
+    @__subcommand : CommandClass?
+    def __subcommand?
+      @__subcommand ||= __klass.resolve_subcommand(__named_args["subcommand"]?)
+    end
+
+    def __subcommand
+      __subcommand?.not_nil!
+    end
+
     def __run
-      if command = __subcommand
+      if __subcommand?
         subargv = __unparsed_args.dup
-        command.new(self, subargv).__run
+        __subcommand.command.new(self, subargv).__run
       else
         __help!
       end

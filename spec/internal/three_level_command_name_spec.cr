@@ -10,9 +10,6 @@ module CliInternalThreeLevelCommandNameFeature
 
         module Commands
           class Three < Cli::Supercommand
-            class Help
-              title global_name
-            end
           end
         end
       end
@@ -20,9 +17,6 @@ module CliInternalThreeLevelCommandNameFeature
   end
 
   it name do
-    Stdio.capture do |io|
-      One.run %w(two three)
-      io.out.gets_to_end.should eq "one two three\n"
-    end
+    One::Commands::Two::Commands::Three::Class.instance.global_name.should eq "one two three"
   end
 end

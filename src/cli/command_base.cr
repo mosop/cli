@@ -1,78 +1,124 @@
 module Cli
   abstract class CommandBase
-    macro __define_supercommand(type)
-      {% type = type.resolve %}
-      def self.__supercommand
-        {% if type < ::Cli::Supercommand %}
-          ::{{type}}
-        {% end %}
-      end
-    end
-
     macro inherited
-      {%
-        name_components = @type.name.split("::")
-        if name_components.size > 3 && name_components[-2] == "Commands"
-          outer_module = name_components[0..-3].join("::").id
-        else
-          outer_module = nil
-        end
-      %}
-
-      {% if outer_module %}
-        __define_supercommand ::{{outer_module}}
-      {% else %}
-        def self.__supercommand
-        end
-      {% end %}
-
       {% if @type.superclass != ::Cli::CommandBase %}
-        {%
-          if @type.superclass == ::Cli::Command
+        {% if @type.superclass == ::Cli::Command %}
+          {%
+            is_command_root = true
+            is_supercommand_root = false
+            super_command_class = "Cli::CommandClass".id
             super_option_data = "Cli::OptionModel".id
             super_help = "Cli::Helps::Command".id
-          elsif @type.superclass == ::Cli::Supercommand
+            super_help_class = "Cli::HelpClass".id
+          %}
+        {% elsif @type.superclass == ::Cli::Supercommand %}
+          {%
+            is_command_root = false
+            is_supercommand_root = true
+            super_command_class = "Cli::CommandClass".id
             super_option_data = "Cli::OptionModel".id
             super_help = "Cli::Helps::Supercommand".id
-          else
+            super_help_class = "Cli::HelpClass".id
+          %}
+        {% else %}
+          {%
+            is_command_root = false
+            is_supercommand_root = false
+            super_command_class = "#{@type.superclass}::Class".id
             super_option_data = "#{@type.superclass}::Options".id
             super_help = "#{@type.superclass}::Help".id
-          end %}
+            super_help_class = "#{@type.superclass}::Help::Class".id
+          %}
+        {% end %}
+
+        class Class < ::{{super_command_class}}
+          def self.instance
+            @@instance.var ||= Class.new
+          end
+
+          def options
+            Options::Class.instance
+          end
+
+          def help
+            Help::Class.instance
+          end
+
+          def name
+            ::StringInflection.kebab(command.name.split("::").last)
+          end
+
+          def command
+            ::{{@type}}
+          end
+
+          def inherited_class?
+            {% unless is_command_root || is_supercommand_root %}
+              ::{{@type.superclass}}::Class.instance
+            {% end %}
+          end
+
+          def supercommand?
+            __get_supercommand
+          end
+
+          instance.supercommand << instance if instance.supercommand?
+        end
+
+        def self.__klass
+          @@__klass.var ||= Class.instance
+        end
 
         class Options < ::{{super_option_data}}
-          {% if @type.superclass == ::Cli::Supercommand %}
-            arg "subcommand", stop: true
-          {% end %}
+          class Class
+            {% if is_command_root || is_supercommand_root %}
+              include ::Cli::OptionModel::CliClass
+            {% end %}
 
-          def command; __command; end
+            def __cli_command
+              ::{{@type}}::Class.instance
+            end
+
+            def default_definitions
+              {% if is_supercommand_root %}
+                [::{{@type}}.__klass.subcommand_option_model_definition] of ::Optarg::Definitions::Base
+              {% else %}
+                [] of ::Optarg::Definitions::Base
+              {% end %}
+            end
+
+            def name
+              {{@type.name.split("::")[-1].underscore}}
+            end
+          end
+
           def __command
             @__command.as(::{{@type}})
           end
         end
 
         class Help < ::{{super_help}}
-          def __command_class; self.class.__command_class; end
-          def self.__command_class
-            ::{{@type}}
+          class Class < ::{{super_help_class}}
+            def self.instance
+              @@instance.var ||= Class.new
+            end
+
+            def command
+              ::{{@type}}::Class.instance
+            end
           end
 
-          def __option_class; self.class.__option_class; end
-          def self.__option_class
-            ::{{@type}}::Options
+          def self.__klass
+            @@__klass.var ||= Class.instance
           end
         end
 
-        def option_data; __option_data; end
         def __option_data
-          @__option_data.as(Options)
+          (@__option_data.var ||= Options.new(__argv, self)).as(Options)
         end
 
         def self.__new_help(indent = 2)
           Help.new(indent: indent)
-        end
-
-        def self.__help_model
-          Help
         end
 
         {%
@@ -86,9 +132,6 @@ module Cli
           {% end %}
         end
 
-        def __new_options(argv)
-          Options.new(self, argv)
-        end
       {% end %}
     end
 
@@ -124,17 +167,20 @@ module Cli
       ex.status
     end
 
+    @@__klass = Util::Var(CommandClass).new
+    def __klass; self.class.__klass; end
+
     getter __parent : ::Cli::CommandBase?
+    getter __argv : Array(String)
 
-    def initialize(@__parent, argv)
-      self.class.__finalize_definition
-      __initialize_options argv
+    def initialize(@__parent, @__argv)
+      __rescue_parsing_error do
+        __option_data.__parse
+      end
     end
 
-    @__option_data : ::Optarg::Model?
-    def __option_data
-      @__option_data.as(::Optarg::Model)
-    end
+    @__option_data = Util::Var(Optarg::Model).new
+    def option_data; __option_data; end
 
     def options; __options; end
     def __options; __option_data.__options; end
@@ -155,36 +201,20 @@ module Cli
     def __unparsed_args; __option_data.__unparsed_args; end
 
     def version; __version; end
-    def __version; self.class.__version; end
+    def __version; self.class.__klass.version; end
 
     def version?; __version?; end
-    def __version?; self.class.__version?; end
-
-    def self.__local_name
-      ::StringInflection.kebab(name.split("::").last)
-    end
+    def __version?; self.class.__klass.version?; end
 
     def self.__help_on_parsing_error?
       true
     end
 
-    def self.__version
-      if v = __version?
-        v.as(::String)
-      elsif sc = __supercommand
-        sc.__version
-      else
-        raise "No version."
-      end
-    end
-
-    def self.__version?
-      nil
-    end
-
     macro command_name(value)
-      def self.__local_name
-        {{value}}
+      class Class
+        def name
+          {{value}}
+        end
       end
     end
 
@@ -195,20 +225,10 @@ module Cli
     end
 
     macro version(value)
-      def self.__version?
-        {{value}}
-      end
-    end
-
-    @@__global_name : String?
-    def self.__global_name
-      @@__global_name ||= begin
-        if enclosing_class = __enclosing_class
-          if enclosing_class.responds_to?(:__global_name)
-            return "#{enclosing_class.__global_name} #{__local_name}"
-          end
+      class Class
+        def version?
+          {{value}}
         end
-        __local_name
       end
     end
 

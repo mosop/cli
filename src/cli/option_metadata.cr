@@ -7,7 +7,7 @@ module Cli
     end
 
     def display_name
-      if definition.is_a?(Optarg::Definitions::Argument)
+      if definition.is_a?(Optarg::DefinitionMixins::Argument)
         definition.key.upcase
       else
         super

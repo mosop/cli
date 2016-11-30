@@ -18,7 +18,7 @@ module CliHelpUnparsedArgsFeatureDetail
       io.out.gets_to_end
     end
     out.should eq <<-EOS
-      exec COMMAND [ARG1 ARG2 ...]
+      exec [OPTIONS] COMMAND [ARG1 ARG2 ...]
 
       Arguments:
         COMMAND  command name

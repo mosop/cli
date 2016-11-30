@@ -21,7 +21,7 @@ module CliInternalHelpHandlerDslFeature
         Stdio.capture do |io|
           {{klass.id}}.run [{{e}}]
           io.out.gets_to_end.should eq <<-EOS
-            {{klass.downcase.id}}
+            {{klass.downcase.id}} [OPTIONS]
 
             Options:
               #{ ({{names}}).join(", ") }  {{desc.id}}\n

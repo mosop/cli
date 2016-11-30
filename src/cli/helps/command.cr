@@ -3,11 +3,11 @@ module Cli::Helps
     def __render
       a = %w()
       s = nil
-      a << (__title || __default_title)
-      a << s if s = __header
+      a << (__klass.title? || __klass.default_title)
+      a << __klass.header if __klass.header?
       a << s if s = __arguments
       a << s if s = __options
-      a << s if s = __footer
+      a << __klass.footer if __klass.footer?
       a.empty? ? nil : a.join("\n\n")
     end
   end

@@ -2,7 +2,7 @@ module Cli
   macro __any_of(df, params)
     {% if params.class_name == "TupleLiteral" %}
       {%
-        type = "#{df.id}::Typed::TYPE".id
+        type = "#{df.id}::Typed::Type".id
         typed_value = "#{df.id}::Typed::Value".id
       %}
       ([

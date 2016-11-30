@@ -16,17 +16,27 @@ module Cli
     @__options : ::String | ::Bool | ::Nil
     @__text : ::String?
 
+    @@__klass = Util::Var(HelpClass).new
+    def __klass; self.class.__klass; end
+
     def initialize(indent = 2)
-      __command_class.__finalize_definition
       @__indent = indent
+    end
+
+    def __command_model
+      __klass.command
+    end
+
+    def __option_model
+      __klass.options
     end
 
     def __definition_descriptions
       @__definition_descriptions ||= begin
         {
-          argument: __descriptions_for(__option_class.definitions.arguments),
-          option: __descriptions_for(__option_class.definitions.options),
-          handler: __descriptions_for(__option_class.definitions.handlers),
+          argument: __descriptions_for(__option_model.definitions.arguments),
+          option: __descriptions_for(__option_model.definitions.value_options),
+          handler: __descriptions_for(__option_model.definitions.handlers),
         }
       end
     end
@@ -48,22 +58,14 @@ module Cli
         body += inclusion.split("\n") if inclusion
         body += default.split("\n") if default
         a << {head: head, body: body}
-        case df
-        when Optarg::Definitions::BoolOption
-          unless df.not.empty?
-            head = df.not.join(", ")
-            desc = "disable #{df.names.first}"
-            a << {head: head, body: [desc]}
-          end
-        end
       end
       a
     end
 
     def __names_of(df)
       case df
-      when Optarg::Definitions::Argument
-        df.key.upcase
+      when Optarg::DefinitionMixins::Argument
+        df.metadata.display_name
       else
         df.names.join(", ")
       end
@@ -80,29 +82,39 @@ module Cli
     end
 
     def __description_of(df)
-      md = df.metadata
-      if md.responds_to?(:description)
-        md.description
+      case df
+      when Optarg::Definitions::NotOption
+        "disable #{df.bool.key}"
+      else
+        md = df.metadata
+        if md.responds_to?(:description)
+          md.description
+        end
       end
     end
 
     def __default_of(df)
       case df
-      when Optarg::Definitions::Value
+      when Optarg::DefinitionMixins::Value
         case v = df.default_value.get?
         when String
           "(default: #{v})"
         when Array(String)
           "(default: #{v.join(", ")})"
         when Bool
-          "(enabled as default)" if v
+          case df
+          when Optarg::Definitions::BoolOption
+            "(enabled as default)" if v
+          when Optarg::Definitions::NotOption
+            "(disabled as default)" if v
+          end
         end
       end
     end
 
     def __array_size_of(df)
       case df
-      when Optarg::Definitions::ArrayOption
+      when Optarg::DefinitionMixins::ArrayValue
         min = df.minimum_length_of_array_value
         min > 0 ? "at least #{min}" : "multiple"
       end
@@ -201,94 +213,62 @@ module Cli
       s.split("").map{|i| i =~ /[A-Z]/ ? i.downcase : i.upcase}.join("")
     end
 
-    def self.__yield
-      yield
-    end
-
-    def __caption; self.class.__caption; end
-    def self.__caption; end;
-
-    def __title; self.class.__title; end
-    def self.__title; end
-
-    def __header; self.class.__header; end
-    def self.__header; end
-
-    def __footer; self.class.__footer; end
-    def self.__footer; end
-
-    def __unparsed_args; self.class.__unparsed_args; end
-    def self.__unparsed_args; end
-
-    def self.local_name; __local_name; end
-    def self.__local_name
-      __command_class.__local_name
-    end
-
-    def self.global_name; __global_name; end
-    def self.__global_name
-      __command_class.__global_name
-    end
-
-    def __default_title; self.class.__default_title; end
-    @@__default_title : String?
-    def self.__default_title
-      @@__default_title ||= begin
-        a = %w()
-        a << __global_name
-        unless __option_class.definitions.options.empty?
-          required = __option_class.definitions.options.any? do |kv|
-            kv[1].value_required?
-          end
-          a << (required ? "OPTIONS" : "[OPTIONS]")
-        end
-        __option_class.definitions.arguments.each do |kv|
-          required = kv[1].value_required?
-          a << (required ? kv[1].metadata.display_name : "[#{kv[1].metadata.display_name}]")
-        end
-        if unparsed_args = __unparsed_args
-          a << unparsed_args
-        end
-        a.join(" ")
-      end
-    end
-
-    macro caption(block)
-      def self.__caption
-        __yield do
-          {{block}}
+    macro caption(s = nil, &block)
+      class Class
+        def caption?
+          {% if s %}
+            {{s}}
+          {% else %}
+            {{block.body}}
+          {% end %}
         end
       end
     end
 
-    macro title(block)
-      def self.__title
-        __yield do
-          {{block}}
+    macro title(s = nil, &block)
+      class Class
+        def title?
+          {% if s %}
+            {{s}}
+          {% else %}
+            {{block.body}}
+          {% end %}
         end
       end
     end
 
-    macro header(block)
-      def self.__header
-        __yield do
-          {{block}}
+    macro header(s = nil, &block)
+      class Class
+        def header?
+          {% if s %}
+            {{s}}
+          {% else %}
+            {{block.body}}
+          {% end %}
         end
       end
     end
 
-    macro footer(block)
-      def self.__footer
-        __yield do
-          {{block}}
+    macro footer(s = nil, &block)
+      class Class
+        def footer?
+          {% if s %}
+            {{s}}
+          {% else %}
+            {{block.body}}
+          {% end %}
         end
       end
     end
 
-    macro unparsed_args(block)
-      def self.__unparsed_args
-        __yield do
-          {{block}}
+    macro unparsed_args(s = nil, &block)
+      class Class
+        def unparsed_args?
+          {% if s %}
+            {{s}}
+          {% else %}
+            {{block.body}}
+          {% end %}
         end
       end
     end

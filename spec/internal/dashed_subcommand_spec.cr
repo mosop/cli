@@ -6,14 +6,17 @@ module CliInternalDashedSubcommandFeature
 
     module Commands
       class DashedCommand < Cli::Command
+        def run
+          puts "ok"
+        end
       end
     end
   end
 
   it name do
     Stdio.capture do |io|
-      Command.run
-      io.out.gets_to_end.should eq "command SUBCOMMAND\n\nSubcommands:\n  dashed-command\n"
+      Command.run %w(dashed-command)
+      io.out.gets_to_end.should eq "ok\n"
     end
   end
 end

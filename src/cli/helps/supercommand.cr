@@ -6,14 +6,14 @@ module Cli::Helps
     def __subcommands_lines
       @__subcommands_lines ||= begin
         a = [] of ::Tuple(::String, ::String?)
-        __command_class.__subcommands.keys.sort.each do |name|
-          subcommand = __command_class.__subcommands[name]
+        __command_model.subcommands.keys.sort.each do |name|
+          subcommand = __command_model.subcommands[name]
           name_column = name
-          name_column += " (default)" if __command_class.__default_subcommand_name? == name
-          caption_column = if aliased = __command_class.__subcommand_aliases[name]?
-            "alias for #{aliased}"
+          name_column += " (default)" if __command_model.default_subcommand_name? == name
+          caption_column = if al = subcommand.as?(CommandClass::Alias)
+            "alias for #{al.real_name}"
           else
-            subcommand.__help_model.__caption
+            subcommand.help.caption?
           end
           a << {name_column, caption_column}
         end
@@ -47,11 +47,11 @@ module Cli::Helps
     def __render
       a = %w()
       s = nil
-      a << (__title || __default_title)
-      a << s if s = __header
+      a << (__klass.title? || __klass.default_title)
+      a << __klass.header if __klass.header?
       a << s if s = __subcommands
       a << s if s = __options
-      a << s if s = __footer
+      a << __klass.footer if __klass.footer?
       a.empty? ? nil : a.join("\n\n")
     end
   end

@@ -56,7 +56,7 @@ module CliHelpForSubcommandsPreviousFeature
       Stdio.capture do |io|
         Package.run %w(--help)
         io.out.gets_to_end.should eq <<-EOS
-          package [SUBCOMMAND]
+          package [OPTIONS] [SUBCOMMAND]
 
           Subcommands:
             install (default)  install package
