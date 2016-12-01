@@ -222,7 +222,7 @@ end
 puts EasyToUse.generate_bash_completion # prints a script
 ```
 
-For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Bash-Completion)
+For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Bash-Completion).
 
 ## Usage
 
