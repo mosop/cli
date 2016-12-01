@@ -195,31 +195,14 @@ For more detail, see [Versioning](#versioning).
 ### Bash Completion
 
 ```crystal
-class EasyToUse < Cli::Supercommand
-  class Foo < Cli::Command
-    # ...
+class TicketToRide < Cli::Command
+  class Options
+    string "--by", any_of: %w(train plane taxi), default: "train"
+    arg "for", any_of: %w(kyoto kanazawa kamakura)
   end
-
-  class Bar < Cli::Command
-    # ...
-  end
-
-  class Baz < Cli::Command
-    # ...
-  end
-
-  class Qux < Cli::Command
-    # ...
-  end
-
-  class Quux < Cli::Command
-    # ...
-  end
-
-  # blah blah blah...
 end
 
-puts EasyToUse.generate_bash_completion # prints a script
+puts TicketToRide.generate_bash_completion # prints a script
 ```
 
 For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Bash-Completion).
