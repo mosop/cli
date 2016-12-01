@@ -202,8 +202,6 @@ class EasyToUse < Cli::Supercommand
   command "qux"
   command "quux"
   # blah blah blah...
-
-  bash_completion
 end
 
 puts EasyToUse.generate_bash_completion # prints a script
