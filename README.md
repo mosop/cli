@@ -196,11 +196,26 @@ For more detail, see [Versioning](#versioning).
 
 ```crystal
 class EasyToUse < Cli::Supercommand
-  command "foo"
-  command "bar"
-  command "baz"
-  command "qux"
-  command "quux"
+  class Foo < Cli::Command
+    # ...
+  end
+
+  class Bar < Cli::Command
+    # ...
+  end
+
+  class Baz < Cli::Command
+    # ...
+  end
+
+  class Qux < Cli::Command
+    # ...
+  end
+
+  class Quux < Cli::Command
+    # ...
+  end
+
   # blah blah blah...
 end
 
