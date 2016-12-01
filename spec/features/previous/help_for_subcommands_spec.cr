@@ -11,7 +11,7 @@ module CliHelpForSubcommandsPreviousFeature
       help
     end
 
-    class Base < Cli::Command
+    abstract class Base < Cli::Command
       class Options
         arg "package_name", desc: "specify package's name", required: true
         help

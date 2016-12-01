@@ -62,7 +62,13 @@ module Cli
             __get_supercommand
           end
 
-          instance.supercommand << instance if instance.supercommand?
+          def abstract?
+            {{@type.abstract?}}
+          end
+
+          if instance.supercommand? && !instance.abstract?
+            instance.supercommand << instance
+          end
         end
 
         def self.__klass

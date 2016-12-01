@@ -1,31 +1,25 @@
 module Cli
   abstract class CommandClass
-    macro __get_supercommand
+    macro __get_supercommand(type = nil)
       {%
-        name_components = @type.name.split("::")
+        type = type.resolve if type
+        type = type || @type
+        names = type.name.split("::").map{|i| i.id}
       %}
-      {% if name_components.size > 4 && name_components[-3] == "Commands" %}
-        {%
-          outer_module = name_components[0..-4].join("::").id
-        %}
-      {% else %}
-        {%
-          outer_module = nil
-        %}
-      {% end %}
-      {% if outer_module %}
-        __get_supercommand2(::{{outer_module}})
+      {% if names.size >= 4 %}
+        __get_supercommand2 ::{{names[0..-3].join("::").id}}, ::{{names[0..-4].join("::").id}}
+      {% elsif names.size >= 3 %}
+        __get_supercommand2 ::{{names[0..-3].join("::").id}}
       {% else %}
         nil
       {% end %}
     end
 
-    macro __get_supercommand2(type)
-      {%
-        type = type.resolve
-      %}
-      {% if type < ::Cli::Supercommand %}
-        ::{{type}}::Class.instance
+    macro __get_supercommand2(type1, type2 = nil)
+      {% if type1.resolve < ::Cli::Supercommand %}
+        {{type1}}::Class.instance
+      {% elsif type2 && type2.resolve < ::Cli::Supercommand %}
+        {{type2}}::Class.instance
       {% else %}
         nil
       {% end %}
@@ -129,6 +123,10 @@ module Cli
 
       def help
         real_command.help
+      end
+
+      def abstract?
+        real_command.abstract?
       end
     end
   end
