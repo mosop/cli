@@ -99,14 +99,11 @@ For more detail, see [Defining Subcommands](#defining_subcommands).
 
 ```crystal
 class Command < Cli::Supercommand
-  command "loooooooooong"
   command "l", aliased: "loooooooooong"
 
-  module Commands
-    class Loooooooooong < Cli::Command
-      def run
-        sleep 1000
-      end
+  class Loooooooooong < Cli::Command
+    def run
+      sleep 1000
     end
   end
 end
@@ -117,7 +114,7 @@ Command.run %w(l) # sleeps
 ### Inheritance
 
 ```crystal
-class Role < Cli::Command
+abstract class Role < Cli::Command
   class Options
     string "--name"
   end
@@ -127,17 +124,15 @@ class Chase < Cli::Supercommand
   command "mouse"
   command "cat"
 
-  module Commands
-    class Mouse < Role
-      def run
-        puts "#{options.name} runs away."
-      end
+  class Mouse < Role
+    def run
+      puts "#{options.name} runs away."
     end
+  end
 
-    class Cat < Role
-      def run
-        puts "#{options.name} runs into a wall."
-      end
+  class Cat < Role
+    def run
+      puts "#{options.name} runs into a wall."
     end
   end
 end
@@ -211,7 +206,7 @@ class EasyToUse < Cli::Supercommand
   bash_completion
 end
 
-EasyToUse.run %w(bash-completion) # prints a script
+puts EasyToUse.generate_bash_completion # prints a script
 ```
 
 For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Bash-Completion)

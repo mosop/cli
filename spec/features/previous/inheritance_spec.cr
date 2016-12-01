@@ -1,7 +1,7 @@
 require "../spec_helper"
 
 module CliInheritanceFeature
-  abstract class Role < Cli::Command
+  class Role < Cli::Command
     class Options
       string "--name"
     end
@@ -11,15 +11,17 @@ module CliInheritanceFeature
     command "mouse"
     command "cat"
 
-    class Mouse < Role
-      def run
-        puts "#{options.name} runs away."
+    module Commands
+      class Mouse < Role
+        def run
+          puts "#{options.name} runs away."
+        end
       end
-    end
 
-    class Cat < Role
-      def run
-        puts "#{options.name} runs into a wall."
+      class Cat < Role
+        def run
+          puts "#{options.name} runs into a wall."
+        end
       end
     end
   end
