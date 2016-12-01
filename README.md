@@ -33,7 +33,7 @@ end
 Command.run %w(--hello world) # prints "Hello, world!"
 ```
 
-For more detail, see [Parsing Options](#parsing_options).
+For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Parsing-Options).
 
 ### Exit
 
@@ -60,7 +60,7 @@ Open.run %w(sesame) # => prints "Opened!" and returns 0 as an exit code
 Open.run %w(paprika) # => prints "Not opened!" into STDERR and returns 1 as an exit code
 ```
 
-For more detail, see [Handling Exit](#handling_exit).
+For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Handling-Exits).
 
 ### Subcommand
 
@@ -93,7 +93,7 @@ Polygon.run %w(hexagon)  # prints "6"
 Polygon.run %w()         # prints "3"
 ```
 
-For more detail, see [Defining Subcommands](#defining_subcommands).
+For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Defining-Subcommands).
 
 ### Aliasing
 
@@ -174,7 +174,7 @@ Call.run %w(--help)
 # (C) 20XX mosop
 ```
 
-For more detail, see [Generating Help](#generating_help).
+For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Generating-Help).
 
 ### Versioning
 
@@ -190,7 +190,7 @@ end
 Command.run %w(-v) # prints 1.0.0
 ```
 
-For more detail, see [Versioning](#versioning).
+For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Versioning-Commands).
 
 ### Bash Completion
 
