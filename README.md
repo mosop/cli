@@ -33,8 +33,6 @@ end
 Command.run %w(--hello world) # prints "Hello, world!"
 ```
 
-For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Parsing-Options).
-
 ### Exit
 
 ```crystal
@@ -56,11 +54,9 @@ class Open < Cli::Command
   end
 end
 
-Open.run %w(sesame) # => prints "Opened!" and returns 0 as an exit code
-Open.run %w(paprika) # => prints "Not opened!" into STDERR and returns 1 as an exit code
+Open.run %w(sesame) # => prints "Opened!" and returns 0
+Open.run %w(paprika) # => prints "Not opened!" into STDERR and returns 1
 ```
-
-For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Handling-Exit).
 
 ### Subcommand
 
@@ -92,8 +88,6 @@ Polygon.run %w(square)   # prints "4"
 Polygon.run %w(hexagon)  # prints "6"
 Polygon.run %w()         # prints "3"
 ```
-
-For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Defining-Subcommands).
 
 ### Aliasing
 
@@ -174,8 +168,6 @@ Call.run %w(--help)
 # (C) 20XX mosop
 ```
 
-For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Generating-Help).
-
 ### Versioning
 
 ```crystal
@@ -190,8 +182,6 @@ end
 Command.run %w(-v) # prints 1.0.0
 ```
 
-For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Versioning-Commands).
-
 ### Bash Completion
 
 ```crystal
@@ -204,8 +194,6 @@ end
 
 puts TicketToRide.generate_bash_completion # prints a script
 ```
-
-For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Bash-Completion).
 
 ## Usage
 
