@@ -1,4 +1,4 @@
-require "../spec_helper"
+require "../../spec_helper"
 
 module CliAliasingFeature
   class Command < ::Cli::Supercommand
