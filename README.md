@@ -67,26 +67,22 @@ For more detail, see [Handling Exit](#handling_exit).
 ```crystal
 class Polygon < Cli::Supercommand
   command "triangle", default: true
-  command "square"
-  command "hexagon"
 
-  module Commands
-    class Triangle < Cli::Command
-      def run
-        puts 3
-      end
+  class Triangle < Cli::Command
+    def run
+      puts 3
     end
+  end
 
-    class Square < Cli::Command
-      def run
-        puts 4
-      end
+  class Square < Cli::Command
+    def run
+      puts 4
     end
+  end
 
-    class Hexagon < Cli::Command
-      def run
-        puts 6
-      end
+  class Hexagon < Cli::Command
+    def run
+      puts 6
     end
   end
 end
@@ -235,4 +231,4 @@ and see [Code Samples](#code_samples) and [Wiki](https://github.com/mosop/cli/wi
 
 ## Releases
 
-See [Releases](https://github.com/mosop/cli/releases)
+See [Releases](https://github.com/mosop/cli/releases).
