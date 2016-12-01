@@ -1,5 +1,6 @@
 require "optarg"
 require "string_inflection/kebab"
+require "string_inflection/snake"
 require "./cli/util/*"
 require "./cli/macros/*"
 require "./cli/*"

@@ -293,5 +293,9 @@ module Cli
     rescue ex : ::Optarg::ParsingError
       exit! "Parsing Error: #{ex.message}", error: true, help: self.class.__help_on_parsing_error?
     end
+
+    def self.generate_bash_completion
+      __klass.generate_bash_completion
+    end
   end
 end

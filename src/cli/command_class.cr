@@ -88,9 +88,21 @@ module Cli
       @global_name ||= supercommand? ? "#{supercommand.global_name} #{name}" : name
     end
 
+    @snake_name : String?
+    def snake_name
+      @snake_name ||= StringInflection.snake(name)
+    end
+
     def resolve_subcommand(name)
       name ||= default_subcommand_name?
       subcommands[name]?
+    end
+
+    def generate_bash_completion
+      g = options.bash_completion.new_generator("_#{snake_name}")
+      g.result + <<-EOS
+      \n\ncomplete -F #{g.entry_point} #{name}
+      EOS
     end
 
     def define_subcommand_alias(name, real)
