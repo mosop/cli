@@ -60,7 +60,7 @@ Open.run %w(sesame) # => prints "Opened!" and returns 0 as an exit code
 Open.run %w(paprika) # => prints "Not opened!" into STDERR and returns 1 as an exit code
 ```
 
-For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Handling-Exits).
+For more detail, see [Wiki](https://github.com/mosop/cli/wiki/Handling-Exit).
 
 ### Subcommand
 
