@@ -102,25 +102,32 @@ function _ticket_to_ride__ls() {
   _ticket_to_ride__cur
   local a=()
   local i=0
-  while [ $i -lt ${#_ticket_to_ride__keys[@]} ]; do
-    if _ticket_to_ride__tag arg $i; then
+  if [[ "$_ticket_to_ride__w" =~ ^- ]]; then
+    while [ $i -lt ${#_ticket_to_ride__keys[@]} ]; do
+      if _ticket_to_ride__tag arg $i; then
+        let i+=1
+        continue
+      fi
+      local found=${_ticket_to_ride__f[$i]}
+      if [[ "$found" == "" ]]; then
+        found=0
+      fi
+      local max=${_ticket_to_ride__occurs[$i]}
+      if [ $max -lt 0 ] || [ $found -lt $max ]; then
+        a+=(${_ticket_to_ride__keys[$i]})
+      fi
       let i+=1
-      continue
+    done
+  else
+    if [ $_ticket_to_ride__ai -lt ${#_ticket_to_ride__args[@]} ]; then
+      a=(${_ticket_to_ride__words[${_ticket_to_ride__args[$_ticket_to_ride__ai]}]})
     fi
-    local found=${_ticket_to_ride__f[$i]}
-    if [[ "$found" == "" ]]; then
-      found=0
-    fi
-    local max=${_ticket_to_ride__occurs[$i]}
-    if [ $max -lt 0 ] || [ $found -lt $max ]; then
-      a+=(${_ticket_to_ride__keys[$i]})
-    fi
-    let i+=1
-  done
-  if [ $_ticket_to_ride__ai -lt ${#_ticket_to_ride__args[@]} ]; then
-    a+=(${_ticket_to_ride__words[${_ticket_to_ride__args[$_ticket_to_ride__ai]}]})
   fi
-  COMPREPLY=( $(compgen -W "$(echo ${a[@]})" -- "$_ticket_to_ride__c") )
+  if [ ${#a[@]} -gt 0 ]; then
+    COMPREPLY=( $(compgen -W "$(echo ${a[@]})" -- "$_ticket_to_ride__c") )
+  else
+    COMPREPLY=( $(compgen -o default -- "$_ticket_to_ride__c") )
+  fi
   return 0
 }
 
@@ -141,46 +148,44 @@ function _ticket_to_ride__reply() {
   _ticket_to_ride__k=-1
   _ticket_to_ride__ai=0
   _ticket_to_ride__f=()
-  while :; do
-    if _ticket_to_ride__end; then
-      _ticket_to_ride__ls
-      return $?
-    fi
+  while ! _ticket_to_ride__tag stop; do
     _ticket_to_ride__word
     _ticket_to_ride__key
     if _ticket_to_ride__tag term; then
       _ticket_to_ride__inc
       break
-    elif [[ $_ticket_to_ride__w =~ ^- ]]; then
+    fi
+    if _ticket_to_ride__end; then
+      _ticket_to_ride__ls
+      return $?
+    fi
+    if [[ $_ticket_to_ride__w =~ ^- ]]; then
       if [ $_ticket_to_ride__k -eq -1 ]; then
         _ticket_to_ride__any
         return $?
       fi
-      _ticket_to_ride__inc
-      if _ticket_to_ride__tag stop; then
-        break
-      fi
       _ticket_to_ride__len
       if [ $_ticket_to_ride__l -eq 1 ]; then
         _ticket_to_ride__add
+        _ticket_to_ride__inc
         continue
       fi
+      _ticket_to_ride__inc
       if _ticket_to_ride__end; then
         _ticket_to_ride__lskey
         return $?
       fi
       _ticket_to_ride__add
-      _ticket_to_ride__inc
-      continue
-    fi
-    if _ticket_to_ride__arg; then
-      _ticket_to_ride__inc
-      if [[ ${_ticket_to_ride__nexts[$_ticket_to_ride__k]} != "" ]]; then
-        _ticket_to_ride__next
-        return $?
-      fi
     else
-      _ticket_to_ride__inc
+      if _ticket_to_ride__arg; then
+        _ticket_to_ride__inc
+        if [[ ${_ticket_to_ride__nexts[$_ticket_to_ride__k]} != "" ]]; then
+          _ticket_to_ride__next
+          return $?
+        fi
+      else
+        _ticket_to_ride__inc
+      fi
     fi
   done
   _ticket_to_ride__any
