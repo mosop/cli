@@ -115,9 +115,6 @@ abstract class Role < Cli::Command
 end
 
 class Chase < Cli::Supercommand
-  command "mouse"
-  command "cat"
-
   class Mouse < Role
     def run
       puts "#{options.name} runs away."
