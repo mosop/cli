@@ -1,5 +1,7 @@
-module Cli::OptionModel::Definitions
+module Cli::OptionModelDefinitions
   class Subcommand < Optarg::Definitions::StringArgument
+    alias Model = OptionModel
+
     getter command_class : CommandClass
 
     def initialize(@command_class)
@@ -7,7 +9,7 @@ module Cli::OptionModel::Definitions
     end
 
     def subclassify(model)
-      Subcommand.new(model.as(CliClass).__cli_command)
+      Subcommand.new(model.as(OptionModel::Cli).command)
     end
 
     def __command_class_of(model)

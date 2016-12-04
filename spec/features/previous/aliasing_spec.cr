@@ -1,6 +1,6 @@
 require "../../spec_helper"
 
-module CliAliasingFeature
+module CliAliasingPreviousFeature
   class Command < ::Cli::Supercommand
     command "loooooooooong"
     command "l", aliased: "loooooooooong"

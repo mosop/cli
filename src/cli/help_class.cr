@@ -14,8 +14,21 @@ module Cli
           a << (required ? "OPTIONS" : "[OPTIONS]")
         end
         options.definitions.arguments.each do |kv|
-          required = kv[1].value_required?
-          a << (required ? kv[1].metadata.display_name : "[#{kv[1].metadata.display_name}]")
+          if df = kv[1].as?(::Optarg::Definitions::StringArrayArgument)
+            min = df.minimum_length_of_array
+            if min > 0
+              (1..min).each do |n|
+                a << "#{df.metadata.display_name}#{n}"
+              end
+            end
+            vargs = ((min + 1)..(min + 2)).map do |n|
+              "#{df.metadata.display_name}#{n}"
+            end
+            a << "[" + vargs.join(" ") + "...]"
+          elsif df = kv[1].as?(::Optarg::Definitions::StringArgument)
+            required = df.value_required?
+            a << (required ? df.metadata.display_name : "[#{df.metadata.display_name}]")
+          end
         end
         if unparsed_args?
           a << unparsed_args

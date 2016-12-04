@@ -14,6 +14,10 @@ declare -a _ticket_to_ride__words
 _ticket_to_ride__words[0]=' train plane taxi '
 _ticket_to_ride__words[1]=' kyoto kanazawa kamakura '
 
+declare -a _ticket_to_ride__cmds
+_ticket_to_ride__cmds[0]=''
+_ticket_to_ride__cmds[1]=''
+
 declare -a _ticket_to_ride__nexts
 
 declare -ia _ticket_to_ride__args
@@ -73,7 +77,9 @@ function _ticket_to_ride__word() {
 function _ticket_to_ride__arg() {
   if [ $_ticket_to_ride__ai -lt ${#_ticket_to_ride__args[@]} ]; then
     _ticket_to_ride__k=${_ticket_to_ride__args[$_ticket_to_ride__ai]}
-    let _ticket_to_ride__ai+=1
+    if ! _ticket_to_ride__tag varg; then
+      let _ticket_to_ride__ai+=1
+    fi
     return 0
   fi
   return 1
@@ -102,6 +108,8 @@ function _ticket_to_ride__ls() {
   _ticket_to_ride__cur
   local a=()
   local i=0
+  local cmd
+  local arg
   if [[ "$_ticket_to_ride__w" =~ ^- ]]; then
     while [ $i -lt ${#_ticket_to_ride__keys[@]} ]; do
       if _ticket_to_ride__tag arg $i; then
@@ -120,7 +128,13 @@ function _ticket_to_ride__ls() {
     done
   else
     if [ $_ticket_to_ride__ai -lt ${#_ticket_to_ride__args[@]} ]; then
-      a=(${_ticket_to_ride__words[${_ticket_to_ride__args[$_ticket_to_ride__ai]}]})
+      arg=${_ticket_to_ride__args[$_ticket_to_ride__ai]}
+      cmd=${_ticket_to_ride__cmds[$arg]}
+      if [[ "$cmd" == "" ]]; then
+        a=(${_ticket_to_ride__words[$arg]})
+      else
+        a=($($cmd))
+      fi
     fi
   fi
   if [ ${#a[@]} -gt 0 ]; then

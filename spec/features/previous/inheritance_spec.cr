@@ -1,6 +1,6 @@
 require "../../spec_helper"
 
-module CliInheritanceFeature
+module CliInheritancePreviousFeature
   class Role < Cli::Command
     class Options
       string "--name"

@@ -25,11 +25,14 @@ module Cli
       {% end %}
     end
 
+    Callback.enable
+    define_callback_group :validate, proc_type: Proc(CommandBase, Nil)
+
     @@instance = Util::Var(CommandClass).new
 
-    @subcommand_option_model_definition : OptionModel::Definitions::Subcommand?
+    @subcommand_option_model_definition : OptionModelDefinitions::Subcommand?
     def subcommand_option_model_definition
-      @@subcommand_option_model_definition ||= OptionModel::Definitions::Subcommand.new(self)
+      @@subcommand_option_model_definition ||= OptionModelDefinitions::Subcommand.new(self)
     end
 
     abstract def name : String

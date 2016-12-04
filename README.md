@@ -205,6 +205,6 @@ and see [Code Samples](#code_samples) and [Wiki](https://github.com/mosop/cli/wi
 - Application-Level Logger
 - I18n
 
-## Releases
+## Release Notes
 
 See [Releases](https://github.com/mosop/cli/releases).

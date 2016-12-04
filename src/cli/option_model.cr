@@ -1,7 +1,7 @@
 module Cli
   abstract class OptionModel < ::Optarg::Model
-    module CliClass
-      abstract def __cli_command
+    module Cli
+      abstract def command
     end
 
     @__command : CommandBase?

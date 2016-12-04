@@ -115,7 +115,7 @@ module Cli
     def __array_size_of(df)
       case df
       when Optarg::DefinitionMixins::ArrayValue
-        min = df.minimum_length_of_array_value
+        min = df.minimum_length_of_array
         min > 0 ? "at least #{min}" : "multiple"
       end
     end
@@ -123,11 +123,11 @@ module Cli
     def __inclusion_of(df)
       case df
       when Optarg::Definitions::StringOption
-        if incl = df.value_validations.find{|i| i.is_a?(::Optarg::Definitions::StringOption::Validations::Inclusion)}
+        if incl = df.validations.find{|i| i.is_a?(::Optarg::Definitions::StringOption::Validations::Inclusion)}
           __inclusion_of2(incl.as(::Optarg::Definitions::StringOption::Validations::Inclusion))
         end
       when Optarg::Definitions::StringArgument
-        if incl = df.value_validations.find{|i| i.is_a?(::Optarg::Definitions::StringArgument::Validations::Inclusion)}
+        if incl = df.validations.find{|i| i.is_a?(::Optarg::Definitions::StringArgument::Validations::Inclusion)}
           __inclusion_of2(incl.as(::Optarg::Definitions::StringArgument::Validations::Inclusion))
         end
       end

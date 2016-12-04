@@ -78,10 +78,10 @@ module Cli
         class Options < ::{{super_option_data}}
           class Class
             {% if is_command_root || is_supercommand_root %}
-              include ::Cli::OptionModel::CliClass
+              include ::Cli::OptionModel::Cli
             {% end %}
 
-            def __cli_command
+            def command
               ::{{@type}}::Class.instance
             end
 
