@@ -18,6 +18,10 @@ declare -a _ticket_to_ride__cmds
 _ticket_to_ride__cmds[0]=''
 _ticket_to_ride__cmds[1]=''
 
+declare -a _ticket_to_ride__acts
+_ticket_to_ride__acts[0]=''
+_ticket_to_ride__acts[1]=''
+
 declare -a _ticket_to_ride__nexts
 
 declare -ia _ticket_to_ride__args
@@ -51,10 +55,10 @@ function _ticket_to_ride__cur() {
 }
 
 function _ticket_to_ride__end() {
-  if [ $_ticket_to_ride__i -eq $COMP_CWORD ]; then
-    return 0
+  if [ $_ticket_to_ride__i -lt $COMP_CWORD ]; then
+    return 1
   fi
-  return 1
+  return 0
 }
 
 function _ticket_to_ride__inc() {
@@ -108,8 +112,9 @@ function _ticket_to_ride__ls() {
   _ticket_to_ride__cur
   local a=()
   local i=0
-  local cmd
   local arg
+  local act
+  local cmd
   if [[ "$_ticket_to_ride__w" =~ ^- ]]; then
     while [ $i -lt ${#_ticket_to_ride__keys[@]} ]; do
       if _ticket_to_ride__tag arg $i; then
@@ -129,29 +134,49 @@ function _ticket_to_ride__ls() {
   else
     if [ $_ticket_to_ride__ai -lt ${#_ticket_to_ride__args[@]} ]; then
       arg=${_ticket_to_ride__args[$_ticket_to_ride__ai]}
+      act=${_ticket_to_ride__acts[$arg]}
       cmd=${_ticket_to_ride__cmds[$arg]}
-      if [[ "$cmd" == "" ]]; then
-        a=(${_ticket_to_ride__words[$arg]})
-      else
+      if [[ "$act" != "" ]]; then
+        :
+      elif [[ "$cmd" != "" ]]; then
         a=($($cmd))
+      else
+        a=(${_ticket_to_ride__words[$arg]})
       fi
     fi
   fi
-  if [ ${#a[@]} -gt 0 ]; then
-    COMPREPLY=( $(compgen -W "$(echo ${a[@]})" -- "$_ticket_to_ride__c") )
-  else
-    COMPREPLY=( $(compgen -o default -- "$_ticket_to_ride__c") )
+  if [[ "$act" != "" ]]; then
+    COMPREPLY=( $(compgen -A $act -- "${_ticket_to_ride__c}") )
+    return 0
+  elif [ ${#a[@]} -gt 0 ]; then
+    COMPREPLY=( $(compgen -W "$(echo ${a[@]})" -- "${_ticket_to_ride__c}") )
+    return 0
   fi
-  return 0
+  _ticket_to_ride__any
+  return $?
 }
 
 function _ticket_to_ride__lskey() {
-  if _ticket_to_ride__keyerr; then return 1; fi
-  local a=(${_ticket_to_ride__words[$_ticket_to_ride__k]})
-  if [ ${#a[@]} -gt 0 ]; then
-    _ticket_to_ride__cur
-    COMPREPLY=( $(compgen -W "$(echo ${a[@]})" -- "$_ticket_to_ride__c") )
-    return 0
+  if ! _ticket_to_ride__keyerr; then
+    local act=(${_ticket_to_ride__acts[$_ticket_to_ride__k]})
+    local cmd=(${_ticket_to_ride__cmds[$_ticket_to_ride__k]})
+    local a
+    if [[ "$act" != "" ]]; then
+      :
+    elif [[ "$cmd" != "" ]]; then
+      a=($($cmd))
+    else
+      a=(${_ticket_to_ride__words[$_ticket_to_ride__k]})
+    fi
+    if [[ "$act" != "" ]]; then
+      _ticket_to_ride__cur
+      COMPREPLY=( $(compgen -A $act -- "${_ticket_to_ride__c}") )
+      return 0
+    elif [ ${#a[@]} -gt 0 ]; then
+      _ticket_to_ride__cur
+      COMPREPLY=( $(compgen -W "$(echo ${a[@]})" -- "${_ticket_to_ride__c}") )
+      return 0
+    fi
   fi
   _ticket_to_ride__any
   return $?
@@ -184,25 +209,27 @@ function _ticket_to_ride__reply() {
         _ticket_to_ride__inc
         continue
       fi
-      _ticket_to_ride__inc
       if _ticket_to_ride__end; then
         _ticket_to_ride__lskey
         return $?
       fi
       _ticket_to_ride__add
+      _ticket_to_ride__inc
     else
       if _ticket_to_ride__arg; then
-        _ticket_to_ride__inc
-        if [[ ${_ticket_to_ride__nexts[$_ticket_to_ride__k]} != "" ]]; then
-          _ticket_to_ride__next
+        if _ticket_to_ride__end; then
+          _ticket_to_ride__lskey
           return $?
         fi
-      else
-        _ticket_to_ride__inc
       fi
+      _ticket_to_ride__inc
     fi
   done
-  _ticket_to_ride__any
+  if [[ "${_ticket_to_ride__nexts[$_ticket_to_ride__k]}" != "" ]]; then
+    _ticket_to_ride__next
+  else
+    _ticket_to_ride__any
+  fi
   return $?
 }
 
