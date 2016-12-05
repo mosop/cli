@@ -184,7 +184,7 @@ Command.run %w(-v) # prints 1.0.0
 ```crystal
 class TicketToRide < Cli::Command
   class Options
-    string "--by", any_of: %w(train plane taxi), default: "train"
+    string "--by", any_of: %w(train plane taxi)
     arg "for", any_of: %w(kyoto kanazawa kamakura)
   end
 end
