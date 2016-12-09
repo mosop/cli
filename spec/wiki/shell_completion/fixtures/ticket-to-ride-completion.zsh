@@ -1,14 +1,14 @@
-_ticket_to_ride__keys=(' --by ' ' for ')
-_ticket_to_ride__args=(1 )
-_ticket_to_ride__acts=('' '')
-_ticket_to_ride__cmds=('' '')
-_ticket_to_ride__lens=(2 1)
-_ticket_to_ride__nexts=('' '')
-_ticket_to_ride__occurs=(1 1)
-_ticket_to_ride__tags=(' opt ' ' arg ')
-_ticket_to_ride__words=(' train plane taxi ' ' kyoto kanazawa kamakura ')
+_ticket_to_ride___keys=(' --by ' ' for ')
+_ticket_to_ride___args=(1 )
+_ticket_to_ride___acts=('' '')
+_ticket_to_ride___cmds=('' '')
+_ticket_to_ride___lens=(2 1)
+_ticket_to_ride___nexts=('' '')
+_ticket_to_ride___occurs=(1 1)
+_ticket_to_ride___tags=(' opt ' ' arg ')
+_ticket_to_ride___words=(' train plane taxi ' ' kyoto kanazawa kamakura ')
 
-function _ticket_to_ride__act() {
+function _ticket_to_ride___act() {
   setopt localoptions ksharrays
   
   local -a a jids
@@ -91,71 +91,71 @@ function _ticket_to_ride__act() {
   return 0
 }
 
-function _ticket_to_ride__add() {
+function _ticket_to_ride___add() {
   setopt localoptions ksharrays
   
   compadd -- "${@:1}"
   return 0
 }
 
-function _ticket_to_ride__any() {
+function _ticket_to_ride___any() {
   setopt localoptions ksharrays
   
-  _ticket_to_ride__act file
+  _ticket_to_ride___act file
   return $?
 }
 
-function _ticket_to_ride__cur() {
+function _ticket_to_ride___cur() {
   setopt localoptions ksharrays
   
-  _ticket_to_ride__c="${COMP_WORDS[COMP_CWORD]}"
+  _ticket_to_ride___c="${COMP_WORDS[COMP_CWORD]}"
   return 0
 }
 
-function _ticket_to_ride__end() {
+function _ticket_to_ride___end() {
   setopt localoptions ksharrays
   
-  if [ $_ticket_to_ride__i -lt $COMP_CWORD ]; then
+  if [ $_ticket_to_ride___i -lt $COMP_CWORD ]; then
     return 1
   fi
   return 0
 }
 
-function _ticket_to_ride__found() {
+function _ticket_to_ride___found() {
   setopt localoptions ksharrays
   
-  if _ticket_to_ride__keyerr; then return 1; fi
+  if _ticket_to_ride___keyerr; then return 1; fi
   local n
-  n=${_ticket_to_ride__f[$_ticket_to_ride__k]}
+  n=${_ticket_to_ride___f[$_ticket_to_ride___k]}
   if [[ "$n" == "" ]]; then
     n=1
   else
     let n+=1
   fi
-  _ticket_to_ride__f[$_ticket_to_ride__k]=$n
+  _ticket_to_ride___f[$_ticket_to_ride___k]=$n
   return 0
 }
 
-function _ticket_to_ride__inc() {
+function _ticket_to_ride___inc() {
   setopt localoptions ksharrays
   
-  let _ticket_to_ride__i+=1
+  let _ticket_to_ride___i+=1
   return 0
 }
 
-function _ticket_to_ride__keyerr() {
+function _ticket_to_ride___keyerr() {
   setopt localoptions ksharrays
   
-  if [[ "$_ticket_to_ride__k" == "" ]] || [ $_ticket_to_ride__k -lt 0 ]; then
+  if [[ "$_ticket_to_ride___k" == "" ]] || [ $_ticket_to_ride___k -lt 0 ]; then
     return 0
   fi
   return 1
 }
 
-function _ticket_to_ride__word() {
+function _ticket_to_ride___word() {
   setopt localoptions ksharrays
   
-  _ticket_to_ride__w="${COMP_WORDS[$_ticket_to_ride__i]}"
+  _ticket_to_ride___w="${COMP_WORDS[$_ticket_to_ride___i]}"
   return 0
 }
 
@@ -164,180 +164,174 @@ function _ticket_to_ride() {
   
   (( COMP_CWORD = CURRENT - 1 ))
   COMP_WORDS=($(echo ${words[@]}))
-  _ticket_to_ride__i=1
-  _ticket_to_ride__k=-1
-  _ticket_to_ride__ai=0
-  _ticket_to_ride__f=()
-  while ! _ticket_to_ride__tag stop; do
-    _ticket_to_ride__word
-    _ticket_to_ride__key
-    if _ticket_to_ride__tag term; then
-      _ticket_to_ride__inc
+  _ticket_to_ride___i=1
+  _ticket_to_ride___k=-1
+  _ticket_to_ride___ai=0
+  _ticket_to_ride___f=()
+  while ! _ticket_to_ride___tag stop; do
+    _ticket_to_ride___word
+    _ticket_to_ride___key
+    if _ticket_to_ride___tag term; then
+      _ticket_to_ride___inc
       break
     fi
-    if _ticket_to_ride__end; then
-      _ticket_to_ride__ls
+    if _ticket_to_ride___end; then
+      _ticket_to_ride___ls
       return $?
     fi
-    if [[ $_ticket_to_ride__w =~ ^- ]]; then
-      if [ $_ticket_to_ride__k -eq -1 ]; then
-        _ticket_to_ride__any
+    if [[ $_ticket_to_ride___w =~ ^- ]]; then
+      if [ $_ticket_to_ride___k -eq -1 ]; then
+        _ticket_to_ride___any
         return $?
       fi
-      _ticket_to_ride__len
-      if [ $_ticket_to_ride__l -eq 1 ]; then
-        _ticket_to_ride__found
-        _ticket_to_ride__inc
+      _ticket_to_ride___found
+      _ticket_to_ride___inc
+      _ticket_to_ride___len
+      if [ $_ticket_to_ride___l -eq 1 ]; then
         continue
       fi
-      if _ticket_to_ride__end; then
-        _ticket_to_ride__lskey
+      if _ticket_to_ride___end; then
+        _ticket_to_ride___lskey
         return $?
       fi
-      _ticket_to_ride__found
-      _ticket_to_ride__inc
+      _ticket_to_ride___inc
     else
-      if _ticket_to_ride__arg; then
-        if _ticket_to_ride__end; then
-          _ticket_to_ride__lskey
+      if _ticket_to_ride___arg; then
+        if _ticket_to_ride___end; then
+          _ticket_to_ride___lskey
           return $?
         fi
       fi
-      _ticket_to_ride__inc
+      _ticket_to_ride___inc
     fi
   done
-  if [[ "${_ticket_to_ride__nexts[$_ticket_to_ride__k]}" != "" ]]; then
-    _ticket_to_ride__next
+  if [[ "${_ticket_to_ride___nexts[$_ticket_to_ride___k]}" != "" ]]; then
+    _ticket_to_ride___next
   else
-    _ticket_to_ride__any
+    _ticket_to_ride___any
   fi
   return $?
 }
 
-function _ticket_to_ride__arg() {
+function _ticket_to_ride___arg() {
   setopt localoptions ksharrays
   
-  if [ $_ticket_to_ride__ai -lt ${#_ticket_to_ride__args[@]} ]; then
-    _ticket_to_ride__k=${_ticket_to_ride__args[$_ticket_to_ride__ai]}
-    if ! _ticket_to_ride__tag varg; then
-      let _ticket_to_ride__ai+=1
+  if [ $_ticket_to_ride___ai -lt ${#_ticket_to_ride___args[@]} ]; then
+    _ticket_to_ride___k=${_ticket_to_ride___args[$_ticket_to_ride___ai]}
+    if ! _ticket_to_ride___tag varg; then
+      let _ticket_to_ride___ai+=1
     fi
     return 0
   fi
   return 1
 }
 
-function _ticket_to_ride__key() {
+function _ticket_to_ride___key() {
   setopt localoptions ksharrays
   
   local i
   i=0
-  while [ $i -lt ${#_ticket_to_ride__keys[@]} ]; do
-    if [[ ${_ticket_to_ride__keys[$i]} == *' '$_ticket_to_ride__w' '* ]]; then
-      _ticket_to_ride__k=$i
+  while [ $i -lt ${#_ticket_to_ride___keys[@]} ]; do
+    if [[ ${_ticket_to_ride___keys[$i]} == *' '$_ticket_to_ride___w' '* ]]; then
+      _ticket_to_ride___k=$i
       return 0
     fi
     let i+=1
   done
-  _ticket_to_ride__k=-1
+  _ticket_to_ride___k=-1
   return 1
 }
 
-function _ticket_to_ride__len() {
+function _ticket_to_ride___len() {
   setopt localoptions ksharrays
   
-  if _ticket_to_ride__keyerr; then return 1; fi
-  _ticket_to_ride__l=${_ticket_to_ride__lens[$_ticket_to_ride__k]}
+  if _ticket_to_ride___keyerr; then return 1; fi
+  _ticket_to_ride___l=${_ticket_to_ride___lens[$_ticket_to_ride___k]}
   return 0
 }
 
-function _ticket_to_ride__ls() {
+function _ticket_to_ride___ls() {
   setopt localoptions ksharrays
   
   local a i max found arg act cmd
   a=()
-  if ! [[ "$_ticket_to_ride__w" =~ ^- ]]; then
-    if [ $_ticket_to_ride__ai -lt ${#_ticket_to_ride__args[@]} ]; then
-      arg=${_ticket_to_ride__args[$_ticket_to_ride__ai]}
-      act=${_ticket_to_ride__acts[$arg]}
-      cmd=${_ticket_to_ride__cmds[$arg]}
-      if [[ "$act" != "" ]]; then
-        :
-      elif [[ "$cmd" != "" ]]; then
-        a+=($(eval $cmd))
-      else
-        a+=($(echo "${_ticket_to_ride__words[$arg]}"))
-      fi
-    fi
-  fi
-  if [[ "$_ticket_to_ride__w" =~ ^- ]] || [[ "$_ticket_to_ride__w" == "" ]] && [[ "$act" == "" ]] && [[ "$cmd" == "" ]]; then
+  if [[ "$_ticket_to_ride___w" =~ ^- ]]; then
     i=0
-    while [ $i -lt ${#_ticket_to_ride__keys[@]} ]; do
-      if _ticket_to_ride__tag arg $i; then
+    while [ $i -lt ${#_ticket_to_ride___keys[@]} ]; do
+      if _ticket_to_ride___tag arg $i; then
         let i+=1
         continue
       fi
-      found=${_ticket_to_ride__f[$i]}
+      found=${_ticket_to_ride___f[$i]}
       if [[ "$found" == "" ]]; then
         found=0
       fi
-      max=${_ticket_to_ride__occurs[$i]}
+      max=${_ticket_to_ride___occurs[$i]}
       if [ $max -lt 0 ] || [ $found -lt $max ]; then
-        a+=($(echo "${_ticket_to_ride__keys[$i]}"))
+        a+=($(echo "${_ticket_to_ride___keys[$i]}"))
       fi
       let i+=1
     done
+  else
+    if [ $_ticket_to_ride___ai -lt ${#_ticket_to_ride___args[@]} ]; then
+      arg=${_ticket_to_ride___args[$_ticket_to_ride___ai]}
+      act=${_ticket_to_ride___acts[$arg]}
+      cmd=${_ticket_to_ride___cmds[$arg]}
+      if [[ "$act" != "" ]]; then
+        _ticket_to_ride___act $act
+        return 0
+      elif [[ "$cmd" != "" ]]; then
+        a=($(eval $cmd))
+      else
+        a=($(echo "${_ticket_to_ride___words[$arg]}"))
+      fi
+    fi
   fi
-  if [[ "$act" != "" ]]; then
-    _ticket_to_ride__act $act
-    return 0
-  elif [ ${#a[@]} -gt 0 ]; then
-    _ticket_to_ride__add "${a[@]}"
+  if [ ${#a[@]} -gt 0 ]; then
+    _ticket_to_ride___add "${a[@]}"
     return 0
   fi
-  _ticket_to_ride__any
+  _ticket_to_ride___any
   return $?
 }
 
-function _ticket_to_ride__lskey() {
+function _ticket_to_ride___lskey() {
   setopt localoptions ksharrays
   
-  if ! _ticket_to_ride__keyerr; then
-    local act
-    local cmd
-    local a
-    act=${_ticket_to_ride__acts[$_ticket_to_ride__k]}
-    cmd=${_ticket_to_ride__cmds[$_ticket_to_ride__k]}
+  if ! _ticket_to_ride___keyerr; then
+    local act cmd a
+    act=${_ticket_to_ride___acts[$_ticket_to_ride___k]}
+    cmd=${_ticket_to_ride___cmds[$_ticket_to_ride___k]}
     if [[ "$act" != "" ]]; then
       :
     elif [[ "$cmd" != "" ]]; then
-      a=($($cmd))
+      a=($(eval $cmd))
     else
-      a=($(echo "${_ticket_to_ride__words[$_ticket_to_ride__k]}"))
+      a=($(echo "${_ticket_to_ride___words[$_ticket_to_ride___k]}"))
     fi
     if [[ "$act" != "" ]]; then
-      _ticket_to_ride__act $act
+      _ticket_to_ride___act $act
       return 0
     elif [ ${#a[@]} -gt 0 ]; then
-      _ticket_to_ride__add "${a[@]}"
+      _ticket_to_ride___add "${a[@]}"
       return 0
     fi
   fi
-  _ticket_to_ride__any
+  _ticket_to_ride___any
   return $?
 }
 
-function _ticket_to_ride__tag() {
+function _ticket_to_ride___tag() {
   setopt localoptions ksharrays
   
   local k
   if [[ "$2" == "" ]]; then
-    if _ticket_to_ride__keyerr; then return 1; fi
-    k=$_ticket_to_ride__k
+    if _ticket_to_ride___keyerr; then return 1; fi
+    k=$_ticket_to_ride___k
   else
     k=$2
   fi
-  if [[ ${_ticket_to_ride__tags[$k]} == *' '$1' '* ]]; then
+  if [[ ${_ticket_to_ride___tags[$k]} == *' '$1' '* ]]; then
     return 0
   fi
   return 1
