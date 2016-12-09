@@ -103,9 +103,29 @@ module Cli
 
     def generate_bash_completion
       g = options.bash_completion.new_generator("_#{snake_name}")
-      g.result + <<-EOS
-      \n\ncomplete -F #{g.entry_point} #{name}
+      <<-EOS
+      #{g.result}
+
+      complete -F #{g.entry_point} #{name}
       EOS
+    end
+
+    def generate_zsh_completion(functional = nil)
+      functional = true if functional.nil?
+      g = options.zsh_completion.new_generator("_#{snake_name}")
+      if functional
+        <<-EOS
+        #compdef #{name}
+
+        #{g.result}
+        EOS
+      else
+        <<-EOS
+        #{g.result}
+
+        compdef #{g.entry_point} #{name}
+        EOS
+      end
     end
 
     def define_subcommand_alias(name, real)

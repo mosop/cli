@@ -1,0 +1,14 @@
+#!/usr/bin/env crystal
+
+require "../src/cli"
+require "../spec/wiki/shell_completion/class"
+
+dir = "#{__DIR__}/../spec/wiki/shell_completion/fixtures"
+zsh_dir = "#{dir}/zsh"
+Dir.mkdir_p zsh_dir
+data = CliWikiShellCompletionFeature::TicketToRide.generate_bash_completion
+File.write "#{dir}/ticket-to-ride-completion.bash", data + "\n"
+data = CliWikiShellCompletionFeature::TicketToRide.generate_zsh_completion(functional: false)
+File.write "#{dir}/ticket-to-ride-completion.zsh", data + "\n"
+data = CliWikiShellCompletionFeature::TicketToRide.generate_zsh_completion
+File.write "#{zsh_dir}/_ticket_to_ride", data + "\n"

@@ -1,4 +1,4 @@
-module CliWikiBashCompletionFeature
+module CliWikiShellCompletionFeature
   class TicketToRide < Cli::Command
     class Options
       string "--by", any_of: %w(train plane taxi)

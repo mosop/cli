@@ -297,5 +297,9 @@ module Cli
     def self.generate_bash_completion
       __klass.generate_bash_completion
     end
+
+    def self.generate_zsh_completion(functional = nil)
+      __klass.generate_zsh_completion(functional)
+    end
   end
 end

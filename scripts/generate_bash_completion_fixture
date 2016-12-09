@@ -1,7 +1,0 @@
-#!/usr/bin/env crystal
-
-require "../src/cli"
-require "../spec/wiki/bash_completion/class"
-
-data = CliWikiBashCompletionFeature::TicketToRide.generate_bash_completion
-File.write "#{__DIR__}/../spec/wiki/bash_completion/ticket-to-ride-bash-completion.sh", data + "\n"
