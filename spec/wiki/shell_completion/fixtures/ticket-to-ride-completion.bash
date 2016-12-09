@@ -160,7 +160,7 @@ function _ticket_to_ride__ls() {
       if [[ "$act" != "" ]]; then
         :
       elif [[ "$cmd" != "" ]]; then
-        a+=($($cmd))
+        a+=($(eval $cmd))
       else
         a+=($(echo "${_ticket_to_ride__words[$arg]}"))
       fi

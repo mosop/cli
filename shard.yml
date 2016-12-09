@@ -1,5 +1,5 @@
 name: cli
-version: 0.4.0.4
+version: 0.4.0.5
 
 authors:
   - mosop
@@ -7,7 +7,7 @@ authors:
 dependencies:
   optarg:
     github: mosop/optarg
-    version: 0.4.2.4
+    version: 0.4.2.5
   string_inflection:
     github: mosop/string_inflection
     version: ~> 0.2.0
