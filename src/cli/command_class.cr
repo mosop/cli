@@ -1,5 +1,8 @@
 module Cli
   abstract class CommandClass
+    Callback.enable
+    define_callback_group :validate, proc_type: Proc(CommandBase, Nil)
+
     macro __get_supercommand(type = nil)
       {%
         type = type.resolve if type
@@ -25,9 +28,6 @@ module Cli
       {% end %}
     end
 
-    Callback.enable
-    define_callback_group :validate, proc_type: Proc(CommandBase, Nil)
-
     @@instance = Util::Var(CommandClass).new
 
     @subcommand_option_model_definition : OptionModelDefinitions::Subcommand?
@@ -39,6 +39,16 @@ module Cli
     abstract def options : OptionModel
     abstract def inherited_class? : Class?
     abstract def supercommand? : Class?
+
+    getter? helps_on_parsing_error = true
+
+    def help_on_parsing_error!
+      @helps_on_parsing_error = true
+    end
+
+    def disable_help_on_parsing_error!
+      @helps_on_parsing_error = false
+    end
 
     def inherited_class
       inherited_class?.not_nil!
@@ -132,37 +142,35 @@ module Cli
       self << Alias.new(self, name, real)
     end
 
-    class Alias < CommandClass
-      getter? supercommand : CommandClass
-      getter name : String
-      getter real_name : String
+    def run(argv)
+      run nil, argv
+    end
 
-      def initialize(@supercommand, @name, @real_name)
+    def run(previous, argv)
+      cmd = command.new(previous, argv)
+      rescue_exit(cmd) do
+        rescue_error(cmd) do
+          cmd.__run
+        end
       end
+    end
 
-      def real_command
-        supercommand.subcommands[real_name]
+    def rescue_exit(cmd)
+      if cmd.__previous?
+        yield
+      else
+        begin
+          yield
+        rescue ex : Cli::Exit
+          ex.exit!
+        end
       end
+    end
 
-      def options
-        real_command.options
-      end
-
-      def inherited_class?
-        real_command.inherited_class?
-      end
-
-      def command
-        real_command.command
-      end
-
-      def help
-        real_command.help
-      end
-
-      def abstract?
-        real_command.abstract?
-      end
+    def rescue_error(command)
+      yield
+    rescue ex : ::Optarg::ParsingError
+      command.exit! "Parsing Error: #{ex.message}", error: true, help: helps_on_parsing_error?
     end
   end
 end

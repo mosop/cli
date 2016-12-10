@@ -30,8 +30,7 @@ module Cli
 
     def __run
       if __subcommand?
-        subargv = __unparsed_args.dup
-        __subcommand.command.new(self, subargv).__run
+        __subcommand.run(self, __unparsed_args.dup)
       else
         __help!
       end

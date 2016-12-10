@@ -1,10 +1,19 @@
 module Cli
   class Exit < ::Exception
-    @status : ::Int32
-    getter :status
+    getter status : Int32
 
     def initialize(message = nil, @status = 0)
       super message
+    end
+
+    def exit!
+      out = status == 0 ? STDOUT : STDERR
+      out.puts message if message
+      if Cli.test?
+        raise self
+      else
+        ::exit status
+      end
     end
   end
 

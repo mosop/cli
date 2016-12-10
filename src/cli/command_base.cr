@@ -142,47 +142,21 @@ module Cli
     end
 
     def self.run(argv = %w())
-      __run(argv)
-    end
-
-    @@__running = false
-
-    def self.__run(argv)
-      if @@__running
-        __run_without_rescue(argv)
-      else
-        @@__running = true
-        begin
-          result = __run_with_rescue(argv)
-        ensure
-          @@__running = false
-        end
-      end
-    end
-
-    def self.__run_without_rescue(argv)
-      new(nil, argv).__run
-    end
-
-    def self.__run_with_rescue(argv)
-      new(nil, argv).__run
-      0
-    rescue ex : ::Cli::Exit
-      out = ex.status == 0 ? ::STDOUT : ::STDERR
-      out.puts ex.message if ex.message
-      ex.status
+      __klass.run argv
     end
 
     @@__klass = Util::Var(CommandClass).new
     def __klass; self.class.__klass; end
 
-    getter __parent : ::Cli::CommandBase?
+    getter? __previous : ::Cli::CommandBase?
     getter __argv : Array(String)
 
-    def initialize(@__parent, @__argv)
-      __rescue_parsing_error do
-        __option_data.__parse
-      end
+    def initialize(parent, argv)
+      initialize nil, parent, argv
+    end
+
+    def initialize(@__previous, @__argv)
+      __option_data.__parse
     end
 
     @__option_data = Util::Var(Optarg::Model).new
@@ -212,10 +186,6 @@ module Cli
     def version?; __version?; end
     def __version?; self.class.__klass.version?; end
 
-    def self.__help_on_parsing_error?
-      true
-    end
-
     macro command_name(value)
       class Class
         def name
@@ -225,9 +195,7 @@ module Cli
     end
 
     macro disable_help_on_parsing_error!
-      def self.__help_on_parsing_error?
-        false
-      end
+      Class.instance.disable_help_on_parsing_error!
     end
 
     macro version(value)
@@ -288,10 +256,12 @@ module Cli
       run
     end
 
-    def __rescue_parsing_error
-      yield
-    rescue ex : ::Optarg::ParsingError
-      exit! "Parsing Error: #{ex.message}", error: true, help: self.class.__help_on_parsing_error?
+    def run(klass, argv = %w())
+      __run klass, argv
+    end
+
+    def __run(klass, argv)
+      __klass.run self, argv
     end
 
     def self.generate_bash_completion
