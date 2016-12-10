@@ -54,7 +54,7 @@ class OpenIt < Cli::Command
   end
 end
 
-Open.run ARGV
+OpenIt.run ARGV
 ```
 
 Output:
