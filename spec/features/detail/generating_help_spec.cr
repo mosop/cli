@@ -1,6 +1,8 @@
 require "../../spec_helper"
 
 module CliGeneratingHelpFeatureDetail
+  include Cli::Spec::Helper
+
   class Smile < Cli::Command
     class Help
       header "Smiles n times."
@@ -15,23 +17,21 @@ module CliGeneratingHelpFeatureDetail
   end
 
   it name do
-    Stdio.capture do |io|
-      Smile.run %w(--help)
-      io.out.gets_to_end.should eq <<-EOS
-        smile [OPTIONS] FACE
+    Smile.run(%w(--help)).should exit_command(output: <<-EOS
+      smile [OPTIONS] FACE
 
-        Smiles n times.
+      Smiles n times.
 
-        Arguments:
-          FACE  your face like :), :(, :P
+      Arguments:
+        FACE  your face like :), :(, :P
 
-        Options:
-          --times NUMBER  number of times to display
-                          (default: 1)
-          -h, --help      show this help
+      Options:
+        --times NUMBER  number of times to display
+                        (default: 1)
+        -h, --help      show this help
 
-        (C) 20XX mosop\n
-        EOS
-    end
+      (C) 20XX mosop
+      EOS
+    )
   end
 end

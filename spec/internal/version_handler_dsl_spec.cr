@@ -1,6 +1,8 @@
 require "../spec_helper"
 
 module CliInternalVersionHandlerDslFeature
+  include Cli::Spec::Helper
+
   class Default < Cli::Command
     version "1.0.0"
     class Options
@@ -20,10 +22,7 @@ module CliInternalVersionHandlerDslFeature
       handler = {{klass.id}}::Options.definitions.handlers[{{names[0]}}]
       handler.names.should eq {{names}}
       {% for e, i in names %}
-        Stdio.capture do |io|
-          {{klass.id}}.run [{{e}}]
-          io.out.gets_to_end.should eq "1.0.0\n"
-        end
+        {{klass.id}}.run([{{e}}]).should exit_command(output: "1.0.0")
       {% end %}
     end
   end

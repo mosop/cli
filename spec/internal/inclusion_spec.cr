@@ -1,6 +1,8 @@
 require "../spec_helper"
 
 module CliInternalInclusionFeature
+  include Cli::Spec::Helper
+
   class ByArray < Cli::Command
     class Options
       arg "arg", desc: "description", any_of: %w(a b c)
@@ -21,20 +23,12 @@ module CliInternalInclusionFeature
 
   describe name do
     it "error" do
-      Stdio.capture do |io|
-        ByArray.run %w(d)
-        io.err.gets.should match /^Parsing Error: /
-      end
-      Stdio.capture do |io|
-        ByTuple.run %w(d)
-        io.err.gets.should match /^Parsing Error: /
-      end
+      ByArray.run(%w(d)).should exit_command(error: /^Parsing Error: /)
+      ByTuple.run(%w(d)).should exit_command(error: /^Parsing Error: /)
     end
 
     it "help" do
-      Stdio.capture do |io|
-        ByArray.run %w(-h)
-        io.out.gets_to_end.should eq <<-EOS
+      ByArray.run(%w(-h)).should exit_command(output: <<-EOS
         by-array [OPTIONS] ARG
 
         Arguments:
@@ -45,12 +39,11 @@ module CliInternalInclusionFeature
                  c
 
         Options:
-          -h, --help  show this help\n
+          -h, --help  show this help
         EOS
-      end
-      Stdio.capture do |io|
-        ByTuple.run %w(-h)
-        io.out.gets_to_end.should eq <<-EOS
+      )
+
+      ByTuple.run(%w(-h)).should exit_command(output: <<-EOS
         by-tuple [OPTIONS] ARG
 
         Arguments:
@@ -61,9 +54,9 @@ module CliInternalInclusionFeature
                  c
 
         Options:
-          -h, --help  show this help\n
+          -h, --help  show this help
         EOS
-      end
+      )
     end
   end
 end

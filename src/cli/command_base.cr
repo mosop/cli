@@ -151,12 +151,11 @@ module Cli
     getter? __previous : ::Cli::CommandBase?
     getter __argv : Array(String)
 
-    def initialize(parent, argv)
-      initialize nil, parent, argv
+    def initialize(argv)
+      initialize nil, argv
     end
 
     def initialize(@__previous, @__argv)
-      __option_data.__parse
     end
 
     @__option_data = Util::Var(Optarg::Model).new
@@ -256,8 +255,8 @@ module Cli
       run
     end
 
-    def run(klass, argv = %w())
-      __run klass, argv
+    def run(klass)
+      __run klass, %w()
     end
 
     def __run(klass, argv)

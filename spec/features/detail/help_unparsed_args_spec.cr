@@ -1,6 +1,8 @@
 require "../../spec_helper"
 
 module CliHelpUnparsedArgsFeatureDetail
+  include Cli::Spec::Helper
+
   class Exec < Cli::Command
     class Options
       arg "command", required: true, stop: true, desc: "command name"
@@ -13,18 +15,15 @@ module CliHelpUnparsedArgsFeatureDetail
   end
 
   it name do
-    out = Stdio.capture do |io|
-      Exec.run %w(-h)
-      io.out.gets_to_end
-    end
-    out.should eq <<-EOS
+    Exec.run(%w(-h)).should exit_command(output: <<-EOS
       exec [OPTIONS] COMMAND [ARG1 ARG2 ...]
 
       Arguments:
         COMMAND  command name
 
       Options:
-        -h, --help  show this help\n
+        -h, --help  show this help
       EOS
+    )
   end
 end

@@ -150,6 +150,7 @@ module Cli
       cmd = command.new(previous, argv)
       rescue_exit(cmd) do
         rescue_error(cmd) do
+          cmd.__option_data.__parse
           cmd.__run
         end
       end
@@ -161,8 +162,14 @@ module Cli
       else
         begin
           yield
-        rescue ex : Cli::Exit
-          ex.exit!
+        rescue ex : Exit
+          if Cli.test?
+            ex
+          else
+            out = ex.exit_code == 0 ? STDOUT : STDERR
+            out.puts ex.message if ex.message
+            exit ex.exit_code
+          end
         end
       end
     end

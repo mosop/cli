@@ -1,6 +1,8 @@
 require "../spec_helper"
 
 module CliInternalRescueParsingErrorFeature
+  include Cli::Spec::Helper
+
   class RequiredArgument < Cli::Command
     class Options
       arg "arg", required: true
@@ -37,12 +39,7 @@ module CliInternalRescueParsingErrorFeature
 
   macro test(command, args = %w())
     it {{command}}.to_s do
-      status, err = Stdio.capture do |io|
-        status = {{command}}.run({{args}})
-        {status, io.err.gets_to_end}
-      end
-      status.should eq 1
-      err.should match(/Parsing Error/)
+      {{command}}.run({{args}}).should exit_command(error: /^Parsing Error: /, code: 1)
     end
   end
 

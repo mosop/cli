@@ -1,6 +1,8 @@
 require "../spec_helper"
 
 module CliInternalHelpHandlerDslFeature
+  include Cli::Spec::Helper
+
   class Default < Cli::Command
     class Options
       help
@@ -18,15 +20,13 @@ module CliInternalHelpHandlerDslFeature
       handler = {{klass.id}}::Options.definitions.handlers[{{names[0]}}]
       handler.names.should eq {{names}}
       {% for e, i in names %}
-        Stdio.capture do |io|
-          {{klass.id}}.run [{{e}}]
-          io.out.gets_to_end.should eq <<-EOS
-            {{klass.downcase.id}} [OPTIONS]
+        {{klass.id}}.run([{{e}}]).should exit_command(output: <<-EOS
+          {{klass.downcase.id}} [OPTIONS]
 
-            Options:
-              #{ ({{names}}).join(", ") }  {{desc.id}}\n
-            EOS
-        end
+          Options:
+            #{ ({{names}}).join(", ") }  {{desc.id}}
+          EOS
+        )
       {% end %}
     end
   end

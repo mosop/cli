@@ -1,6 +1,8 @@
 require "../spec_helper"
 
 module CliExitFeature
+  include Cli::Spec::Helper
+
   class Open < Cli::Command
     class Options
       arg "word"
@@ -19,21 +21,8 @@ module CliExitFeature
     end
   end
 
-  describe name do
-    it "exit" do
-      code, out = Stdio.capture do |io|
-        {Open.run(%w(sesame)), io.out.gets_to_end}
-      end
-      code.should eq 0
-      out.should eq "Opened!\n"
-    end
-
-    it "error" do
-      code, err = Stdio.capture do |io|
-        {Open.run(%w(paprika)), io.err.gets_to_end}
-      end
-      code.should eq 1
-      err.should eq "Not opened!\n"
-    end
+  it name do
+    Open.run(%w(sesame)).should exit_command(output: "Opened!", code: 0)
+    Open.run(%w(paprika)).should exit_command(error: "Not opened!", code: 1)
   end
 end

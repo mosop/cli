@@ -1,6 +1,8 @@
 require "../../spec_helper"
 
 module CliVersioningFeatureDetail
+  include Cli::Spec::Helper
+
   class Command < ::Cli::Supercommand
     version "1.1.0"
     command "inherit"
@@ -28,19 +30,8 @@ module CliVersioningFeatureDetail
   end
 
   it name do
-    Stdio.capture do |io|
-      Command.run %w(-v)
-      io.out.gets_to_end.should eq "1.1.0\n"
-    end
-
-    Stdio.capture do |io|
-      Command.run %w(inherit -v)
-      io.out.gets_to_end.should eq "1.1.0\n"
-    end
-
-    Stdio.capture do |io|
-      Command.run %w(specific -v)
-      io.out.gets_to_end.should eq "1.0.0\n"
-    end
+    Command.run(%w(-v)).should exit_command("1.1.0")
+    Command.run(%w(inherit -v)).should exit_command("1.1.0")
+    Command.run(%w(specific -v)).should exit_command("1.0.0")
   end
 end

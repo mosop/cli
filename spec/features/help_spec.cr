@@ -1,6 +1,8 @@
 require "../spec_helper"
 
 module CliHelpFeature
+  include Cli::Spec::Helper
+
   class Lang < Cli::Command
     class Help
       header "Converts a language to other languages."
@@ -17,28 +19,26 @@ module CliHelpFeature
   end
 
   it name do
-    Stdio.capture do |io|
-      Lang.run %w(--help)
-      io.out.gets_to_end.should eq <<-EOS
-        lang [OPTIONS] FROM
+    Lang.run(%w(--help)).should exit_command(output: <<-EOS
+      lang [OPTIONS] FROM
 
-        Converts a language to other languages.
+      Converts a language to other languages.
 
-        Arguments:
-          FROM  source language
+      Arguments:
+        FROM  source language
 
-        Options:
-          --indent NUM          set number of tab size
-                                (default: 2)
-          --std                 use standard library
-                                (enabled as default)
-          --Std                 disable --std
-          --to LANG (multiple)  target language
-                                (default: crystal)
-          -h, --help            show this help
+      Options:
+        --indent NUM          set number of tab size
+                              (default: 2)
+        --std                 use standard library
+                              (enabled as default)
+        --Std                 disable --std
+        --to LANG (multiple)  target language
+                              (default: crystal)
+        -h, --help            show this help
 
-        (C) 20XX mosop\n
-        EOS
-    end
+      (C) 20XX mosop
+      EOS
+    )
   end
 end

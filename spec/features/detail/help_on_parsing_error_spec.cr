@@ -1,6 +1,8 @@
 require "../../spec_helper"
 
 module CliHelpOnParsingErrorFeatureDetail
+  include Cli::Spec::Helper
+
   class Bookmark < ::Cli::Command
     class Options
       arg "url", required: true, desc: "a URL to be bookmarked"
@@ -15,23 +17,19 @@ module CliHelpOnParsingErrorFeatureDetail
   end
 
   it name do
-    Stdio.capture do |io|
-      Bookmark.run
-      io.err.gets_to_end.should eq <<-EOS
-        Parsing Error: The URL argument is required.
+    Bookmark.run.should exit_command(error: <<-EOS
+      Parsing Error: The URL argument is required.
 
-        bookmark URL
+      bookmark URL
 
-        Arguments:
-          URL  a URL to be bookmarked\n
-        EOS
-    end
+      Arguments:
+        URL  a URL to be bookmarked
+      EOS
+    )
 
-    Stdio.capture do |io|
-      Disabled.run
-      io.err.gets_to_end.should eq <<-EOS
-        Parsing Error: The URL argument is required.\n
-        EOS
-    end
+    Disabled.run.should exit_command(error: <<-EOS
+      Parsing Error: The URL argument is required.
+      EOS
+    )
   end
 end

@@ -1,6 +1,6 @@
 require "../../spec_helper"
 
-module CliWikiHandlingExitNonExplicitFeature
+module CliWikiTheExitWaysNormalReturnFeature
   class Command < Cli::Command
     def run
       ":)"
