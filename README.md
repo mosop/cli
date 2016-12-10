@@ -36,7 +36,7 @@ Command.run %w(--hello world) # prints "Hello, world!"
 ### Exit
 
 ```crystal
-class Open < Cli::Command
+class OpenIt < Cli::Command
   class Options
     arg "word"
   end
@@ -54,8 +54,20 @@ class Open < Cli::Command
   end
 end
 
-Open.run %w(sesame) # => prints "Opened!" and returns 0
-Open.run %w(paprika) # => prints "Not opened!" into STDERR and returns 1
+Open.run ARGV
+```
+
+Output:
+
+```sh
+$ open-it sesame
+Opened!
+$ echo $?
+0
+$ open-it paprika
+Not opened!
+$ echo $?
+1
 ```
 
 ### Subcommand
@@ -179,7 +191,7 @@ end
 Command.run %w(-v) # prints 1.0.0
 ```
 
-### Bash Completion
+### Shell Completion
 
 ```crystal
 class TicketToRide < Cli::Command
@@ -189,7 +201,9 @@ class TicketToRide < Cli::Command
   end
 end
 
-puts TicketToRide.generate_bash_completion # prints a script
+puts TicketToRide.generate_bash_completion
+# or
+puts TicketToRide.generate_zsh_completion
 ```
 
 ## Usage
