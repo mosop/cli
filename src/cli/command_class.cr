@@ -142,38 +142,6 @@ module Cli
       self << Alias.new(self, name, real)
     end
 
-    def run(argv)
-      run nil, argv
-    end
-
-    def run(previous, argv)
-      cmd = command.new(previous, argv)
-      rescue_exit(cmd) do
-        rescue_error(cmd) do
-          cmd.__option_data.__parse
-          cmd.__run
-        end
-      end
-    end
-
-    def rescue_exit(cmd)
-      if cmd.__previous?
-        yield
-      else
-        begin
-          yield
-        rescue ex : Exit
-          if Cli.test?
-            ex
-          else
-            out = ex.exit_code == 0 ? STDOUT : STDERR
-            out.puts ex.message if ex.message
-            exit ex.exit_code
-          end
-        end
-      end
-    end
-
     def rescue_error(command)
       yield
     rescue ex : ::Optarg::ParsingError

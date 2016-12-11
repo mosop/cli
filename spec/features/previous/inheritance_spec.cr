@@ -27,10 +27,11 @@ module CliInheritancePreviousFeature
   end
 
   it name do
-    Stdio.capture do |io|
-      Chase.run(%w(mouse --name Jerry))
-      Chase.run(%w(cat --name Tom))
-      io.out.gets_to_end.should eq "Jerry runs away.\nTom runs into a wall.\n"
+    Chase.run %w(mouse --name Jerry) do |cmd|
+      cmd.out.gets_to_end.should eq "Jerry runs away.\n"
+    end
+    Chase.run %w(cat --name Tom) do |cmd|
+      cmd.out.gets_to_end.should eq "Tom runs into a wall.\n"
     end
   end
 end

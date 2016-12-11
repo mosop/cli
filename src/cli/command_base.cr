@@ -1,5 +1,9 @@
 module Cli
   abstract class CommandBase
+    Callback.enable
+    define_callback_group :initialize
+    define_callback_group :exit, proc_type: Proc(Exit, Nil)
+
     macro inherited
       {% if @type.superclass != ::Cli::CommandBase %}
         {% if @type.superclass == ::Cli::Command %}
@@ -69,10 +73,61 @@ module Cli
           if instance.supercommand? && !instance.abstract?
             instance.supercommand << instance
           end
+
+          def run(argv)
+            run(argv) {}
+          end
+
+          def run(argv, &block : ::{{@type}} -> _)
+            run nil, argv, &block
+          end
+
+          def run(previous, argv)
+            run(previous, argv) {}
+          end
+
+          def run(previous, argv, &block : ::{{@type}} -> _)
+            cmd = command.new(previous, argv)
+            rescue_exit(cmd) do
+              rescue_error(cmd) do
+                cmd.__option_data.__parse
+                result = cmd.__run
+                cmd.__io.close_writer unless previous
+                yield cmd
+                result
+              end
+            end
+          end
+
+          def rescue_exit(cmd)
+            if cmd.__previous?
+              yield
+            else
+              begin
+                result = yield
+                cmd.run_callbacks_for_exit(::Cli::Exit.new) {}
+                result
+              rescue ex : ::Cli::Exit
+                if ::Cli.test?
+                  cmd.run_callbacks_for_exit(ex) {}
+                  ex
+                else
+                  cmd.run_callbacks_for_exit ex do
+                    ex.stdout.puts ex.message if ex.message
+                  end
+                  exit ex.exit_code
+                end
+              end
+            end
+          end
         end
 
         def self.__klass
-          @@__klass.var ||= Class.instance
+          (@@__klass.var ||= Class.instance).as(Class)
+        end
+
+        def self.run(argv = \%w(), &block : ::{{@type}} -> _)
+          __klass.run argv, &block
         end
 
         class Options < ::{{super_option_data}}
@@ -141,14 +196,10 @@ module Cli
       {% end %}
     end
 
-    def self.run(argv = %w())
-      __klass.run argv
-    end
-
     @@__klass = Util::Var(CommandClass).new
     def __klass; self.class.__klass; end
 
-    getter? __previous : ::Cli::CommandBase?
+    getter! __previous : ::Cli::CommandBase?
     getter __argv : Array(String)
 
     def initialize(argv)
@@ -156,6 +207,7 @@ module Cli
     end
 
     def initialize(@__previous, @__argv)
+      run_callbacks_for_initialize {}
     end
 
     @__option_data = Util::Var(Optarg::Model).new
@@ -247,6 +299,10 @@ module Cli
       __exit! version
     end
 
+    def self.run(argv = %w())
+      __klass.run argv
+    end
+
     def run
       raise "Not implemented."
     end
@@ -269,6 +325,39 @@ module Cli
 
     def self.generate_zsh_completion(functional = nil)
       __klass.generate_zsh_completion(functional)
+    end
+
+    @__io : IoHash?
+    def __io
+      @__io ||= (__previous? ? __previous.__io : Cli.new_default_io)
+    end
+
+    def __io=(value)
+      @__io = value
+    end
+
+    def io
+      __io
+    end
+
+    def io=(value)
+      self.__io = value
+    end
+
+    def puts(*args)
+      __io[:out].puts *args
+    end
+
+    def print(*args)
+      __io[:out].print *args
+    end
+
+    def out
+      __io[:out]
+    end
+
+    def err
+      __io[:err]
     end
   end
 end

@@ -14,9 +14,8 @@ module CliInternalDashedSubcommandFeature
   end
 
   it name do
-    Stdio.capture do |io|
-      Command.run %w(dashed-command)
-      io.out.gets_to_end.should eq "ok\n"
+    Command.run %w(dashed-command) do |cmd|
+      cmd.out.gets_to_end.should eq "ok\n"
     end
   end
 end

@@ -13,9 +13,8 @@ module CliAccessFromOptionsPreviousFeature
   end
 
   it name do
-    Stdio.capture do |io|
-      Command.run(%w(--go))
-      io.out.gets_to_end.should eq "Gone with the Wind\n"
+    Command.run(%w(--go)) do |cmd|
+      cmd.out.gets_to_end.should eq "Gone with the Wind\n"
     end
   end
 end

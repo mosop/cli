@@ -15,9 +15,8 @@ module CliAliasingPreviousFeature
   end
 
   it name do
-    Stdio.capture do |io|
-      Command.run %w(l)
-      io.out.gets_to_end.should eq "sleep!\n"
+    Command.run %w(l) do |cmd|
+      cmd.out.gets_to_end.should eq "sleep!\n"
     end
   end
 end

@@ -28,12 +28,17 @@ module CliSubcommandPreviousFeature
   end
 
   it name do
-    Stdio.capture do |io|
-      Polygon.run %w(triangle)
-      Polygon.run %w(square)
-      Polygon.run %w(hexagon)
-      Polygon.run %w()
-      io.out.gets_to_end.should eq "3\n4\n6\n3\n"
+    Polygon.run %w(triangle) do |cmd|
+      cmd.out.gets_to_end.should eq "3\n"
+    end
+    Polygon.run %w(square) do |cmd|
+      cmd.out.gets_to_end.should eq "4\n"
+    end
+    Polygon.run %w(hexagon) do |cmd|
+      cmd.out.gets_to_end.should eq "6\n"
+    end
+    Polygon.run %w() do |cmd|
+      cmd.out.gets_to_end.should eq "3\n"
     end
   end
 end

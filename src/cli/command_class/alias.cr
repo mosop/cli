@@ -30,5 +30,21 @@ class Cli::CommandClass
     def abstract?
       real_command.abstract?
     end
+
+    def run(*args)
+      case cmd = real_command
+      when Alias
+      else
+        cmd.run *args
+      end
+    end
+
+    def run(*args, &block)
+      case cmd = real_command
+      when Alias
+      else
+        cmd.run *args, &block
+      end
+    end
   end
 end

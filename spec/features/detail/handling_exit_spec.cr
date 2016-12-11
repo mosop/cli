@@ -14,9 +14,7 @@ module CliHandlingExitFeatureDetail
     end
     describe name do
       it {{run}} do
-        Stdio.capture do |io|
-          Exit%x.run.should exit_command(code: {{code}}, output: {{out}}, error: {{err}})
-        end
+        Exit%x.run.should exit_command(code: {{code}}, output: {{out}}, error: {{err}})
       end
     end
   end

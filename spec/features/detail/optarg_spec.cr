@@ -16,13 +16,12 @@ module CliOptargFeatureDetail
   end
 
   it name do
-    Stdio.capture do |io|
-      Command.run %w(foo -s bar -- baz)
-      io.out.gets_to_end.should eq <<-EOS
-        foo
-        bar
-        baz\n
-        EOS
+    Command.run %w(foo -s bar -- baz) do |cmd|
+      cmd.out.gets_to_end.should eq <<-EOS
+      foo
+      bar
+      baz\n
+      EOS
     end
   end
 end

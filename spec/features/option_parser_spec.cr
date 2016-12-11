@@ -12,9 +12,8 @@ module CliOptionParserFeature
   end
 
   it name do
-    Stdio.capture do |io|
-      Command.run %w(--hello world)
-      io.out.gets_to_end.should eq "Hello, world!\n"
+    Command.run %w(--hello world) do |cmd|
+      cmd.out.gets_to_end.should eq "Hello, world!\n"
     end
   end
 end

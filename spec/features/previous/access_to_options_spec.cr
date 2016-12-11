@@ -13,9 +13,8 @@ module CliAccessToOptionsPreviousFeature
   end
 
   it name do
-    Stdio.capture do |io|
-      Command.run(%w(--option foo bar -- baz))
-      io.out.gets_to_end.should eq "foo bar baz\n"
+    Command.run %w(--option foo bar -- baz) do |cmd|
+      cmd.out.gets_to_end.should eq "foo bar baz\n"
     end
   end
 end

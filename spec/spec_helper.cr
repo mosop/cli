@@ -1,5 +1,4 @@
 require "spec"
-require "stdio"
 require "../src/cli"
 require "../src/spec"
 
