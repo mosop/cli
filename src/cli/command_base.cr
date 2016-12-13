@@ -316,7 +316,7 @@ module Cli
     end
 
     def __run(klass, argv)
-      __klass.run self, argv
+      klass.__klass.run self, argv
     end
 
     def self.generate_bash_completion
