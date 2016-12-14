@@ -9,7 +9,7 @@ module Cli::OptionModelDefinitions
     end
 
     def subclassify(model)
-      Subcommand.new(model.as(OptionModel::Cli).command)
+      Subcommand.new(model.as(OptionModelMixin).command)
     end
 
     def __command_class_of(model)

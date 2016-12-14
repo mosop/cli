@@ -37,7 +37,7 @@ module Cli
 
         class Class < ::{{super_command_class}}
           def self.instance
-            @@instance.var ||= Class.new
+            (@@instance.var ||= Class.new).as(Class)
           end
 
           def options
@@ -136,9 +136,7 @@ module Cli
 
         class Options < ::{{super_option_data}}
           class Class
-            {% if is_command_root || is_supercommand_root %}
-              include ::Cli::OptionModel::Cli
-            {% end %}
+            include ::Cli::OptionModelMixin
 
             def command
               ::{{@type}}::Class.instance
@@ -154,6 +152,12 @@ module Cli
 
             def name
               {{@type.name.split("::")[-1].underscore}}
+            end
+          end
+
+          class DynamicDefinitionContext
+            def command
+              parser.data.__command
             end
           end
 
@@ -196,7 +200,6 @@ module Cli
             ::{{enclosing_class_name}}
           {% end %}
         end
-
       {% end %}
     end
 

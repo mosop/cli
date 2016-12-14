@@ -7,8 +7,7 @@ class Cli::OptionModel
       stop: {{stop}},
       metadata: ::Cli::OptionMetadata.new(description: {{desc}}, variable_name: {{var}}),
       any_of: ::Cli.__any_of(::Optarg::Definitions::StringOption, {{any_of}}),
-      complete: {{complete}},
-      _mixin: ::Cli::OptionModelDefinitionMixins::Cli
+      complete: {{complete}}
     ) {{block}}
   end
 
@@ -18,8 +17,7 @@ class Cli::OptionModel
       stop: {{stop}},
       default: {{default}},
       not: {{not}},
-      metadata: ::Cli::OptionMetadata.new(description: {{desc}}),
-      _mixin: ::Cli::OptionModelDefinitionMixins::Cli
+      metadata: ::Cli::OptionMetadata.new(description: {{desc}})
     ) {{block}}
   end
 
@@ -30,8 +28,7 @@ class Cli::OptionModel
       min: {{min}},
       metadata: ::Cli::OptionMetadata.new(description: {{desc}}, variable_name: {{var}}),
       any_item_of: ::Cli.__any_item_of(::Optarg::Definitions::StringArrayOption, {{any_item_of}}),
-      complete: {{complete}},
-      _mixin: ::Cli::OptionModelDefinitionMixins::Cli
+      complete: {{complete}}
     ) {{block}}
   end
 
@@ -43,8 +40,7 @@ class Cli::OptionModel
       required: {{required}},
       metadata: ::Cli::OptionMetadata.new(description: {{desc}}),
       any_of: ::Cli.__any_of(::Optarg::Definitions::StringArgument, {{any_of}}),
-      complete: {{complete}},
-      _mixin: ::Cli::OptionModelDefinitionMixins::Cli
+      complete: {{complete}}
     ) {{block}}
   end
 
@@ -55,8 +51,7 @@ class Cli::OptionModel
       min: {{min}},
       metadata: ::Cli::OptionMetadata.new(description: {{desc}}, variable_name: {{var}}),
       any_item_of: ::Cli.__any_item_of(::Optarg::Definitions::StringArrayArgument, {{any_item_of}}),
-      complete: {{complete}},
-      _mixin: ::Cli::OptionModelDefinitionMixins::Cli
+      complete: {{complete}}
     ) {{block}}
   end
 
