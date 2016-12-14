@@ -90,11 +90,15 @@ module Cli
             cmd = command.new(previous, argv)
             rescue_exit(cmd) do
               rescue_error(cmd) do
-                cmd.__option_data.__parse
-                result = cmd.__run
-                cmd.__io.close_writer unless previous
-                yield cmd
-                result
+                begin
+                  cmd.__option_data.__parse
+                  result = cmd.__run
+                  cmd.__io.close_writer unless previous
+                  yield cmd
+                  result
+                ensure
+                  cmd.__io.close_writer unless previous
+                end
               end
             end
           end
