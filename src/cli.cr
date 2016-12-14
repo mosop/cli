@@ -8,7 +8,6 @@ require "./cli/helps/*"
 require "./cli/ios/*"
 require "./cli/option_model/*"
 require "./cli/option_model_definitions/*"
-require "./cli/option_model_mixins/*"
 require "./cli/util/*"
 
 module Cli
