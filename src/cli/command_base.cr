@@ -322,6 +322,10 @@ module Cli
       __run klass, %w()
     end
 
+    def run(klass, argv)
+      __run klass, argv
+    end
+
     def __run(klass, argv)
       klass.__klass.run self, argv
     end
