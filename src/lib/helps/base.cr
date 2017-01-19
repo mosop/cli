@@ -126,7 +126,7 @@ module Cli::Helps
 
     def inclusion_of2(incl)
       a = incl.values.map do |v|
-        desc = if md = v.metadata.as?(OptionValueMetadata)
+        desc = if md = v.metadata.as?(OptionValueMetadata(String))
           md.description
         end
         Description.new(head: v.metadata.string, body: desc ? desc.split("\n") : %w())
