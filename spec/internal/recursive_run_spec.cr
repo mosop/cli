@@ -9,7 +9,7 @@ module CliInternalRecursiveRunFeature
     end
 
     def run
-      run Command
+      Command.run self
     end
   end
 

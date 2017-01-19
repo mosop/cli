@@ -14,7 +14,7 @@ module CliInternalArgArrayTitleFeature
   end
 
   it name do
-    Command::Help::Class.instance.default_title.should eq "command [NAME1 NAME2...]"
-    WithMin::Help::Class.instance.default_title.should eq "with-min NAME1 NAME2 NAME3 [NAME4 NAME5...]"
+    Command.klass.default_title.should eq "command [NAME1 NAME2...]"
+    WithMin.klass.default_title.should eq "with-min NAME1 NAME2 NAME3 [NAME4 NAME5...]"
   end
 end

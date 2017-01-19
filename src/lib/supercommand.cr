@@ -1,7 +1,7 @@
 require "./command_base"
 
 module Cli
-  abstract class Supercommand < ::Cli::CommandBase
+  abstract class Supercommand < CommandBase
     macro command(name, default = false, aliased = nil)
       {%
         s = aliased || name
@@ -19,18 +19,9 @@ module Cli
       {% end %}
     end
 
-    @__subcommand : CommandClass?
-    def __subcommand?
-      @__subcommand ||= __klass.resolve_subcommand(__named_args["subcommand"]?)
-    end
-
-    def __subcommand
-      __subcommand?.not_nil!
-    end
-
     def __run
-      if __subcommand?
-        __subcommand.run(self, __unparsed_args.dup)
+      if subcommand = __klass.resolve_subcommand(__option_data.__parser.args.__strings["subcommand"]?)
+        subcommand.run(self, __unparsed_args.dup)
       else
         __help!
       end

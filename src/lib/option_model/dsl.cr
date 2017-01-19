@@ -63,13 +63,13 @@ class Cli::OptionModel
     {%
       names = names || %w(-h --help)
     %}
-    on({{names}}, desc: ({{desc}} || "show this help")) { __command.__help! }
+    on({{names}}, desc: ({{desc}} || "show this help")) { __cli_command.__help! }
   end
 
   macro version(names = nil, desc = nil)
     {%
       names = names || %w(-v --version)
     %}
-    on({{names}}, desc: ({{desc}} || "show version")) { __command.__version! }
+    on({{names}}, desc: ({{desc}} || "show version")) { __cli_command.__version! }
   end
 end

@@ -1,6 +1,6 @@
 require "./command_base"
 
 module Cli
-  abstract class Command < ::Cli::CommandBase
+  abstract class Command < CommandBase
   end
 end

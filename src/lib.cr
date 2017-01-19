@@ -1,0 +1,7 @@
+require "optarg"
+require "string_inflection/kebab"
+require "string_inflection/snake"
+require "./version"
+require "./lib/macros"
+require "./lib/command_base"
+require "./lib/*"

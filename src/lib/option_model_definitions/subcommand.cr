@@ -9,12 +9,10 @@ module Cli::OptionModelDefinitions
     end
 
     def subclassify(model)
-      Subcommand.new(model.as(OptionModelMixin).command)
-    end
-
-    def __command_class_of(model)
-      if model.responds_to?(:command)
-        model.command.as(CommandClass)
+      if model.responds_to?(:__cli_command)
+        Subcommand.new(model.__cli_command.__klass)
+      else
+        self
       end
     end
 

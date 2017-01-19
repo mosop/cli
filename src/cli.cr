@@ -1,14 +1,4 @@
-require "optarg"
-require "string_inflection/kebab"
-require "string_inflection/snake"
-require "./cli/macros/*"
-require "./cli/*"
-require "./cli/command_class/*"
-require "./cli/helps/*"
-require "./cli/ios/*"
-require "./cli/option_model/*"
-require "./cli/option_model_definitions/*"
-require "./cli/util/*"
+require "./lib"
 
 module Cli
   def self.env
