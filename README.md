@@ -14,8 +14,9 @@ dependencies:
     github: mosop/cli
 ```
 
-## Code Samples
 <a name="code_samples"></a>
+
+## Code Samples
 
 ### Option Parser
 
@@ -212,7 +213,11 @@ puts TicketToRide.generate_zsh_completion
 require "cli"
 ```
 
-and see [Code Samples](#code_samples) and [Wiki](https://github.com/mosop/cli/wiki).
+and see:
+
+* [Code Samples](#code_samples)
+* [Wiki](https://github.com/mosop/cli/wiki)
+* [API Document](http://mosop.me/cli/Cli.html)
 
 ## Want to Do
 
