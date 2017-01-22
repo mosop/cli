@@ -11,6 +11,7 @@ module Cli
       {% if @type.superclass != ::Cli::CommandBase %}
         {%
           type_id = @type.name.split("(")[0].split("::").join("_").id
+          last_name = @type.name.split("::").last.id
           snake_type_id = type_id.underscore
         %}
         {% if @type.superclass == ::Cli::Command %}
@@ -44,7 +45,7 @@ module Cli
           inherit_callback_group :exit, proc_type: Proc(::Cli::Exit, Nil)
         {% end %}
 
-        # The dedicated Cli::OptionModel subclass for the command class.
+        # The dedicated Cli::OptionModel subclass for the `{{last_name}}` class.
         #
         # This class is automatically defined by the Crystal CLI library.
         class Options < ::{{super_option_data}}
@@ -181,7 +182,7 @@ module Cli
           {% end %}
         end
 
-        # Configures help message attributes.
+        # Configures help message attributes for the `{{last_name}}` class.
         #
         # This class is automatically defined by the Crystal CLI library.
         class Help
@@ -200,7 +201,7 @@ module Cli
             ::{{@type}}.__klass.header = s
           end
 
-          # Sets the header.
+          # Sets the footer.
           def self.footer(s : String)
             ::{{@type}}.__klass.footer = s
           end
