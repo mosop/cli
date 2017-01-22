@@ -44,9 +44,13 @@ module Cli
           inherit_callback_group :exit, proc_type: Proc(::Cli::Exit, Nil)
         {% end %}
 
+        # The dedicated Cli::OptionModel subclass for the command class.
+        #
+        # This class is automatically defined by the Crystal CLI library.
         class Options < ::{{super_option_data}}
         end
 
+        # :nodoc:
         class ::Cli::CommandClass
           {% unless @type.abstract? %}
             # :nodoc:
@@ -120,8 +124,11 @@ module Cli
           abstract: {{@type.abstract?}},
           options: Options.__klass
         )
-        def self.klass; @@__klass; end
+
+        # :nodoc:
         def self.__klass; @@__klass; end
+
+        # :nodoc:
         def __klass; @@__klass; end
 
         {% unless @type.abstract? %}
@@ -129,28 +136,42 @@ module Cli
             @@__klass.supercommand << @@__klass
           end
 
+          # Run the command.
+          #
+          # This method is automatically defined by the Crystal CLI library.
           def self.run
             run(\%w())
           end
 
+          # Run the command.
+          #
+          # This method is automatically defined by the Crystal CLI library.
           def self.run(argv : Array(String))
-            klass.{{snake_type_id}}__run(argv)
+            __klass.{{snake_type_id}}__run(argv)
           end
 
+          # Run the command.
+          #
+          # This method is automatically defined by the Crystal CLI library.
           def self.run(previous : ::Cli::CommandBase, argv : Array(String) = \%w())
             __klass.{{snake_type_id}}__run(previous, argv)
           end
 
+          # Run the command.
+          #
+          # This method is automatically defined by the Crystal CLI library.
           def self.run(argv : Array(String) = \%w(), &block : ::{{@type}} ->)
             __klass.{{snake_type_id}}__run(argv, &block)
           end
         {% end %}
 
         class Options
+          # :nodoc:
           def self.__cli_command
             ::{{@type}}
           end
 
+          # :nodoc:
           def __cli_command
             @__cli_command.as(::{{@type}})
           end
@@ -160,28 +181,37 @@ module Cli
           {% end %}
         end
 
+        # Configures help message attributes.
+        #
+        # This class is automatically defined by the Crystal CLI library.
         class Help
-          def self.caption(s)
+          # Sets the caption.
+          def self.caption(s : String)
             ::{{@type}}.__klass.caption = s
           end
 
-          def self.title(s)
+          # Sets the title.
+          def self.title(s : String)
             ::{{@type}}.__klass.title = s
           end
 
-          def self.header(s)
+          # Sets the header.
+          def self.header(s : String)
             ::{{@type}}.__klass.header = s
           end
 
-          def self.footer(s)
+          # Sets the header.
+          def self.footer(s : String)
             ::{{@type}}.__klass.footer = s
           end
 
+          # Sets the string for unparsed arguments.
           def self.unparsed_args(s)
             ::{{@type}}.__klass.unparsed_args = s
           end
         end
 
+        # :nodoc:
         def __option_data
           (@__option_data.var ||= Options.new(@__argv, self)).as(Options)
         end

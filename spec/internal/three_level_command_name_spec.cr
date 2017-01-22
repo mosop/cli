@@ -17,6 +17,6 @@ module CliInternalThreeLevelCommandNameFeature
   end
 
   it name do
-    One::Commands::Two::Commands::Three.klass.global_name.should eq "one two three"
+    One::Commands::Two::Commands::Three.__klass.global_name.should eq "one two three"
   end
 end

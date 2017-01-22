@@ -38,11 +38,11 @@ module CliInternalDefaultHelpTitleFeature
   end
 
   it name do
-    Optional.klass.default_title.should eq "optional [OPTIONS]"
-    Required.klass.default_title.should eq "required OPTIONS"
-    OptionalArg.klass.default_title.should eq "optional-arg [ARG]"
-    RequiredArg.klass.default_title.should eq "required-arg ARG"
-    Supercommand.klass.default_title.should eq "supercommand SUBCOMMAND"
-    SupercommandWithDefault.klass.default_title.should eq "supercommand-with-default [SUBCOMMAND]"
+    Optional.__klass.default_title.should eq "optional [OPTIONS]"
+    Required.__klass.default_title.should eq "required OPTIONS"
+    OptionalArg.__klass.default_title.should eq "optional-arg [ARG]"
+    RequiredArg.__klass.default_title.should eq "required-arg ARG"
+    Supercommand.__klass.default_title.should eq "supercommand SUBCOMMAND"
+    SupercommandWithDefault.__klass.default_title.should eq "supercommand-with-default [SUBCOMMAND]"
   end
 end

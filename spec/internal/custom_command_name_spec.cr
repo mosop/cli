@@ -6,6 +6,6 @@ module CliInternalCustomCommandNameFeature
   end
 
   it name do
-    Command.klass.global_name.should eq "custom"
+    Command.__klass.global_name.should eq "custom"
   end
 end
