@@ -1,5 +1,6 @@
 module Cli
   abstract class CommandBase
+    # :nodoc:
     macro __get_supercommand_class(type = nil)
       {%
         names = @type.name.split("::").map{|i| i.id}
@@ -13,6 +14,7 @@ module Cli
       {% end %}
     end
 
+    # :nodoc:
     macro __get_supercommand_class2(type1, type2 = nil)
       {% if type1.resolve < ::Cli::Supercommand %}
         {{type1}}.__klass

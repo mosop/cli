@@ -1,4 +1,5 @@
 module Cli
+  # :nodoc:
   class OptionValueMetadata(T) < Optarg::ValueMetadata(T)
     getter description : ::String?
 

@@ -19,7 +19,7 @@ module CliInternalVersionHandlerDslFeature
 
   macro test(example, klass, names, desc)
     it {{example}} do
-      handler = {{klass.id}}::Options.definitions.handlers[{{names[0]}}]
+      handler = {{klass.id}}::Options.__klass.definitions.handlers[{{names[0]}}]
       handler.names.should eq {{names}}
       {% for e, i in names %}
         {{klass.id}}.run([{{e}}]).should exit_command(output: "1.0.0")

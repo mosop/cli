@@ -1,4 +1,5 @@
 module Cli
+  # :nodoc:
   macro __any_of(df, params)
     {% if params.class_name == "TupleLiteral" %}
       {%

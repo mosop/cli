@@ -1,4 +1,5 @@
 class Cli::OptionModel
+  # Defines a String option model item.
   macro string(names, stop = nil, default = nil, required = nil, desc = nil, var = nil, any_of = nil, complete = nil, &block)
     ::Optarg::Model.string(
       {{names}},
@@ -11,6 +12,7 @@ class Cli::OptionModel
     ) {{block}}
   end
 
+  # Defines a Bool option model item.
   macro bool(names, stop = nil, default = nil, not = nil, desc = nil, &block)
     ::Optarg::Model.bool(
       {{names}},
@@ -21,6 +23,7 @@ class Cli::OptionModel
     ) {{block}}
   end
 
+  # Defines an Array(String) option model item.
   macro array(names, default = nil, min = nil, desc = nil, var = nil, any_item_of = nil, complete = nil, &block)
     ::Optarg::Model.array(
       {{names}},
@@ -32,6 +35,7 @@ class Cli::OptionModel
     ) {{block}}
   end
 
+  # Defines a String argument model item.
   macro arg(name, stop = nil, default = nil, required = nil, desc = nil, any_of = nil, complete = nil, &block)
     ::Optarg::Model.arg(
       {{name}},
@@ -44,6 +48,7 @@ class Cli::OptionModel
     ) {{block}}
   end
 
+  # Defines an Array(String) argument model item.
   macro arg_array(names, default = nil, min = nil, desc = nil, var = nil, any_item_of = nil, complete = nil, &block)
     ::Optarg::Model.arg_array(
       {{names}},
@@ -55,21 +60,24 @@ class Cli::OptionModel
     ) {{block}}
   end
 
+  # Defines a handler model item.
   macro on(names, desc = nil, &block)
     ::Optarg::Model.on({{names}}, metadata: ::Cli::OptionMetadata.new(description: {{desc}})) {{block}}
   end
 
+  # Defines a handler model item for printing a help message.
   macro help(names = nil, desc = nil)
     {%
       names = names || %w(-h --help)
     %}
-    on({{names}}, desc: ({{desc}} || "show this help")) { __cli_command.__help! }
+    on({{names}}, desc: ({{desc}} || "show this help")) { __cli_command.help! }
   end
 
+  # Defines a handler model item for printing a version string.
   macro version(names = nil, desc = nil)
     {%
       names = names || %w(-v --version)
     %}
-    on({{names}}, desc: ({{desc}} || "show version")) { __cli_command.__version! }
+    on({{names}}, desc: ({{desc}} || "show version")) { __cli_command.version! }
   end
 end

@@ -1,0 +1,65 @@
+#!/usr/bin/env ruby
+require "yaml"
+require "tmpdir"
+
+VERSION = /^refs\/tags\/v(\d+(\.\d+)*)$/
+
+Dir.mktmpdir do |dir|
+  cred_file = File.join(dir, ".git-credentials")
+  `touch #{cred_file}`
+  `chmod 600 #{cred_file}`
+  File.write cred_file, "https://mosop:#{ENV["MOSOP_GITHUB_ACCESS_TOKEN"]}@github.com\n"
+  Dir.mktmpdir do |dir|
+    Dir.chdir(dir) do
+      `git init`
+      `git config --local credential.helper 'store --file #{cred_file}'`
+      `git remote add origin https://github.com/mosop/cli.git`
+      gh_pages_found = false
+      versions = []
+      `git ls-remote`.chomp.split("\n").each do |line|
+        sha, ref = line.split(/\s+/)
+        if VERSION =~ ref
+          versions << Gem::Version.new($1)
+        elsif ref == "refs/heads/gh-pages"
+          gh_pages_found = true
+        end
+      end
+      version = versions.sort.last
+      exit unless version
+      `git fetch origin v#{version}:tags/v#{version}`
+      `git checkout -b latest v#{version}`
+      `crystal deps`
+      `crystal doc`
+      doc_dir = File.join(dir, "doc")
+      Dir.mktmpdir do |dir|
+        Dir.chdir(dir) do
+          ver_dir = File.join(dir, "v#{version}")
+          if gh_pages_found
+            `git init`
+            `git config --local credential.helper 'store --file #{cred_file}'`
+            `git remote add origin https://github.com/mosop/cli.git`
+            `git pull origin gh-pages`
+            `git checkout -b gh-pages origin/gh-pages`
+            Dir.glob("*") do |f|
+              `rm -rf #{f}` unless f.start_with?("v")
+            end
+            `rm -rf .git`
+          end
+          `cp -a #{doc_dir}/* #{dir}/`
+          `rm -rf #{ver_dir}`
+          `mkdir -p #{ver_dir}`
+          `cp -a #{doc_dir}/* #{ver_dir}/`
+          `git init`
+          `git config --local credential.helper 'store --file #{cred_file}'`
+          `git remote add origin https://github.com/mosop/cli.git`
+          `git config --add --local user.name mosop`
+          `git config --add --local user.email mosop@users.noreply.github.com`
+          `git checkout -b gh-pages`
+          `git add .`
+          `git commit -m '#{Time.now.strftime("%Y%m%d")}'`
+          `git push -f origin gh-pages`
+        end
+      end
+    end
+  end
+end

@@ -1,6 +1,9 @@
 require "./command_base/macros"
 
 module Cli
+  # The base of command classes.
+  #
+  # Your application should not directly inherit this class. Instead, use `Command` or `Supercommand`.
   abstract class CommandBase
     Callback.enable
 
@@ -68,12 +71,12 @@ module Cli
                 rescue_error(cmd) do
                   begin
                     cmd.__option_data.__parse
-                    result = cmd.__run
-                    cmd.__io.close_writer unless previous
+                    result = cmd.run
+                    cmd.io.close_writer unless previous
                     yield cmd
                     result
                   ensure
-                    cmd.__io.close_writer unless previous
+                    cmd.io.close_writer unless previous
                   end
                 end
               end
@@ -127,34 +130,18 @@ module Cli
           end
 
           def self.run
-            __run
-          end
-
-          def self.__run
-            __run(\%w())
+            run(\%w())
           end
 
           def self.run(argv : Array(String))
-            __run(argv)
-          end
-
-          def self.__run(argv : Array(String))
-            __klass.{{snake_type_id}}__run(argv)
+            klass.{{snake_type_id}}__run(argv)
           end
 
           def self.run(previous : ::Cli::CommandBase, argv : Array(String) = \%w())
-            __run(previous, argv)
-          end
-
-          def self.__run(previous : ::Cli::CommandBase, argv : Array(String) = \%w())
             __klass.{{snake_type_id}}__run(previous, argv)
           end
 
           def self.run(argv : Array(String) = \%w(), &block : ::{{@type}} ->)
-            __run(argv, &block)
-          end
-
-          def self.__run(argv : Array(String) = \%w(), &block : ::{{@type}} ->)
             __klass.{{snake_type_id}}__run(argv, &block)
           end
         {% end %}
@@ -168,37 +155,8 @@ module Cli
             @__cli_command.as(::{{@type}})
           end
 
-          # class Class
-          #   include ::Cli::OptionModelMixin
-          #
-          #   def command
-          #     ::{{@type}}::Class.instance
-          #   end
-          #
-          #   def default_definitions
-          #     {% if is_supercommand_root %}
-          #       [::{{@type}}.__klass.subcommand_option_model_definition] of ::Optarg::Definitions::Base
-          #     {% else %}
-          #       [] of ::Optarg::Definitions::Base
-          #     {% end %}
-          #   end
-          #
-          #   def name
-          #     {{@type.name.split("::")[-1].underscore}}
-          #   end
-          # end
-          #
-          # class DynamicDefinitionContext
-          #   def command
-          #     parser.data.__command
-          #   end
-          # end
-          #
-          # def __command
-          #   @__command.as(::{{@type}})
-          # end
           {% if is_supercommand_root %}
-            __definitions << ::{{@type}}.__klass.subcommand_option_model_definition
+            __klass.definitions << ::{{@type}}.__klass.subcommand_option_model_definition
           {% end %}
         end
 
@@ -225,79 +183,87 @@ module Cli
         end
 
         def __option_data
-          (@__option_data.var ||= Options.new(__argv, self)).as(Options)
+          (@__option_data.var ||= Options.new(@__argv, self)).as(Options)
         end
-
-        # def self.__new_help(indent = 2)
-        #   Help.new(indent: indent)
-        # end
       {% end %}
     end
 
-    getter! __previous : ::Cli::CommandBase?
-    getter __argv : Array(String)
+    # :nodoc:
+    getter? __previous : ::Cli::CommandBase?
 
+    @__argv : Array(String)
+
+    # :nodoc:
     def initialize(argv)
       initialize nil, argv
     end
 
+    # :nodoc:
     def initialize(@__previous, @__argv)
       run_callbacks_for_initialize {}
     end
 
     @__option_data = Util::Var(Optarg::Model).new
-    def option_data; __option_data; end
 
-    def options; __options; end
-    def __options; __option_data; end
+    # Returns option and argument values (an `OptionModel` instance).
+    #
+    # This method is the same as `#args`.
+    def options; __option_data; end
 
-    def args; __args; end
-    def __args; __option_data; end
+    # Returns option and argument values (an `OptionModel` instance).
+    #
+    # This method is the same as `#options`.
+    def args; __option_data; end
 
-    def named_args; __named_args; end
-    def __named_args; __option_data.__named_args; end
+    # Returns an array of nameless argument values.
+    #
+    # This method is a short form of `#args`.nameless_args.
+    def nameless_args : Array(String)
+      __option_data.nameless_args
+    end
 
-    def nameless_args; __nameless_args; end
-    def __nameless_args; __option_data.__nameless_args; end
+    # Returns an array of unparsed argument values.
+    #
+    # This method is a short form of `#args`.unparsed_args.
+    def unparsed_args : Array(String)
+      __option_data.unparsed_args
+    end
 
-    def parsed_args; __parsed_args; end
-    def __parsed_args; __option_data.__parsed_args; end
+    # Returns the command version.
+    def version : String
+      __klass.version
+    end
 
-    def unparsed_args; __unparsed_args; end
-    def __unparsed_args; __option_data.__unparsed_args; end
+    # Returns the command version.
+    #
+    # Returns nil, if no version is set.
+    def version? : String?
+      __klass.version?
+    end
 
-    def version; __version; end
-    def __version; __klass.version; end
-
-    def version?; __version?; end
-    def __version?; __klass.version?; end
-
-    def self.command_name(value)
+    # Sets the command name.
+    def self.command_name(value : String)
       __klass.name = value
     end
 
+    # Disables printing a help message when a parsing error occurs.
     def self.disable_help_on_parsing_error!
       __klass.disable_help_on_parsing_error!
     end
 
-    def self.version(value)
+    # Sets the command version.
+    def self.version(value : String)
       __klass.version = value
     end
 
-    def help!(message = nil, error = nil, code = nil, indent = 2)
-      __help! message, error, code, indent
-    end
-
-    def __help!(message = nil, error = nil, code = nil, indent = 2)
+    # Prints a help message and exits the command.
+    def help!(message : String? = nil, error : Bool? = nil, code : Int32? = nil, indent = 2)
       error = !message.nil? if error.nil?
-      __exit! message, error, code, true, indent
+      exit! message, error, code, true, indent
     end
 
-    def exit!(message = nil, error = false, code = nil, help = false, indent = 2)
-      __exit! message, error, code, help, indent
-    end
-
-    def __exit!(message = nil, error = false, code = nil, help = false, indent = 2)
+    # Exits the command.
+    def exit!(message : String? = nil, error : Bool = false, code : Int32? = nil, help = false, indent = 2)
       a = %w()
       a << message if message
       if help
@@ -308,69 +274,63 @@ module Cli
       raise ::Cli::Exit.new(message, code)
     end
 
-    def error!(message = nil, code = nil, help = false, indent = 2)
-      __error! message, code, help, indent
+    # Exits the command with an error status.
+    def error!(message : String? = nil, code : Int32? = nil, help : Bool = false, indent = 2)
+      exit! message, true, code, help, indent
     end
 
-    def __error!(message = nil, code = nil, help = false, indent = 2)
-      __exit! message, true, code, help, indent
-    end
-
+    # Prints a version string and exits the command.
     def version!
-      __version!
+      exit! version
     end
 
-    def __version!
-      __exit! version
-    end
-
+    # Runs the command.
+    #
+    # This method is an entrypoint for running a command.
+    #
+    # Subclasses must override this method.
     def run
       raise "Not implemented."
     end
 
-    def __run
-      run
-    end
-
+    # Generates a bash completion script.
     def self.generate_bash_completion
       __klass.generate_bash_completion
     end
 
-    def self.generate_zsh_completion(functional = nil)
+    # Generates a zsh completion script.
+    def self.generate_zsh_completion(functional : Bool = true)
       __klass.generate_zsh_completion(functional)
     end
 
-    @__io : IoHash?
-    def __io
-      @__io ||= (__previous? ? __previous.__io : Cli.new_default_io)
-    end
-
-    def __io=(value)
-      @__io = value
-    end
-
+    @io : IoHash?
+    # Returns a named IO container.
     def io
-      __io
+      @io ||= if prev = @__previous
+        prev.io
+      else
+        Cli.new_default_io
+      end
     end
 
-    def io=(value)
-      self.__io = value
-    end
-
+    # Invokes the :out IO's puts method.
     def puts(*args)
-      __io[:out].puts *args
+      io[:out].puts *args
     end
 
+    # Invokes the :out IO'S print method.
     def print(*args)
-      __io[:out].print *args
+      io[:out].print *args
     end
 
+    # Returns the :out IO.
     def out
-      __io[:out]
+      io[:out]
     end
 
+    # Returns the :err IO.
     def err
-      __io[:err]
+      io[:err]
     end
   end
 end

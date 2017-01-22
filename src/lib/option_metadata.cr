@@ -1,4 +1,5 @@
 module Cli
+  # :nodoc:
   class OptionMetadata < Optarg::Metadata
     getter description : ::String?
     getter variable_name : ::String?

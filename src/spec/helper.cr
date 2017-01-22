@@ -1,13 +1,16 @@
 module Cli::Spec
+  # Extends modules for testing commands.
   module Helper
     macro included
       extend ::Cli::Spec::Helper
     end
 
+    # Returns a new Crystal Spec expectation that asserts how a command exits.
     def exit_command(output = nil, error = nil, code = nil)
       Expectation.new(output, error, code)
     end
 
+    # :nodoc:
     class Expectation
       alias Message = String | Regex
 

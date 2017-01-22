@@ -1,4 +1,5 @@
 module Cli
+  # :nodoc:
   class CommandClass
     alias Runner = Proc(CommandBase, Array(String), Nil)
     @@runners = {} of String => Runner
@@ -95,11 +96,6 @@ module Cli
       @@runners[class_name].call(previous, args)
     end
 
-    # @snake_name : String?
-    # def snake_name
-    #   @snake_name ||= StringInflection.snake(@name)
-    # end
-
     def resolve_subcommand(name)
       name ||= default_subcommand_name?
       subcommands[name]?
@@ -114,8 +110,7 @@ module Cli
       EOS
     end
 
-    def generate_zsh_completion(functional = nil)
-      functional = true if functional.nil?
+    def generate_zsh_completion(functional)
       g = options.zsh_completion.new_generator("_#{snake_name}")
       if functional
         <<-EOS

@@ -1,7 +1,14 @@
 require "./command_base"
 
 module Cli
+  # The base of supercommand classes.
   abstract class Supercommand < CommandBase
+    # Sets subcommand attributes.
+    #
+    # ### Parameters
+    # * name (String) : a target subcommand name
+    # * default (Bool) : if true, it makes the target subcommand a default subcommand.
+    # * aliased (String) : makes the target sucommand an alias of the other subcommand that has the *aliased* name.
     macro command(name, default = false, aliased = nil)
       {%
         s = aliased || name
@@ -19,11 +26,12 @@ module Cli
       {% end %}
     end
 
-    def __run
-      if subcommand = __klass.resolve_subcommand(__option_data.__parser.args.__strings["subcommand"]?)
-        subcommand.run(self, __unparsed_args.dup)
+    # :nodoc:
+    def run
+      if subcommand = __klass.resolve_subcommand(__option_data[String]["subcommand"]?)
+        subcommand.run(self, unparsed_args.dup)
       else
-        __help!
+        help!
       end
     end
   end

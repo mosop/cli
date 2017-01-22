@@ -1,3 +1,7 @@
 language: crystal
+
 script:
-  - scripts/test
+- bin/test
+
+after_success:
+- if [ "$TRAVIS_BRANCH" == "master" ]; then bin/deploy_doc; fi
