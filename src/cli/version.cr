@@ -1,3 +1,3 @@
 module Cli
-  VERSION = "0.5.1.5"
+  VERSION = "0.5.2"
 end
