@@ -5,7 +5,7 @@ module Cli
     @@runners = {} of String => Runner
 
     getter! class_name : String?
-    property name : String
+    getter name = ""
     getter! inherited_class : CommandClass?
     getter! supercommand : CommandClass?
     getter? helps_on_parsing_error = true
@@ -19,7 +19,13 @@ module Cli
     property! unparsed_args : String?
     getter! options : Optarg::ModelClass?
 
-    def initialize(@supercommand, @inherited_class, @class_name : String, @name, @abstract : Bool, @is_supercommand : Bool, @options : Optarg::ModelClass)
+    def initialize(@supercommand, @inherited_class, @class_name : String, name, @abstract : Bool, @is_supercommand : Bool, @options : Optarg::ModelClass)
+      self.name = name
+    end
+
+    def name=(v)
+      options.name = v
+      @name = v
     end
 
     @abstract : Bool?

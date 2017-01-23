@@ -1,6 +1,5 @@
 class Cli::CommandClass
   class Alias < CommandClass
-    getter name : String
     getter real_name : String
 
     def initialize(@supercommand, @name, @real_name)
