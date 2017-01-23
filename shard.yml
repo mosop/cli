@@ -1,5 +1,5 @@
 name: cli
-version: 0.6.2
+version: 0.6.3
 
 authors:
   - mosop
@@ -9,7 +9,7 @@ crystal: 0.20.5
 dependencies:
   optarg:
     github: mosop/optarg
-    version: ~> 0.5.2
+    version: ~> 0.5.3
   string_inflection:
     github: mosop/string_inflection
     version: ~> 0.2.0
