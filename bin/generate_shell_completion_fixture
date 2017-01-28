@@ -1,14 +1,20 @@
 #!/usr/bin/env crystal
 
 require "../src/cli"
+require "../spec/internal/shell_completion/class"
 require "../spec/wiki/shell_completion/class"
 
-dir = "#{__DIR__}/../spec/wiki/shell_completion/fixtures"
-zsh_dir = "#{dir}/zsh"
-Dir.mkdir_p zsh_dir
-data = CliWikiShellCompletionFeature::TicketToRide.generate_bash_completion
-File.write "#{dir}/ticket-to-ride-completion.bash", data + "\n"
-data = CliWikiShellCompletionFeature::TicketToRide.generate_zsh_completion(functional: false)
-File.write "#{dir}/ticket-to-ride-completion.zsh", data + "\n"
-data = CliWikiShellCompletionFeature::TicketToRide.generate_zsh_completion
-File.write "#{zsh_dir}/_ticket_to_ride", data + "\n"
+macro __generate(dir, klass, filename, filename2)
+  %dir = {{dir}}
+  %zsh_dir = "#{%dir}/zsh"
+  Dir.mkdir_p %zsh_dir
+  %data = {{klass}}.generate_bash_completion
+  File.write File.join(%dir, {{filename}} + ".bash"), %data + "\n"
+  %data = {{klass}}.generate_zsh_completion(functional: false)
+  File.write File.join(%dir, {{filename}} + ".zsh"), %data + "\n"
+  %data = {{klass}}.generate_zsh_completion
+  File.write File.join(%zsh_dir, {{filename2}}), %data + "\n"
+end
+
+__generate "#{__DIR__}/../spec/internal/shell_completion/fixtures", CliInternalSpecs::ShellCompletion::Command, "command", "_command"
+__generate "#{__DIR__}/../spec/wiki/shell_completion/fixtures", CliWikiShellCompletionFeature::TicketToRide, "ticket-to-ride-completion", "_ticket_to_ride"

@@ -1,0 +1,727 @@
+_command___keys=(' subcommand ')
+_command___args=(0)
+_command___acts=('')
+_command___cmds=('')
+_command___lens=(1)
+_command___nexts=(' subcommand1 subcommand2 ')
+_command___occurs=(1)
+_command___tags=(' arg stop ')
+_command___words=(' subcommand1 subcommand2 ')
+
+function _command___act() {
+  setopt localoptions ksharrays
+  
+  local -a a jids
+  case $1 in
+    alias)
+      a=( "${(k)aliases[@]}" ) ;;
+    arrayvar)
+      a=( "${(k@)parameters[(R)array*]}" )
+      ;;
+    binding)
+      a=( "${(k)widgets[@]}" )
+      ;;
+    builtin)
+      a=( "${(k)builtins[@]}" "${(k)dis_builtins[@]}" )
+      ;;
+    command)
+      a=( "${(k)commands[@]}" "${(k)aliases[@]}" "${(k)builtins[@]}" "${(k)functions[@]}" "${(k)reswords[@]}")
+      ;;
+    directory)
+      a=( ${IPREFIX}${PREFIX}*${SUFFIX}${ISUFFIX}(N-/) )
+      ;;
+    disabled)
+      a=( "${(k)dis_builtins[@]}" )
+      ;;
+    enabled)
+      a=( "${(k)builtins[@]}" )
+      ;;
+    export)
+      a=( "${(k)parameters[(R)*export*]}" )
+      ;;
+    file)
+      a=( ${IPREFIX}${PREFIX}*${SUFFIX}${ISUFFIX}(N) )
+      ;;
+    function)
+      a=( "${(k)functions[@]}" )
+      ;;
+    group)
+      _groups -U -O a
+      ;;
+    hostname)
+      _hosts -U -O a
+      ;;
+    job)
+      a=( "${savejobtexts[@]%% *}" )
+      ;;
+    keyword)
+      a=( "${(k)reswords[@]}" )
+      ;;
+    running)
+      a=()
+      jids=( "${(@k)savejobstates[(R)running*]}" )
+      for job in "${jids[@]}"; do
+        a+=( ${savejobtexts[$job]%% *} )
+      done
+      ;;
+    stopped)
+      a=()
+      jids=( "${(@k)savejobstates[(R)suspended*]}" )
+      for job in "${jids[@]}"; do
+        a+=( ${savejobtexts[$job]%% *} )
+      done
+      ;;
+    setopt|shopt)
+      a=( "${(k)options[@]}" )
+      ;;
+    signal)
+      a=( "SIG${^signals[@]}" )
+      ;;
+    user)
+      a=( "${(k)userdirs[@]}" )
+      ;;
+    variable)
+      a=( "${(k)parameters[@]}" )
+      ;;
+    *)
+      a=( ${IPREFIX}${PREFIX}*${SUFFIX}${ISUFFIX}(N) )
+      ;;
+  esac
+  compadd -- "${a[@]}"
+  return 0
+}
+
+function _command___add() {
+  setopt localoptions ksharrays
+  
+  compadd -- "${@:1}"
+  return 0
+}
+
+function _command___any() {
+  setopt localoptions ksharrays
+  
+  _command___act file
+  return $?
+}
+
+function _command___cur() {
+  setopt localoptions ksharrays
+  
+  _command___c="${COMP_WORDS[COMP_CWORD]}"
+  return 0
+}
+
+function _command___end() {
+  setopt localoptions ksharrays
+  
+  if [ $_command___i -lt $COMP_CWORD ]; then
+    return 1
+  fi
+  return 0
+}
+
+function _command___found() {
+  setopt localoptions ksharrays
+  
+  if _command___keyerr; then return 1; fi
+  local n
+  n=${_command___f[$_command___k]}
+  if [[ "$n" == "" ]]; then
+    n=1
+  else
+    let n+=1
+  fi
+  _command___f[$_command___k]=$n
+  return 0
+}
+
+function _command___inc() {
+  setopt localoptions ksharrays
+  
+  let _command___i+=1
+  return 0
+}
+
+function _command___keyerr() {
+  setopt localoptions ksharrays
+  
+  if [[ "$_command___k" == "" ]] || [ $_command___k -lt 0 ]; then
+    return 0
+  fi
+  return 1
+}
+
+function _command___word() {
+  setopt localoptions ksharrays
+  
+  _command___w="${COMP_WORDS[$_command___i]}"
+  return 0
+}
+
+function _command() {
+  setopt localoptions ksharrays
+  
+  (( COMP_CWORD = CURRENT - 1 ))
+  COMP_WORDS=($(echo ${words[@]}))
+  _command___i=1
+  _command___k=-1
+  _command___ai=0
+  _command___f=()
+  while ! _command___tag stop; do
+    _command___word
+    _command___key
+    if _command___tag term; then
+      _command___inc
+      break
+    fi
+    if _command___end; then
+      _command___ls
+      return $?
+    fi
+    if [[ $_command___w =~ ^- ]]; then
+      if [ $_command___k -eq -1 ]; then
+        _command___any
+        return $?
+      fi
+      _command___found
+      _command___inc
+      _command___len
+      if [ $_command___l -eq 1 ]; then
+        continue
+      fi
+      if _command___end; then
+        _command___lskey
+        return $?
+      fi
+      _command___inc
+    else
+      if _command___arg; then
+        if _command___end; then
+          _command___lskey
+          return $?
+        fi
+      fi
+      _command___inc
+    fi
+  done
+  if [[ "${_command___nexts[$_command___k]}" != "" ]]; then
+    _command___next
+  else
+    _command___any
+  fi
+  return $?
+}
+
+function _command___arg() {
+  setopt localoptions ksharrays
+  
+  if [ $_command___ai -lt ${#_command___args[@]} ]; then
+    _command___k=${_command___args[$_command___ai]}
+    if ! _command___tag varg; then
+      let _command___ai+=1
+    fi
+    return 0
+  fi
+  return 1
+}
+
+function _command___key() {
+  setopt localoptions ksharrays
+  
+  local i
+  i=0
+  while [ $i -lt ${#_command___keys[@]} ]; do
+    if [[ ${_command___keys[$i]} == *' '$_command___w' '* ]]; then
+      _command___k=$i
+      return 0
+    fi
+    let i+=1
+  done
+  _command___k=-1
+  return 1
+}
+
+function _command___len() {
+  setopt localoptions ksharrays
+  
+  if _command___keyerr; then return 1; fi
+  _command___l=${_command___lens[$_command___k]}
+  return 0
+}
+
+function _command___ls() {
+  setopt localoptions ksharrays
+  
+  local a i max found arg act cmd
+  a=()
+  if [[ "$_command___w" =~ ^- ]]; then
+    i=0
+    while [ $i -lt ${#_command___keys[@]} ]; do
+      if _command___tag arg $i; then
+        let i+=1
+        continue
+      fi
+      found=${_command___f[$i]}
+      if [[ "$found" == "" ]]; then
+        found=0
+      fi
+      max=${_command___occurs[$i]}
+      if [ $max -lt 0 ] || [ $found -lt $max ]; then
+        a+=($(echo "${_command___keys[$i]}"))
+      fi
+      let i+=1
+    done
+  else
+    if [ $_command___ai -lt ${#_command___args[@]} ]; then
+      arg=${_command___args[$_command___ai]}
+      act=${_command___acts[$arg]}
+      cmd=${_command___cmds[$arg]}
+      if [[ "$act" != "" ]]; then
+        _command___act $act
+        return 0
+      elif [[ "$cmd" != "" ]]; then
+        a=($(eval $cmd))
+      else
+        a=($(echo "${_command___words[$arg]}"))
+      fi
+    fi
+  fi
+  if [ ${#a[@]} -gt 0 ]; then
+    _command___add "${a[@]}"
+    return 0
+  fi
+  _command___any
+  return $?
+}
+
+function _command___lskey() {
+  setopt localoptions ksharrays
+  
+  if ! _command___keyerr; then
+    local act cmd a
+    act=${_command___acts[$_command___k]}
+    cmd=${_command___cmds[$_command___k]}
+    if [[ "$act" != "" ]]; then
+      :
+    elif [[ "$cmd" != "" ]]; then
+      a=($(eval $cmd))
+    else
+      a=($(echo "${_command___words[$_command___k]}"))
+    fi
+    if [[ "$act" != "" ]]; then
+      _command___act $act
+      return 0
+    elif [ ${#a[@]} -gt 0 ]; then
+      _command___add "${a[@]}"
+      return 0
+    fi
+  fi
+  _command___any
+  return $?
+}
+
+function _command___tag() {
+  setopt localoptions ksharrays
+  
+  local k
+  if [[ "$2" == "" ]]; then
+    if _command___keyerr; then return 1; fi
+    k=$_command___k
+  else
+    k=$2
+  fi
+  if [[ ${_command___tags[$k]} == *' '$1' '* ]]; then
+    return 0
+  fi
+  return 1
+}
+
+function _command___next() {
+  setopt localoptions ksharrays
+  
+  case $_command___w in
+    'subcommand1')
+      _command__subcommand1
+      ;;
+    'subcommand2')
+      _command__subcommand2
+      ;;
+    *)
+      _command___any
+      ;;
+  esac
+  return $?
+}
+
+_command__subcommand1___keys=(' -s ')
+_command__subcommand1___args=()
+_command__subcommand1___acts=('')
+_command__subcommand1___cmds=('')
+_command__subcommand1___lens=(2)
+_command__subcommand1___nexts=('')
+_command__subcommand1___occurs=(1)
+_command__subcommand1___tags=(' opt ')
+_command__subcommand1___words=('')
+
+function _command__subcommand1() {
+  setopt localoptions ksharrays
+  
+  _command___k=-1
+  _command___ai=0
+  _command___f=()
+  while ! _command__subcommand1___tag stop; do
+    _command___word
+    _command__subcommand1___key
+    if _command__subcommand1___tag term; then
+      _command___inc
+      break
+    fi
+    if _command___end; then
+      _command__subcommand1___ls
+      return $?
+    fi
+    if [[ $_command___w =~ ^- ]]; then
+      if [ $_command___k -eq -1 ]; then
+        _command___any
+        return $?
+      fi
+      _command___found
+      _command___inc
+      _command__subcommand1___len
+      if [ $_command___l -eq 1 ]; then
+        continue
+      fi
+      if _command___end; then
+        _command__subcommand1___lskey
+        return $?
+      fi
+      _command___inc
+    else
+      if _command__subcommand1___arg; then
+        if _command___end; then
+          _command__subcommand1___lskey
+          return $?
+        fi
+      fi
+      _command___inc
+    fi
+  done
+  if [[ "${_command__subcommand1___nexts[$_command___k]}" != "" ]]; then
+    _command__subcommand1___next
+  else
+    _command___any
+  fi
+  return $?
+}
+
+function _command__subcommand1___arg() {
+  setopt localoptions ksharrays
+  
+  if [ $_command___ai -lt ${#_command__subcommand1___args[@]} ]; then
+    _command___k=${_command__subcommand1___args[$_command___ai]}
+    if ! _command__subcommand1___tag varg; then
+      let _command___ai+=1
+    fi
+    return 0
+  fi
+  return 1
+}
+
+function _command__subcommand1___key() {
+  setopt localoptions ksharrays
+  
+  local i
+  i=0
+  while [ $i -lt ${#_command__subcommand1___keys[@]} ]; do
+    if [[ ${_command__subcommand1___keys[$i]} == *' '$_command___w' '* ]]; then
+      _command___k=$i
+      return 0
+    fi
+    let i+=1
+  done
+  _command___k=-1
+  return 1
+}
+
+function _command__subcommand1___len() {
+  setopt localoptions ksharrays
+  
+  if _command___keyerr; then return 1; fi
+  _command___l=${_command__subcommand1___lens[$_command___k]}
+  return 0
+}
+
+function _command__subcommand1___ls() {
+  setopt localoptions ksharrays
+  
+  local a i max found arg act cmd
+  a=()
+  if [[ "$_command___w" =~ ^- ]]; then
+    i=0
+    while [ $i -lt ${#_command__subcommand1___keys[@]} ]; do
+      if _command__subcommand1___tag arg $i; then
+        let i+=1
+        continue
+      fi
+      found=${_command___f[$i]}
+      if [[ "$found" == "" ]]; then
+        found=0
+      fi
+      max=${_command__subcommand1___occurs[$i]}
+      if [ $max -lt 0 ] || [ $found -lt $max ]; then
+        a+=($(echo "${_command__subcommand1___keys[$i]}"))
+      fi
+      let i+=1
+    done
+  else
+    if [ $_command___ai -lt ${#_command__subcommand1___args[@]} ]; then
+      arg=${_command__subcommand1___args[$_command___ai]}
+      act=${_command__subcommand1___acts[$arg]}
+      cmd=${_command__subcommand1___cmds[$arg]}
+      if [[ "$act" != "" ]]; then
+        _command___act $act
+        return 0
+      elif [[ "$cmd" != "" ]]; then
+        a=($(eval $cmd))
+      else
+        a=($(echo "${_command__subcommand1___words[$arg]}"))
+      fi
+    fi
+  fi
+  if [ ${#a[@]} -gt 0 ]; then
+    _command___add "${a[@]}"
+    return 0
+  fi
+  _command___any
+  return $?
+}
+
+function _command__subcommand1___lskey() {
+  setopt localoptions ksharrays
+  
+  if ! _command___keyerr; then
+    local act cmd a
+    act=${_command__subcommand1___acts[$_command___k]}
+    cmd=${_command__subcommand1___cmds[$_command___k]}
+    if [[ "$act" != "" ]]; then
+      :
+    elif [[ "$cmd" != "" ]]; then
+      a=($(eval $cmd))
+    else
+      a=($(echo "${_command__subcommand1___words[$_command___k]}"))
+    fi
+    if [[ "$act" != "" ]]; then
+      _command___act $act
+      return 0
+    elif [ ${#a[@]} -gt 0 ]; then
+      _command___add "${a[@]}"
+      return 0
+    fi
+  fi
+  _command___any
+  return $?
+}
+
+function _command__subcommand1___tag() {
+  setopt localoptions ksharrays
+  
+  local k
+  if [[ "$2" == "" ]]; then
+    if _command___keyerr; then return 1; fi
+    k=$_command___k
+  else
+    k=$2
+  fi
+  if [[ ${_command__subcommand1___tags[$k]} == *' '$1' '* ]]; then
+    return 0
+  fi
+  return 1
+}
+
+_command__subcommand2___keys=(' -s ')
+_command__subcommand2___args=()
+_command__subcommand2___acts=('')
+_command__subcommand2___cmds=('')
+_command__subcommand2___lens=(2)
+_command__subcommand2___nexts=('')
+_command__subcommand2___occurs=(1)
+_command__subcommand2___tags=(' opt ')
+_command__subcommand2___words=('')
+
+function _command__subcommand2() {
+  setopt localoptions ksharrays
+  
+  _command___k=-1
+  _command___ai=0
+  _command___f=()
+  while ! _command__subcommand2___tag stop; do
+    _command___word
+    _command__subcommand2___key
+    if _command__subcommand2___tag term; then
+      _command___inc
+      break
+    fi
+    if _command___end; then
+      _command__subcommand2___ls
+      return $?
+    fi
+    if [[ $_command___w =~ ^- ]]; then
+      if [ $_command___k -eq -1 ]; then
+        _command___any
+        return $?
+      fi
+      _command___found
+      _command___inc
+      _command__subcommand2___len
+      if [ $_command___l -eq 1 ]; then
+        continue
+      fi
+      if _command___end; then
+        _command__subcommand2___lskey
+        return $?
+      fi
+      _command___inc
+    else
+      if _command__subcommand2___arg; then
+        if _command___end; then
+          _command__subcommand2___lskey
+          return $?
+        fi
+      fi
+      _command___inc
+    fi
+  done
+  if [[ "${_command__subcommand2___nexts[$_command___k]}" != "" ]]; then
+    _command__subcommand2___next
+  else
+    _command___any
+  fi
+  return $?
+}
+
+function _command__subcommand2___arg() {
+  setopt localoptions ksharrays
+  
+  if [ $_command___ai -lt ${#_command__subcommand2___args[@]} ]; then
+    _command___k=${_command__subcommand2___args[$_command___ai]}
+    if ! _command__subcommand2___tag varg; then
+      let _command___ai+=1
+    fi
+    return 0
+  fi
+  return 1
+}
+
+function _command__subcommand2___key() {
+  setopt localoptions ksharrays
+  
+  local i
+  i=0
+  while [ $i -lt ${#_command__subcommand2___keys[@]} ]; do
+    if [[ ${_command__subcommand2___keys[$i]} == *' '$_command___w' '* ]]; then
+      _command___k=$i
+      return 0
+    fi
+    let i+=1
+  done
+  _command___k=-1
+  return 1
+}
+
+function _command__subcommand2___len() {
+  setopt localoptions ksharrays
+  
+  if _command___keyerr; then return 1; fi
+  _command___l=${_command__subcommand2___lens[$_command___k]}
+  return 0
+}
+
+function _command__subcommand2___ls() {
+  setopt localoptions ksharrays
+  
+  local a i max found arg act cmd
+  a=()
+  if [[ "$_command___w" =~ ^- ]]; then
+    i=0
+    while [ $i -lt ${#_command__subcommand2___keys[@]} ]; do
+      if _command__subcommand2___tag arg $i; then
+        let i+=1
+        continue
+      fi
+      found=${_command___f[$i]}
+      if [[ "$found" == "" ]]; then
+        found=0
+      fi
+      max=${_command__subcommand2___occurs[$i]}
+      if [ $max -lt 0 ] || [ $found -lt $max ]; then
+        a+=($(echo "${_command__subcommand2___keys[$i]}"))
+      fi
+      let i+=1
+    done
+  else
+    if [ $_command___ai -lt ${#_command__subcommand2___args[@]} ]; then
+      arg=${_command__subcommand2___args[$_command___ai]}
+      act=${_command__subcommand2___acts[$arg]}
+      cmd=${_command__subcommand2___cmds[$arg]}
+      if [[ "$act" != "" ]]; then
+        _command___act $act
+        return 0
+      elif [[ "$cmd" != "" ]]; then
+        a=($(eval $cmd))
+      else
+        a=($(echo "${_command__subcommand2___words[$arg]}"))
+      fi
+    fi
+  fi
+  if [ ${#a[@]} -gt 0 ]; then
+    _command___add "${a[@]}"
+    return 0
+  fi
+  _command___any
+  return $?
+}
+
+function _command__subcommand2___lskey() {
+  setopt localoptions ksharrays
+  
+  if ! _command___keyerr; then
+    local act cmd a
+    act=${_command__subcommand2___acts[$_command___k]}
+    cmd=${_command__subcommand2___cmds[$_command___k]}
+    if [[ "$act" != "" ]]; then
+      :
+    elif [[ "$cmd" != "" ]]; then
+      a=($(eval $cmd))
+    else
+      a=($(echo "${_command__subcommand2___words[$_command___k]}"))
+    fi
+    if [[ "$act" != "" ]]; then
+      _command___act $act
+      return 0
+    elif [ ${#a[@]} -gt 0 ]; then
+      _command___add "${a[@]}"
+      return 0
+    fi
+  fi
+  _command___any
+  return $?
+}
+
+function _command__subcommand2___tag() {
+  setopt localoptions ksharrays
+  
+  local k
+  if [[ "$2" == "" ]]; then
+    if _command___keyerr; then return 1; fi
+    k=$_command___k
+  else
+    k=$2
+  fi
+  if [[ ${_command__subcommand2___tags[$k]} == *' '$1' '* ]]; then
+    return 0
+  fi
+  return 1
+}
+
+compdef _command command
