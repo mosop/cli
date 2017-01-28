@@ -6,7 +6,13 @@ module Cli::Spec
     end
 
     # Returns a new Crystal Spec expectation that asserts how a command exits.
-    def exit_command(output = nil, error = nil, code = nil)
+    #
+    # ### Parameters
+    #
+    # * *output* : An expected output. If nil, the test is omitted.
+    # * *error* : An expected error output. If nil, the test is omitted.
+    # * *code* : An expected exit code. If nil, the test is omitted.
+    def exit_command(output : (String | Regex | Nil) = nil, error : (String | Regex | Nil) = nil, code : Int32? = nil)
       Expectation.new(output, error, code)
     end
 
