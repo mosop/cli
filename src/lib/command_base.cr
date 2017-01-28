@@ -120,7 +120,7 @@ module Cli
           supercommand: __get_supercommand_class,
           inherited_class: {{ is_command_root || is_supercommand_root ? nil : "::#{@type.superclass}.__klass".id }},
           class_name: {{@type.name.stringify}},
-          name: ::StringInflection.kebab({{@type}}.name.split("::").last),
+          name: ::StringInflection.kebab(::{{@type}}.name.split("::").last),
           is_supercommand: {{is_supercommand}},
           abstract: {{@type.abstract?}},
           options: Options.__klass
