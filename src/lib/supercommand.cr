@@ -8,7 +8,7 @@ module Cli
     # ### Parameters
     # * name (String) : a target subcommand name
     # * default (Bool) : if true, it makes the target subcommand a default subcommand.
-    # * aliased (String) : makes the target sucommand an alias of the other subcommand that has the *aliased* name.
+    # * aliased (String) : makes the target subcommand an alias of the other subcommand that has the *aliased* name.
     macro command(name, default = false, aliased = nil)
       {%
         s = aliased || name
