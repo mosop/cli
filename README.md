@@ -21,54 +21,19 @@ dependencies:
 ### Option Parser
 
 ```crystal
-class Command < Cli::Command
+class Hello < Cli::Command
   class Options
-    string "--hello"
-  end
-
-  def run
-    puts "Hello, #{options.hello}!"
-  end
-end
-
-Command.run %w(--hello world) # prints "Hello, world!"
-```
-
-### Exit
-
-```crystal
-class OpenIt < Cli::Command
-  class Options
+    bool "--bye"
     arg "word"
   end
 
-  def valid?
-    args.word == "sesame"
-  end
-
   def run
-    if valid?
-      exit! "Opened!"
-    else
-      error! "Not opened!"
-    end
+    puts "#{options.bye? "Goodbye" : "Hello"}, #{options.word}!"
   end
 end
 
-OpenIt.run ARGV
-```
-
-Output:
-
-```sh
-$ open-it sesame
-Opened!
-$ echo $?
-0
-$ open-it paprika
-Not opened!
-$ echo $?
-1
+Hello.run %w(world) # prints "Hello, world!"
+Hello.run %w(--bye world) # prints "Goodbye, world!"
 ```
 
 ### Subcommand
@@ -162,20 +127,25 @@ class Call < Cli::Command
 end
 
 Call.run %w(--help)
-# call [OPTIONS] MESSAGE
-#
-# Receives an ancient message.
-#
-# Arguments:
-#   MESSAGE (required)  your message to call them
-#
-# Options:
-#   -w          wait for response
-#               (default: true)
-#   -W          disable -w
-#   -h, --help  show this help
-#
-# (C) 20XX mosop
+```
+
+Output:
+
+```
+call [OPTIONS] MESSAGE
+
+Receives an ancient message.
+
+Arguments:
+  MESSAGE (required)  your message to call them
+
+Options:
+  -w          wait for response
+              (default: true)
+  -W          disable -w
+  -h, --help  show this help
+
+(C) 20XX mosop
 ```
 
 ### Versioning
