@@ -65,6 +65,11 @@ class Cli::OptionModel
     ::Optarg::Model.on({{names}}, metadata: ::Cli::OptionMetadata.new(description: {{desc}})) {{block}}
   end
 
+  # Defines an unknown model item.
+  macro unknown(desc = nil, &block)
+    ::Optarg::Model.unknown(metadata: ::Cli::OptionMetadata.new(description: {{desc}})) {{block}}
+  end
+
   # Defines a handler model item for printing a help message.
   macro help(names = nil, desc = nil)
     {%
