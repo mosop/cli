@@ -11,5 +11,9 @@ module CliInternalSpecs::ShellCompletion
         string "-s"
       end
     end
+
+    class Subcommand3 < Cli::Command
+      replacer_command Subcommand2
+    end
   end
 end

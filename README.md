@@ -72,20 +72,20 @@ Polygon.run %w(hexagon)  # prints "6"
 Polygon.run %w()         # prints "3"
 ```
 
-### Aliasing
+### Replacing
 
 ```crystal
-class Command < Cli::Supercommand
-  command "l", aliased: "loooooooooong"
-
-  class Loooooooooong < Cli::Command
-    def run
-      sleep 1000
-    end
+class New < Cli::Command
+  def run
+    puts "new!"
   end
 end
 
-Command.run %w(l) # sleeps
+class Obsolete < Cli::Command
+  replacer_command New
+end
+
+Obsolete.run # prints "new!"
 ```
 
 ### Inheritance

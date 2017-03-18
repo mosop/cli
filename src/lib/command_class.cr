@@ -18,6 +18,7 @@ module Cli
     property! footer : String?
     property! unparsed_args : String?
     getter! options : Optarg::ModelClass?
+    property? completable = true
 
     def initialize(@supercommand, @inherited_class, @class_name : String, name, @abstract : Bool, @is_supercommand : Bool, @options : Optarg::ModelClass)
       self.name = name

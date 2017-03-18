@@ -52,69 +52,83 @@ module Cli
         end
 
         # :nodoc:
-        class ::Cli::CommandClass
-          {% unless @type.abstract? %}
-            # :nodoc:
-            def {{snake_type_id}}__run(argv)
-              {{snake_type_id}}__run(nil, argv)
-            end
-
-            # :nodoc:
-            def {{snake_type_id}}__run(argv, &block : ::{{@type}} ->)
-              {{snake_type_id}}__run(nil, argv, &block)
-            end
-
-            # :nodoc:
-            def {{snake_type_id}}__run(previous, argv)
-              {{snake_type_id}}__run(previous, argv) {}
-            end
-
-            # :nodoc:
-            def {{snake_type_id}}__run(previous, argv, &block : ::{{@type}} ->)
-              cmd = ::{{@type}}.new(previous, argv)
-              rescue_exit(cmd) do
-                rescue_error(cmd) do
-                  begin
-                    cmd.__option_data.__parse
-                    result = cmd.run
-                    cmd.io.close_writer unless previous
-                    yield cmd
-                    result
-                  ensure
-                    cmd.io.close_writer unless previous
-                  end
-                end
+        macro __define_run(klass)
+          \{%
+            klass = klass.resolve if klass.class_name == "Path"
+          \%}
+          # :nodoc:
+          class ::Cli::CommandClass
+            {% unless @type.abstract? %}
+              # :nodoc:
+              def {{snake_type_id}}__run(argv)
+                {{snake_type_id}}__run(nil, argv)
               end
-            end
 
-            # :nodoc:
-            def rescue_exit(cmd)
-              if cmd.__previous?
-                yield
-              else
-                begin
-                  result = yield
-                  cmd.run_callbacks_for_exit(::Cli::Exit.new) {}
-                  result
-                rescue ex : ::Cli::Exit
-                  if ::Cli.test?
-                    cmd.run_callbacks_for_exit(ex) {}
-                    ex
-                  else
-                    cmd.run_callbacks_for_exit ex do
-                      ex.stdout.puts ex.message if ex.message
+              # :nodoc:
+              def {{snake_type_id}}__run(argv, &block : ::\{{klass}} ->)
+                {{snake_type_id}}__run(nil, argv, &block)
+              end
+
+              # :nodoc:
+              def {{snake_type_id}}__run(previous, argv)
+                {{snake_type_id}}__run(previous, argv) {}
+              end
+
+              # :nodoc:
+              def {{snake_type_id}}__run(previous, argv, &block : ::\{{klass}} ->)
+                cmd = ::\{{klass}}.new(previous, argv)
+                rescue_exit(cmd) do
+                  rescue_error(cmd) do
+                    begin
+                      cmd.__option_data.__parse
+                      result = cmd.run
+                      cmd.io.close_writer unless previous
+                      yield cmd
+                      result
+                    ensure
+                      cmd.io.close_writer unless previous
                     end
-                    exit ex.exit_code
                   end
                 end
               end
-            end
 
-            @@runners[{{@type.name.stringify}}] = Runner.new do |previous, args|
-              ::{{@type}}.__klass.{{snake_type_id}}__run(previous, args)
-            end
-          {% end %}
+              # :nodoc:
+              def rescue_exit(cmd)
+                if cmd.__previous?
+                  yield
+                else
+                  begin
+                    result = yield
+                    cmd.run_callbacks_for_exit(::Cli::Exit.new) {}
+                    result
+                  rescue ex : ::Cli::Exit
+                    if ::Cli.test?
+                      cmd.run_callbacks_for_exit(ex) {}
+                      ex
+                    else
+                      cmd.run_callbacks_for_exit ex do
+                        ex.stdout.puts ex.message if ex.message
+                      end
+                      exit ex.exit_code
+                    end
+                  end
+                end
+              end
+
+              @@runners[\{{klass.name.stringify}}] = Runner.new do |previous, args|
+                ::\{{klass}}.__klass.{{snake_type_id}}__run(previous, args)
+              end
+            {% end %}
+          end
+
+          # Run the command.
+          #
+          # This method is automatically defined by the Crystal CLI library.
+          def self.run(argv : Array(String) = \\%w(), &block : ::\{{klass}} ->)
+            __klass.{{snake_type_id}}__run(argv, &block)
+          end
         end
+        __define_run ::{{@type}}
 
         @@__klass = ::Cli::CommandClass.new(
           supercommand: __get_supercommand_class,
@@ -156,13 +170,6 @@ module Cli
           # This method is automatically defined by the Crystal CLI library.
           def self.run(previous : ::Cli::CommandBase, argv : Array(String) = \%w())
             __klass.{{snake_type_id}}__run(previous, argv)
-          end
-
-          # Run the command.
-          #
-          # This method is automatically defined by the Crystal CLI library.
-          def self.run(argv : Array(String) = \%w(), &block : ::{{@type}} ->)
-            __klass.{{snake_type_id}}__run(argv, &block)
           end
         {% end %}
 
@@ -362,6 +369,16 @@ module Cli
     # Returns the :err IO.
     def err
       io[:err]
+    end
+
+    # :nodoc:
+    def self.replacer_command
+    end
+
+    # Replaces this command with the *klass* command.
+    macro replacer_command(klass)
+      __define_run {{klass}}
+      @@__klass.completable = false
     end
   end
 end

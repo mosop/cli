@@ -17,12 +17,13 @@ module Cli::OptionModelDefinitions
     end
 
     def completion_words(gen)
-      command_class.subcommands.keys
+      command_class.subcommands.select{|k,v| v.completable?}.map{|i| i[0]}
     end
 
     def completion_next_models_by_value(gen)
       ({} of String => Optarg::ModelClass).tap do |h|
         command_class.subcommands.each do |k, v|
+          next unless v.completable?
           h[k] = v.options
         end
       end
