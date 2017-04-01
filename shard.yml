@@ -1,10 +1,10 @@
 name: cli
-version: 0.6.8
+version: 0.6.9
 
 authors:
   - mosop
 
-crystal: 0.21.0
+crystal: 0.21.1
 
 dependencies:
   optarg:
@@ -17,7 +17,7 @@ dependencies:
 development_dependencies:
   have_files:
     github: mosop/have_files
-    version: ~> 0.3.2
+    version: ~> 0.3.3
   crystal_plus:
     github: mosop/crystal_plus
     version: ~> 0.1.3
