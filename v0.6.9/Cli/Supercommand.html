@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta id="repository-name" content="github.com/mosop/cli">
+  <link href="../css/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../js/doc.js"></script>
+  <title>Cli::Supercommand - github.com/mosop/cli</title>
+</head>
+<body>
+
+<div id="types-list">
+  <div id="search-box">
+    <input type="search" id="search-input" placeholder="Search...">
+  </div>
+
+  <ul>
+    <li><a href="../index.html">README</a></li>
+  </ul>
+
+  <ul>
+  
+  <li class="parent open current" data-id="github.com/mosop/cli/Cli" data-name="cli">
+      <a href="../Cli.html">Cli</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Command" data-name="cli::command">
+      <a href="../Cli/Command.html">Command</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/CommandBase" data-name="cli::commandbase">
+      <a href="../Cli/CommandBase.html">CommandBase</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Exit" data-name="cli::exit">
+      <a href="../Cli/Exit.html">Exit</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/IoHash" data-name="cli::iohash">
+      <a href="../Cli/IoHash.html">IoHash</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/IoHash/NameArg" data-name="cli::iohash::namearg">
+      <a href="../Cli/IoHash/NameArg.html">NameArg</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/Ios" data-name="cli::ios">
+      <a href="../Cli/Ios.html">Ios</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Ios/Pipe" data-name="cli::ios::pipe">
+      <a href="../Cli/Ios/Pipe.html">Pipe</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/OptionModel" data-name="cli::optionmodel">
+      <a href="../Cli/OptionModel.html">OptionModel</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/OptionModel/Parser" data-name="cli::optionmodel::parser">
+      <a href="../Cli/OptionModel/Parser.html">Parser</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/Spec" data-name="cli::spec">
+      <a href="../Cli/Spec.html">Spec</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Spec/Helper" data-name="cli::spec::helper">
+      <a href="../Cli/Spec/Helper.html">Helper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" current" data-id="github.com/mosop/cli/Cli/Supercommand" data-name="cli::supercommand">
+      <a href="../Cli/Supercommand.html">Supercommand</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+</div>
+
+<div id="main-content">
+<h1 class="type-name">
+
+  <span class="kind">abstract class</span> Cli::Supercommand
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cli/Supercommand.html">Cli::Supercommand</a></li><li class="superclass"><a href="../Cli/CommandBase.html">Cli::CommandBase</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>Overview</h2>
+
+  <p>The base of supercommand classes.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/mosop/cli/blob/2ce3d38288b1a701b61ff352f2ebca427f87a77c/src/lib/supercommand.cr#L5" target="_blank">lib/supercommand.cr</a>
+    
+    <br/>
+  
+
+
+
+
+
+
+
+
+
+  <h2>Macro Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#command%28name%2Cdefault%3Dfalse%2Caliased%3Dnil%29-macro" class="signature"><strong>command</strong>(name, default = false, aliased = nil)</a>
+        
+          <div class="summary"><p>Sets subcommand attributes.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+<div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../Cli/CommandBase.html">Cli::CommandBase</a></code></h3>
+  
+  
+    <a href="../Cli/CommandBase.html#args-instance-method" class="tooltip">
+      <span>args</span>
+    args</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#err-instance-method" class="tooltip">
+      <span>err</span>
+    err</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#error%21%28message%3AString%3F%3Dnil%2Ccode%3AInt32%3F%3Dnil%2Chelp%3ABool%3Dfalse%2Cindent%3D2%29-instance-method" class="tooltip">
+      <span>error!(message : String? = <span class="n">nil</span>, code : Int32? = <span class="n">nil</span>, help : Bool = <span class="n">false</span>, indent = <span class="n">2</span>)</span>
+    error!</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#exit%21%28message%3AString%3F%3Dnil%2Cerror%3ABool%3Dfalse%2Ccode%3AInt32%3F%3Dnil%2Chelp%3Dfalse%2Cindent%3D2%29-instance-method" class="tooltip">
+      <span>exit!(message : String? = <span class="n">nil</span>, error : Bool = <span class="n">false</span>, code : Int32? = <span class="n">nil</span>, help = <span class="n">false</span>, indent = <span class="n">2</span>)</span>
+    exit!</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#help%21%28message%3AString%3F%3Dnil%2Cerror%3ABool%3F%3Dnil%2Ccode%3AInt32%3F%3Dnil%2Cindent%3D2%29-instance-method" class="tooltip">
+      <span>help!(message : String? = <span class="n">nil</span>, error : Bool? = <span class="n">nil</span>, code : Int32? = <span class="n">nil</span>, indent = <span class="n">2</span>)</span>
+    help!</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#io-instance-method" class="tooltip">
+      <span>io</span>
+    io</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#nameless_args%3AArray%28String%29-instance-method" class="tooltip">
+      <span>nameless_args : Array(String)</span>
+    nameless_args</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#options-instance-method" class="tooltip">
+      <span>options</span>
+    options</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#out-instance-method" class="tooltip">
+      <span>out</span>
+    out</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#print%28%2Aargs%29-instance-method" class="tooltip">
+      <span>print(*args)</span>
+    print</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#puts%28%2Aargs%29-instance-method" class="tooltip">
+      <span>puts(*args)</span>
+    puts</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#run-instance-method" class="tooltip">
+      <span>run</span>
+    run</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#unparsed_args%3AArray%28String%29-instance-method" class="tooltip">
+      <span>unparsed_args : Array(String)</span>
+    unparsed_args</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#version%3AString-instance-method" class="tooltip">
+      <span>version : String</span>
+    version</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#version%21-instance-method" class="tooltip">
+      <span>version!</span>
+    version!</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#version%3F%3AString%3F-instance-method" class="tooltip">
+      <span>version? : String?</span>
+    version?</a>
+    
+  
+
+
+    
+
+  <h3>Class methods inherited from class <code><a href="../Cli/CommandBase.html">Cli::CommandBase</a></code></h3>
+  
+  
+    <a href="../Cli/CommandBase.html#command_name%28value%3AString%29-class-method" class="tooltip">
+      <span>command_name(value : String)</span>
+    command_name</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#disable_help_on_parsing_error%21-class-method" class="tooltip">
+      <span>disable_help_on_parsing_error!</span>
+    disable_help_on_parsing_error!</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#generate_bash_completion-class-method" class="tooltip">
+      <span>generate_bash_completion</span>
+    generate_bash_completion</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#generate_zsh_completion%28functional%3ABool%3Dtrue%29-class-method" class="tooltip">
+      <span>generate_zsh_completion(functional : Bool = <span class="n">true</span>)</span>
+    generate_zsh_completion</a>, 
+    
+  
+    <a href="../Cli/CommandBase.html#version%28value%3AString%29-class-method" class="tooltip">
+      <span>version(value : String)</span>
+    version</a>
+    
+  
+
+
+  
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+  
+</div>
+
+
+
+
+
+
+  <h2>Macro Detail</h2>
+  
+    <div class="entry-detail" id="command&#40;name,default&#61;false,aliased&#61;nil&#41;-macro">
+      <div class="signature">
+        
+        macro <strong>command</strong>(name, default = false, aliased = nil)
+
+        <a class="method-permalink" href="#command%28name%2Cdefault%3Dfalse%2Caliased%3Dnil%29-macro">#</a>
+      </div>
+      
+        <div class="doc"><p>Sets subcommand attributes.</p>
+
+<h3>Parameters</h3>
+
+<ul><li>name (String) : a target subcommand name</li><li>default (Bool) : if true, it makes the target subcommand a default subcommand.</li><li>aliased (String) : makes the target subcommand an alias of the other subcommand that has the <em>aliased</em> name.</li></ul></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/2ce3d38288b1a701b61ff352f2ebca427f87a77c/src/lib/supercommand.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+</div>
+
+</body>
+</html>

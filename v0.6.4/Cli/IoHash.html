@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta id="repository-name" content="github.com/mosop/cli">
+  <link href="../css/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../js/doc.js"></script>
+  <title>Cli::IoHash - github.com/mosop/cli</title>
+</head>
+<body>
+
+<div id="types-list">
+  <div id="search-box">
+    <input type="search" id="search-input" placeholder="Search...">
+  </div>
+
+  <ul>
+    <li><a href="../index.html">README</a></li>
+  </ul>
+
+  <ul>
+  
+  <li class="parent open current" data-id="github.com/mosop/cli/Cli" data-name="cli">
+      <a href="../Cli.html">Cli</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Command" data-name="cli::command">
+      <a href="../Cli/Command.html">Command</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/CommandBase" data-name="cli::commandbase">
+      <a href="../Cli/CommandBase.html">CommandBase</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Exit" data-name="cli::exit">
+      <a href="../Cli/Exit.html">Exit</a>
+      
+    </li>
+  
+  <li class="parent current" data-id="github.com/mosop/cli/Cli/IoHash" data-name="cli::iohash">
+      <a href="../Cli/IoHash.html">IoHash</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/IoHash/NameArg" data-name="cli::iohash::namearg">
+      <a href="../Cli/IoHash/NameArg.html">NameArg</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/Ios" data-name="cli::ios">
+      <a href="../Cli/Ios.html">Ios</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Ios/Pipe" data-name="cli::ios::pipe">
+      <a href="../Cli/Ios/Pipe.html">Pipe</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/OptionModel" data-name="cli::optionmodel">
+      <a href="../Cli/OptionModel.html">OptionModel</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/OptionModel/Parser" data-name="cli::optionmodel::parser">
+      <a href="../Cli/OptionModel/Parser.html">Parser</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/Spec" data-name="cli::spec">
+      <a href="../Cli/Spec.html">Spec</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Spec/Helper" data-name="cli::spec::helper">
+      <a href="../Cli/Spec/Helper.html">Helper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Supercommand" data-name="cli::supercommand">
+      <a href="../Cli/Supercommand.html">Supercommand</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+</div>
+
+<div id="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Cli::IoHash
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cli/IoHash.html">Cli::IoHash</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>Overview</h2>
+
+  <p>Contains named IOs.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/mosop/cli/blob/545012af75bdaf6c06e907a309db20a416caeb7f/src/lib/io_hash.cr#L3" target="_blank">lib/io_hash.cr</a>
+    
+    <br/>
+  
+
+
+
+
+
+
+
+  <h2>Instance Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#%5B%5D%28name%3ANameArg%29-instance-method" class="signature"><strong>#[]</strong>(name : NameArg)</a>
+        
+          <div class="summary"><p>Gets a named IO.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#%5B%5D%3D%28name%3ANameArg%2Cwriter%3AIO%29-instance-method" class="signature"><strong>#[]=</strong>(name : NameArg, writer : IO)</a>
+        
+          <div class="summary"><p>Sets a named IO.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+  
+</div>
+
+
+
+
+  <h2>Instance Method Detail</h2>
+  
+    <div class="entry-detail" id="&#91;&#93;&#40;name:NameArg&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>[]</strong>(name : <a href="../Cli/IoHash/NameArg.html">NameArg</a>)
+
+        <a class="method-permalink" href="#%5B%5D%28name%3ANameArg%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Gets a named IO.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/545012af75bdaf6c06e907a309db20a416caeb7f/src/lib/io_hash.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="&#91;&#93;&#61;&#40;name:NameArg,writer:IO&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>[]=</strong>(name : <a href="../Cli/IoHash/NameArg.html">NameArg</a>, writer : IO)
+
+        <a class="method-permalink" href="#%5B%5D%3D%28name%3ANameArg%2Cwriter%3AIO%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Sets a named IO.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/545012af75bdaf6c06e907a309db20a416caeb7f/src/lib/io_hash.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>

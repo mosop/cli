@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta id="repository-name" content="github.com/mosop/cli">
+  <link href="../css/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../js/doc.js"></script>
+  <title>Cli::OptionModel - github.com/mosop/cli</title>
+</head>
+<body>
+
+<div id="types-list">
+  <div id="search-box">
+    <input type="search" id="search-input" placeholder="Search...">
+  </div>
+
+  <ul>
+    <li><a href="../index.html">README</a></li>
+  </ul>
+
+  <ul>
+  
+  <li class="parent open current" data-id="github.com/mosop/cli/Cli" data-name="cli">
+      <a href="../Cli.html">Cli</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Command" data-name="cli::command">
+      <a href="../Cli/Command.html">Command</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/CommandBase" data-name="cli::commandbase">
+      <a href="../Cli/CommandBase.html">CommandBase</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Exit" data-name="cli::exit">
+      <a href="../Cli/Exit.html">Exit</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/IoHash" data-name="cli::iohash">
+      <a href="../Cli/IoHash.html">IoHash</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/IoHash/NameArg" data-name="cli::iohash::namearg">
+      <a href="../Cli/IoHash/NameArg.html">NameArg</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/Ios" data-name="cli::ios">
+      <a href="../Cli/Ios.html">Ios</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Ios/Pipe" data-name="cli::ios::pipe">
+      <a href="../Cli/Ios/Pipe.html">Pipe</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent current" data-id="github.com/mosop/cli/Cli/OptionModel" data-name="cli::optionmodel">
+      <a href="../Cli/OptionModel.html">OptionModel</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/OptionModel/Parser" data-name="cli::optionmodel::parser">
+      <a href="../Cli/OptionModel/Parser.html">Parser</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/Spec" data-name="cli::spec">
+      <a href="../Cli/Spec.html">Spec</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Spec/Helper" data-name="cli::spec::helper">
+      <a href="../Cli/Spec/Helper.html">Helper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Supercommand" data-name="cli::supercommand">
+      <a href="../Cli/Supercommand.html">Supercommand</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+</div>
+
+<div id="main-content">
+<h1 class="type-name">
+
+  <span class="kind">abstract class</span> Cli::OptionModel
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cli/OptionModel.html">Cli::OptionModel</a></li><li class="superclass">Optarg::Model</li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>Overview</h2>
+
+  <p>Inherits the Optarg::Model class for parsing command-line arguments.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model.cr#L3" target="_blank">lib/option_model.cr</a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model/dsl.cr#L1" target="_blank">lib/option_model/dsl.cr</a>
+    
+    <br/>
+  
+
+
+
+
+
+
+
+
+
+  <h2>Instance Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#command-instance-method" class="signature"><strong>#command</strong></a>
+        
+          <div class="summary"><p>Returns a related command instance.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>Macro Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#arg%28name%2Cstop%3Dnil%2Cdefault%3Dnil%2Crequired%3Dnil%2Cdesc%3Dnil%2Cany_of%3Dnil%2Ccomplete%3Dnil%29-macro" class="signature"><strong>arg</strong>(name, stop = nil, default = nil, required = nil, desc = nil, any_of = nil, complete = nil)</a>
+        
+          <div class="summary"><p>Defines a String argument model item.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#arg_array%28names%2Cdefault%3Dnil%2Cmin%3Dnil%2Cdesc%3Dnil%2Cvar%3Dnil%2Cany_item_of%3Dnil%2Ccomplete%3Dnil%29-macro" class="signature"><strong>arg_array</strong>(names, default = nil, min = nil, desc = nil, var = nil, any_item_of = nil, complete = nil)</a>
+        
+          <div class="summary"><p>Defines an Array(String) argument model item.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#array%28names%2Cdefault%3Dnil%2Cmin%3Dnil%2Cdesc%3Dnil%2Cvar%3Dnil%2Cany_item_of%3Dnil%2Ccomplete%3Dnil%29-macro" class="signature"><strong>array</strong>(names, default = nil, min = nil, desc = nil, var = nil, any_item_of = nil, complete = nil)</a>
+        
+          <div class="summary"><p>Defines an Array(String) option model item.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#bool%28names%2Cstop%3Dnil%2Cdefault%3Dnil%2Cnot%3Dnil%2Cdesc%3Dnil%29-macro" class="signature"><strong>bool</strong>(names, stop = nil, default = nil, not = nil, desc = nil)</a>
+        
+          <div class="summary"><p>Defines a Bool option model item.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#help%28names%3Dnil%2Cdesc%3Dnil%29-macro" class="signature"><strong>help</strong>(names = nil, desc = nil)</a>
+        
+          <div class="summary"><p>Defines a handler model item for printing a help message.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on%28names%2Cdesc%3Dnil%29-macro" class="signature"><strong>on</strong>(names, desc = nil)</a>
+        
+          <div class="summary"><p>Defines a handler model item.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#string%28names%2Cstop%3Dnil%2Cdefault%3Dnil%2Crequired%3Dnil%2Cdesc%3Dnil%2Cvar%3Dnil%2Cany_of%3Dnil%2Ccomplete%3Dnil%29-macro" class="signature"><strong>string</strong>(names, stop = nil, default = nil, required = nil, desc = nil, var = nil, any_of = nil, complete = nil)</a>
+        
+          <div class="summary"><p>Defines a String option model item.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unknown%28desc%3Dnil%29-macro" class="signature"><strong>unknown</strong>(desc = nil)</a>
+        
+          <div class="summary"><p>Defines an unknown model item.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#version%28names%3Dnil%2Cdesc%3Dnil%29-macro" class="signature"><strong>version</strong>(names = nil, desc = nil)</a>
+        
+          <div class="summary"><p>Defines a handler model item for printing a version string.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+
+
+
+
+  <h2>Instance Method Detail</h2>
+  
+    <div class="entry-detail" id="command-instance-method">
+      <div class="signature">
+        
+        def <strong>command</strong>
+
+        <a class="method-permalink" href="#command-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns a related command instance.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>Macro Detail</h2>
+  
+    <div class="entry-detail" id="arg&#40;name,stop&#61;nil,default&#61;nil,required&#61;nil,desc&#61;nil,any_of&#61;nil,complete&#61;nil&#41;-macro">
+      <div class="signature">
+        
+        macro <strong>arg</strong>(name, stop = nil, default = nil, required = nil, desc = nil, any_of = nil, complete = nil)
+
+        <a class="method-permalink" href="#arg%28name%2Cstop%3Dnil%2Cdefault%3Dnil%2Crequired%3Dnil%2Cdesc%3Dnil%2Cany_of%3Dnil%2Ccomplete%3Dnil%29-macro">#</a>
+      </div>
+      
+        <div class="doc"><p>Defines a String argument model item.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model/dsl.cr#L39" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="arg_array&#40;names,default&#61;nil,min&#61;nil,desc&#61;nil,var&#61;nil,any_item_of&#61;nil,complete&#61;nil&#41;-macro">
+      <div class="signature">
+        
+        macro <strong>arg_array</strong>(names, default = nil, min = nil, desc = nil, var = nil, any_item_of = nil, complete = nil)
+
+        <a class="method-permalink" href="#arg_array%28names%2Cdefault%3Dnil%2Cmin%3Dnil%2Cdesc%3Dnil%2Cvar%3Dnil%2Cany_item_of%3Dnil%2Ccomplete%3Dnil%29-macro">#</a>
+      </div>
+      
+        <div class="doc"><p>Defines an Array(String) argument model item.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model/dsl.cr#L52" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="array&#40;names,default&#61;nil,min&#61;nil,desc&#61;nil,var&#61;nil,any_item_of&#61;nil,complete&#61;nil&#41;-macro">
+      <div class="signature">
+        
+        macro <strong>array</strong>(names, default = nil, min = nil, desc = nil, var = nil, any_item_of = nil, complete = nil)
+
+        <a class="method-permalink" href="#array%28names%2Cdefault%3Dnil%2Cmin%3Dnil%2Cdesc%3Dnil%2Cvar%3Dnil%2Cany_item_of%3Dnil%2Ccomplete%3Dnil%29-macro">#</a>
+      </div>
+      
+        <div class="doc"><p>Defines an Array(String) option model item.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model/dsl.cr#L27" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="bool&#40;names,stop&#61;nil,default&#61;nil,not&#61;nil,desc&#61;nil&#41;-macro">
+      <div class="signature">
+        
+        macro <strong>bool</strong>(names, stop = nil, default = nil, not = nil, desc = nil)
+
+        <a class="method-permalink" href="#bool%28names%2Cstop%3Dnil%2Cdefault%3Dnil%2Cnot%3Dnil%2Cdesc%3Dnil%29-macro">#</a>
+      </div>
+      
+        <div class="doc"><p>Defines a Bool option model item.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model/dsl.cr#L16" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="help&#40;names&#61;nil,desc&#61;nil&#41;-macro">
+      <div class="signature">
+        
+        macro <strong>help</strong>(names = nil, desc = nil)
+
+        <a class="method-permalink" href="#help%28names%3Dnil%2Cdesc%3Dnil%29-macro">#</a>
+      </div>
+      
+        <div class="doc"><p>Defines a handler model item for printing a help message.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model/dsl.cr#L74" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on&#40;names,desc&#61;nil&#41;-macro">
+      <div class="signature">
+        
+        macro <strong>on</strong>(names, desc = nil)
+
+        <a class="method-permalink" href="#on%28names%2Cdesc%3Dnil%29-macro">#</a>
+      </div>
+      
+        <div class="doc"><p>Defines a handler model item.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model/dsl.cr#L64" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="string&#40;names,stop&#61;nil,default&#61;nil,required&#61;nil,desc&#61;nil,var&#61;nil,any_of&#61;nil,complete&#61;nil&#41;-macro">
+      <div class="signature">
+        
+        macro <strong>string</strong>(names, stop = nil, default = nil, required = nil, desc = nil, var = nil, any_of = nil, complete = nil)
+
+        <a class="method-permalink" href="#string%28names%2Cstop%3Dnil%2Cdefault%3Dnil%2Crequired%3Dnil%2Cdesc%3Dnil%2Cvar%3Dnil%2Cany_of%3Dnil%2Ccomplete%3Dnil%29-macro">#</a>
+      </div>
+      
+        <div class="doc"><p>Defines a String option model item.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model/dsl.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unknown&#40;desc&#61;nil&#41;-macro">
+      <div class="signature">
+        
+        macro <strong>unknown</strong>(desc = nil)
+
+        <a class="method-permalink" href="#unknown%28desc%3Dnil%29-macro">#</a>
+      </div>
+      
+        <div class="doc"><p>Defines an unknown model item.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model/dsl.cr#L69" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="version&#40;names&#61;nil,desc&#61;nil&#41;-macro">
+      <div class="signature">
+        
+        macro <strong>version</strong>(names = nil, desc = nil)
+
+        <a class="method-permalink" href="#version%28names%3Dnil%2Cdesc%3Dnil%29-macro">#</a>
+      </div>
+      
+        <div class="doc"><p>Defines a handler model item for printing a version string.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/43c22a73eebc6a5381e007c8de453140be37bb70/src/lib/option_model/dsl.cr#L82" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+</div>
+
+</body>
+</html>

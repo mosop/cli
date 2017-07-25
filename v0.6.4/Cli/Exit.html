@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta id="repository-name" content="github.com/mosop/cli">
+  <link href="../css/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../js/doc.js"></script>
+  <title>Cli::Exit - github.com/mosop/cli</title>
+</head>
+<body>
+
+<div id="types-list">
+  <div id="search-box">
+    <input type="search" id="search-input" placeholder="Search...">
+  </div>
+
+  <ul>
+    <li><a href="../index.html">README</a></li>
+  </ul>
+
+  <ul>
+  
+  <li class="parent open current" data-id="github.com/mosop/cli/Cli" data-name="cli">
+      <a href="../Cli.html">Cli</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Command" data-name="cli::command">
+      <a href="../Cli/Command.html">Command</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/CommandBase" data-name="cli::commandbase">
+      <a href="../Cli/CommandBase.html">CommandBase</a>
+      
+    </li>
+  
+  <li class=" current" data-id="github.com/mosop/cli/Cli/Exit" data-name="cli::exit">
+      <a href="../Cli/Exit.html">Exit</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/IoHash" data-name="cli::iohash">
+      <a href="../Cli/IoHash.html">IoHash</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/IoHash/NameArg" data-name="cli::iohash::namearg">
+      <a href="../Cli/IoHash/NameArg.html">NameArg</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/Ios" data-name="cli::ios">
+      <a href="../Cli/Ios.html">Ios</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Ios/Pipe" data-name="cli::ios::pipe">
+      <a href="../Cli/Ios/Pipe.html">Pipe</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/OptionModel" data-name="cli::optionmodel">
+      <a href="../Cli/OptionModel.html">OptionModel</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/OptionModel/Parser" data-name="cli::optionmodel::parser">
+      <a href="../Cli/OptionModel/Parser.html">Parser</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/Spec" data-name="cli::spec">
+      <a href="../Cli/Spec.html">Spec</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Spec/Helper" data-name="cli::spec::helper">
+      <a href="../Cli/Spec/Helper.html">Helper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Supercommand" data-name="cli::supercommand">
+      <a href="../Cli/Supercommand.html">Supercommand</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+</div>
+
+<div id="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Cli::Exit
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cli/Exit.html">Cli::Exit</a></li><li class="superclass">Exception</li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>Overview</h2>
+
+  <p>Contains information about exit.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/mosop/cli/blob/545012af75bdaf6c06e907a309db20a416caeb7f/src/lib/exit.cr#L3" target="_blank">lib/exit.cr</a>
+    
+    <br/>
+  
+
+
+
+
+
+
+
+  <h2>Instance Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#error%3F-instance-method" class="signature"><strong>#error?</strong></a>
+        
+          <div class="summary"><p>Tests if the exit code is non-zero.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#exit_code%3AInt32-instance-method" class="signature"><strong>#exit_code</strong> : Int32</a>
+        
+          <div class="summary"><p>Returns an exit code.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#success%3F-instance-method" class="signature"><strong>#success?</strong></a>
+        
+          <div class="summary"><p>Tests if the exit code is zero.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+  
+</div>
+
+
+
+
+  <h2>Instance Method Detail</h2>
+  
+    <div class="entry-detail" id="error?-instance-method">
+      <div class="signature">
+        
+        def <strong>error?</strong>
+
+        <a class="method-permalink" href="#error%3F-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Tests if the exit code is non-zero.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/545012af75bdaf6c06e907a309db20a416caeb7f/src/lib/exit.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="exit_code:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>exit_code</strong> : Int32
+
+        <a class="method-permalink" href="#exit_code%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns an exit code.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/545012af75bdaf6c06e907a309db20a416caeb7f/src/lib/exit.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="success?-instance-method">
+      <div class="signature">
+        
+        def <strong>success?</strong>
+
+        <a class="method-permalink" href="#success%3F-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Tests if the exit code is zero.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/mosop/cli/blob/545012af75bdaf6c06e907a309db20a416caeb7f/src/lib/exit.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>

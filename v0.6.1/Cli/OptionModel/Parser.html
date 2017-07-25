@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta id="repository-name" content="github.com/mosop/cli">
+  <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../../js/doc.js"></script>
+  <title>Cli::OptionModel::Parser - github.com/mosop/cli</title>
+</head>
+<body>
+
+<div id="types-list">
+  <div id="search-box">
+    <input type="search" id="search-input" placeholder="Search...">
+  </div>
+
+  <ul>
+    <li><a href="../../index.html">README</a></li>
+  </ul>
+
+  <ul>
+  
+  <li class="parent open current" data-id="github.com/mosop/cli/Cli" data-name="cli">
+      <a href="../../Cli.html">Cli</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Command" data-name="cli::command">
+      <a href="../../Cli/Command.html">Command</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/CommandBase" data-name="cli::commandbase">
+      <a href="../../Cli/CommandBase.html">CommandBase</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Exit" data-name="cli::exit">
+      <a href="../../Cli/Exit.html">Exit</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/IoHash" data-name="cli::iohash">
+      <a href="../../Cli/IoHash.html">IoHash</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/IoHash/NameArg" data-name="cli::iohash::namearg">
+      <a href="../../Cli/IoHash/NameArg.html">NameArg</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/Ios" data-name="cli::ios">
+      <a href="../../Cli/Ios.html">Ios</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Ios/Pipe" data-name="cli::ios::pipe">
+      <a href="../../Cli/Ios/Pipe.html">Pipe</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent open current" data-id="github.com/mosop/cli/Cli/OptionModel" data-name="cli::optionmodel">
+      <a href="../../Cli/OptionModel.html">OptionModel</a>
+      
+        <ul>
+  
+  <li class=" current" data-id="github.com/mosop/cli/Cli/OptionModel/Parser" data-name="cli::optionmodel::parser">
+      <a href="../../Cli/OptionModel/Parser.html">Parser</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/mosop/cli/Cli/Spec" data-name="cli::spec">
+      <a href="../../Cli/Spec.html">Spec</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Spec/Helper" data-name="cli::spec::helper">
+      <a href="../../Cli/Spec/Helper.html">Helper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/mosop/cli/Cli/Supercommand" data-name="cli::supercommand">
+      <a href="../../Cli/Supercommand.html">Supercommand</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+</div>
+
+<div id="main-content">
+<h1 class="type-name">
+
+  <span class="kind">abstract class</span> Cli::OptionModel::Parser
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a></li><li class="superclass">Optarg::Parser</li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>Overview</h2>
+
+  <p>A dedicated Optarg::Parser subclass for the model class.</p>
+
+<p>This class is automatically defined by the optarg library.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/mosop/cli/blob/1e0e68ad3c27f62ef50b48dc59049b9858cd2933/src/lib/option_model.cr#L3" target="_blank">lib/option_model.cr</a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>Class Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#after_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method" class="signature"><strong>.after_validate</strong>(name, proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#after_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method" class="signature"><strong>.after_validate</strong>(proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#after_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-class-method" class="signature"><strong>.after_validate</strong>(name = <span class="n">nil</span>, &block : Cli::OptionModel::Parser, Cli::OptionModel -> Nil)</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#around_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method" class="signature"><strong>.around_validate</strong>(name, proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#around_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method" class="signature"><strong>.around_validate</strong>(proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#around_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-class-method" class="signature"><strong>.around_validate</strong>(name = <span class="n">nil</span>, &block : Cli::OptionModel::Parser, Cli::OptionModel -> Nil)</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#before_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method" class="signature"><strong>.before_validate</strong>(name, proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#before_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method" class="signature"><strong>.before_validate</strong>(proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#before_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-class-method" class="signature"><strong>.before_validate</strong>(name = <span class="n">nil</span>, &block : Cli::OptionModel::Parser, Cli::OptionModel -> Nil)</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method" class="signature"><strong>.on_validate</strong>(name, proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method" class="signature"><strong>.on_validate</strong>(proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-class-method" class="signature"><strong>.on_validate</strong>(name = <span class="n">nil</span>, &block : Cli::OptionModel::Parser, Cli::OptionModel -> Nil)</a>
+        
+          <div class="summary"><p>Registers a callback for the validate group.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>Instance Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#after_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method" class="signature"><strong>#after_validate</strong>(name, proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#after_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method" class="signature"><strong>#after_validate</strong>(proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#after_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-instance-method" class="signature"><strong>#after_validate</strong>(name = <span class="n">nil</span>, &block : Cli::OptionModel::Parser, Cli::OptionModel -> Nil)</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#around_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method" class="signature"><strong>#around_validate</strong>(name, proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#around_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method" class="signature"><strong>#around_validate</strong>(proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#around_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-instance-method" class="signature"><strong>#around_validate</strong>(name = <span class="n">nil</span>, &block : Cli::OptionModel::Parser, Cli::OptionModel -> Nil)</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#before_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method" class="signature"><strong>#before_validate</strong>(name, proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#before_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method" class="signature"><strong>#before_validate</strong>(proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#before_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-instance-method" class="signature"><strong>#before_validate</strong>(name = <span class="n">nil</span>, &block : Cli::OptionModel::Parser, Cli::OptionModel -> Nil)</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#callback_results_for_validate-instance-method" class="signature"><strong>#callback_results_for_validate</strong></a>
+        
+          <div class="summary"><p>Returns callback results of the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method" class="signature"><strong>#on_validate</strong>(name, proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method" class="signature"><strong>#on_validate</strong>(proc : ::Proc(Cli::OptionModel::Parser, Cli::OptionModel, Nil))</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-instance-method" class="signature"><strong>#on_validate</strong>(name = <span class="n">nil</span>, &block : Cli::OptionModel::Parser, Cli::OptionModel -> Nil)</a>
+        
+          <div class="summary"><p>Registers a dynamic callback for the validate group.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#run_callbacks_for_validate%28%2Aargs%2C%26block%29-instance-method" class="signature"><strong>#run_callbacks_for_validate</strong>(*args, &block)</a>
+        
+          <div class="summary"><p>Invokes all callbacks of the validate group.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>Class Method Detail</h2>
+  
+    <div class="entry-detail" id="after_validate&#40;name,proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>after_validate</strong>(name, proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#after_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="after_validate&#40;proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>after_validate</strong>(proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#after_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="after_validate&#40;name&#61;nil,&amp;block:Cli::OptionModel::Parser,Cli::OptionModel-&gt;Nil&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>after_validate</strong>(name = <span class="n">nil</span>, &block : <a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a> -> Nil)
+
+        <a class="method-permalink" href="#after_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="around_validate&#40;name,proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>around_validate</strong>(name, proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#around_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="around_validate&#40;proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>around_validate</strong>(proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#around_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="around_validate&#40;name&#61;nil,&amp;block:Cli::OptionModel::Parser,Cli::OptionModel-&gt;Nil&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>around_validate</strong>(name = <span class="n">nil</span>, &block : <a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a> -> Nil)
+
+        <a class="method-permalink" href="#around_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="before_validate&#40;name,proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>before_validate</strong>(name, proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#before_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="before_validate&#40;proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>before_validate</strong>(proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#before_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="before_validate&#40;name&#61;nil,&amp;block:Cli::OptionModel::Parser,Cli::OptionModel-&gt;Nil&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>before_validate</strong>(name = <span class="n">nil</span>, &block : <a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a> -> Nil)
+
+        <a class="method-permalink" href="#before_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_validate&#40;name,proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>on_validate</strong>(name, proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#on_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_validate&#40;proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>on_validate</strong>(proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#on_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_validate&#40;name&#61;nil,&amp;block:Cli::OptionModel::Parser,Cli::OptionModel-&gt;Nil&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>on_validate</strong>(name = <span class="n">nil</span>, &block : <a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a> -> Nil)
+
+        <a class="method-permalink" href="#on_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>Instance Method Detail</h2>
+  
+    <div class="entry-detail" id="after_validate&#40;name,proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>after_validate</strong>(name, proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#after_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="after_validate&#40;proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>after_validate</strong>(proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#after_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="after_validate&#40;name&#61;nil,&amp;block:Cli::OptionModel::Parser,Cli::OptionModel-&gt;Nil&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>after_validate</strong>(name = <span class="n">nil</span>, &block : <a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a> -> Nil)
+
+        <a class="method-permalink" href="#after_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="around_validate&#40;name,proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>around_validate</strong>(name, proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#around_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="around_validate&#40;proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>around_validate</strong>(proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#around_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="around_validate&#40;name&#61;nil,&amp;block:Cli::OptionModel::Parser,Cli::OptionModel-&gt;Nil&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>around_validate</strong>(name = <span class="n">nil</span>, &block : <a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a> -> Nil)
+
+        <a class="method-permalink" href="#around_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="before_validate&#40;name,proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>before_validate</strong>(name, proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#before_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="before_validate&#40;proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>before_validate</strong>(proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#before_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="before_validate&#40;name&#61;nil,&amp;block:Cli::OptionModel::Parser,Cli::OptionModel-&gt;Nil&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>before_validate</strong>(name = <span class="n">nil</span>, &block : <a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a> -> Nil)
+
+        <a class="method-permalink" href="#before_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="callback_results_for_validate-instance-method">
+      <div class="signature">
+        
+        def <strong>callback_results_for_validate</strong>
+
+        <a class="method-permalink" href="#callback_results_for_validate-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns callback results of the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_validate&#40;name,proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>on_validate</strong>(name, proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#on_validate%28name%2Cproc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_validate&#40;proc:::Proc&#40;Cli::OptionModel::Parser,Cli::OptionModel,Nil&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>on_validate</strong>(proc : ::Proc(<a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a>, Nil))
+
+        <a class="method-permalink" href="#on_validate%28proc%3A%3A%3AProc%28Cli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel%2CNil%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_validate&#40;name&#61;nil,&amp;block:Cli::OptionModel::Parser,Cli::OptionModel-&gt;Nil&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>on_validate</strong>(name = <span class="n">nil</span>, &block : <a href="../../Cli/OptionModel/Parser.html">Cli::OptionModel::Parser</a>, <a href="../../Cli/OptionModel.html">Cli::OptionModel</a> -> Nil)
+
+        <a class="method-permalink" href="#on_validate%28name%3Dnil%2C%26block%3ACli%3A%3AOptionModel%3A%3AParser%2CCli%3A%3AOptionModel-%3ENil%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a dynamic callback for the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="run_callbacks_for_validate&#40;*args,&amp;block&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>run_callbacks_for_validate</strong>(*args, &block)
+
+        <a class="method-permalink" href="#run_callbacks_for_validate%28%2Aargs%2C%26block%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Invokes all callbacks of the validate group.</p>
+
+<p>This method is automatically defined by the Crystal Callback library.</p></div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
