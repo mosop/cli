@@ -1,4 +1,4 @@
-require "../../src/cli"
+require "../../../src/cli"
 
 class Command < Cli::Command
   def run
