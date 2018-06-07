@@ -1,13 +1,11 @@
 module Cli::Ios
-  class Pipe
+  class Pipe < IO
     # :nodoc:
     class Closed < Exception
       def initialize(io)
         super "Piped #{io} already closed."
       end
     end
-
-    include IO
 
     @reader : IO::FileDescriptor?
     @writer : IO::FileDescriptor?
