@@ -4,7 +4,7 @@ version: 0.6.10
 authors:
   - mosop
 
-crystal: 0.24.1
+crystal: 0.24.2
 
 dependencies:
   optarg:
@@ -16,8 +16,8 @@ dependencies:
 
 development_dependencies:
   have_files:
-    github: paulosuzart/have_files
-    branch: bump-crystal
+    github: mosop/have_files
+    version: ~> 0.4.0
   crystal_plus:
     github: mosop/crystal_plus
     version: ~> 0.1.4

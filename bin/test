@@ -1,7 +1,9 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env bash
 
-Dir.glob("spec/**/*_spec.cr").each do |f|
-  cmd = "crystal spec #{f}"
-  abort "error: #{cmd}" unless system(cmd)
-end
-exit 1 unless system("crystal spec")
+set -e
+
+find spec -type f -name "*_spec.cr" -print0 | while IFS= read -r -d $'\0' line; do
+  crystal spec "$line" 
+done
+
+crystal spec
