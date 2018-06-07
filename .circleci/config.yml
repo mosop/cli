@@ -1,0 +1,41 @@
+version: 2
+workflows:
+  version: 2
+  test:
+    jobs:
+    - test_crystal_0_24_2
+jobs:
+  test_crystal_0_24_2:
+    docker:
+    - image: 'crystallang/crystal:0.24.2'
+    working_directory: ~/repo
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+        - 'v1-dependencies-{{ checksum "shard.yml" }}'
+        - v1-dependencies-
+    - run: shards
+    - save_cache:
+        paths:
+        - .shards
+        - lib
+        key: 'v1-dependencies-{{ checksum "shard.yml" }}'
+    - run: bin/test
+  test_crystal_nightly:
+    docker:
+    - image: 'crystallang/crystal:nightly'
+    working_directory: ~/repo
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+        - 'v1-dependencies-{{ checksum "shard.yml" }}'
+        - v1-dependencies-
+    - run: shards
+    - save_cache:
+        paths:
+        - .shards
+        - lib
+        key: 'v1-dependencies-{{ checksum "shard.yml" }}'
+    - run: bin/test
