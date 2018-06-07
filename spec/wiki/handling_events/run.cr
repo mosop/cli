@@ -1,4 +1,4 @@
-require "../../src/cli"
+require "../../../src/cli"
 
 class FinallySmile < Cli::Command
   after_exit do |cmd, exit|
