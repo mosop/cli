@@ -238,7 +238,7 @@ module Cli
 
     # :nodoc:
     def initialize(@__previous, @__argv)
-      run_callbacks_for_initialize {}
+      run_callbacks_for_initialize { }
     end
 
     @__option_data = Util::Var(Optarg::Model).new
@@ -246,12 +246,16 @@ module Cli
     # Returns option and argument values (an `OptionModel` instance).
     #
     # This method is the same as `#args`.
-    def options; __option_data; end
+    def options
+      __option_data
+    end
 
     # Returns option and argument values (an `OptionModel` instance).
     #
     # This method is the same as `#options`.
-    def args; __option_data; end
+    def args
+      __option_data
+    end
 
     # Returns an array of nameless argument values.
     #
@@ -342,13 +346,14 @@ module Cli
     end
 
     @io : IoHash?
+
     # Returns a named IO container.
     def io
       @io ||= if prev = @__previous
-        prev.io
-      else
-        Cli.new_default_io
-      end
+                prev.io
+              else
+                Cli.new_default_io
+              end
     end
 
     # Invokes the :out IO's puts method.
