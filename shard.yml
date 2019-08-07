@@ -4,12 +4,12 @@ version: 0.7.0
 authors:
   - mosop
 
-crystal: 0.24.2
+crystal: 0.30.0
 
 dependencies:
   optarg:
-    github: mosop/optarg
-    version: ~> 0.5.8
+    github: drujensen/optarg
+    version: ~> 0.7.0
   string_inflection:
     github: mosop/string_inflection
     version: ~> 0.2.1
