@@ -69,6 +69,8 @@ module Cli::Helps
         if md.responds_to?(:variable_name)
           md.variable_name
         end
+      else
+        # skip
       end
     end
 
@@ -98,8 +100,14 @@ module Cli::Helps
             "(enabled as default)" if v
           when Optarg::Definitions::NotOption
             "(disabled as default)" if v
+          else
+            # skip
           end
+        else
+          # skip
         end
+      else
+        # skip
       end
     end
 
@@ -108,6 +116,8 @@ module Cli::Helps
       when Optarg::DefinitionMixins::ArrayValue
         min = df.minimum_length_of_array
         min > 0 ? "at least #{min}" : "multiple"
+      else
+        # skip
       end
     end
 
@@ -121,6 +131,8 @@ module Cli::Helps
         if incl = df.validations.find { |i| i.is_a?(::Optarg::Definitions::StringArgument::Validations::Inclusion) }
           inclusion_of2(incl.as(::Optarg::Definitions::StringArgument::Validations::Inclusion))
         end
+      else
+        # skip
       end
     end
 

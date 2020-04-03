@@ -52,6 +52,8 @@ module Cli
         case io
         when Ios::Pipe
           io.close_writer
+        when IO
+          # IO was no writer
         end
       end
     end
