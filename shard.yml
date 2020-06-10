@@ -9,7 +9,7 @@ crystal: 0.30.0
 dependencies:
   optarg:
     github: amberframework/optarg
-    version: ~> 0.7.0
+    version: ~> 0.8.0
   string_inflection:
     github: mosop/string_inflection
     version: ~> 0.2.1
