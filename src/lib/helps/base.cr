@@ -1,12 +1,12 @@
 module Cli::Helps
   abstract class Base
     TYPES = {
-      :argument => :argument,
-      :array => :option,
-      :bool => :option,
-      :string => :option,
+      :argument     => :argument,
+      :array        => :option,
+      :bool         => :option,
+      :string       => :option,
       :string_array => :option,
-      :handler => :handler
+      :handler      => :handler,
     }
 
     alias Description = {head: ::String, body: ::Array(::String)}
@@ -26,8 +26,8 @@ module Cli::Helps
       @definition_descriptions ||= begin
         {
           argument: descriptions_for(@command.options.definitions.arguments),
-          option: descriptions_for(@command.options.definitions.value_options),
-          handler: descriptions_for(@command.options.definitions.handlers),
+          option:   descriptions_for(@command.options.definitions.value_options),
+          handler:  descriptions_for(@command.options.definitions.handlers),
         }
       end
     end
@@ -69,6 +69,8 @@ module Cli::Helps
         if md.responds_to?(:variable_name)
           md.variable_name
         end
+      else
+        # skip
       end
     end
 
@@ -98,8 +100,14 @@ module Cli::Helps
             "(enabled as default)" if v
           when Optarg::Definitions::NotOption
             "(disabled as default)" if v
+          else
+            # skip
           end
+        else
+          # skip
         end
+      else
+        # skip
       end
     end
 
@@ -108,27 +116,31 @@ module Cli::Helps
       when Optarg::DefinitionMixins::ArrayValue
         min = df.minimum_length_of_array
         min > 0 ? "at least #{min}" : "multiple"
+      else
+        # skip
       end
     end
 
     def inclusion_of(df)
       case df
       when Optarg::Definitions::StringOption
-        if incl = df.validations.find{|i| i.is_a?(::Optarg::Definitions::StringOption::Validations::Inclusion)}
+        if incl = df.validations.find { |i| i.is_a?(::Optarg::Definitions::StringOption::Validations::Inclusion) }
           inclusion_of2(incl.as(::Optarg::Definitions::StringOption::Validations::Inclusion))
         end
       when Optarg::Definitions::StringArgument
-        if incl = df.validations.find{|i| i.is_a?(::Optarg::Definitions::StringArgument::Validations::Inclusion)}
+        if incl = df.validations.find { |i| i.is_a?(::Optarg::Definitions::StringArgument::Validations::Inclusion) }
           inclusion_of2(incl.as(::Optarg::Definitions::StringArgument::Validations::Inclusion))
         end
+      else
+        # skip
       end
     end
 
     def inclusion_of2(incl)
       a = incl.values.map do |v|
         desc = if md = v.metadata.as?(OptionValueMetadata(String))
-          md.description
-        end
+                 md.description
+               end
         Description.new(head: v.metadata.string, body: desc ? desc.split("\n") : %w())
       end
       indent = " " * @indent
@@ -157,14 +169,14 @@ module Cli::Helps
 
     def join_description(*types)
       descs = [] of Description
-      types.each{|t| descs += self.class.sort_description(definition_descriptions[t])}
+      types.each { |t| descs += self.class.sort_description(definition_descriptions[t]) }
       return nil if descs.empty?
       join_description2 descs
     end
 
     def join_description2(descs)
       lines = %w()
-      left_width = descs.map{|i| i[:head].size}.max + @indent
+      left_width = descs.map { |i| i[:head].size }.max + @indent
       indent = " " * @indent
       descs.each do |desc|
         entry = %w()
@@ -201,7 +213,7 @@ module Cli::Helps
     end
 
     def self.reverse_case(s)
-      s.split("").map{|i| i =~ /[A-Z]/ ? i.downcase : i.upcase}.join("")
+      s.split("").map { |i| i =~ /[A-Z]/ ? i.downcase : i.upcase }.join("")
     end
   end
 end
