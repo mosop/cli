@@ -27,7 +27,7 @@ module Cli::Ios
     end
 
     # Implements `IO#write`.
-    def write(slice : Slice(UInt8)) : Int64
+    def write(slice : Slice(UInt8)) : Nil
       if io = @writer
         io.write slice
       else
